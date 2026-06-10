@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="theme-color" content="#1e1b4b"/>
+  <title>Checklist de Mala — Orlando 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Nunito','Segoe UI',system-ui,sans-serif;background:#f5f3ff;color:#1e1b4b;min-height:100vh;padding-bottom:90px}
+    .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e1b4b;color:#fff;padding:10px 20px;border-radius:24px;font-size:.83rem;font-weight:700;opacity:0;transition:all .3s;z-index:200;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
+    .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+    .top{background:linear-gradient(135deg,#1e1b4b,#4c1d95);color:#fff;padding:13px 16px;padding-top:calc(13px + env(safe-area-inset-top));display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:60;box-shadow:0 2px 12px rgba(30,27,75,.3)}
+    .top h1{font-size:.93rem;font-weight:800;flex:1;text-align:center}
+    .top a{color:#fff;text-decoration:none;font-size:.76rem;background:rgba(255,255,255,.15);padding:6px 12px;border-radius:20px;font-weight:700;border:1px solid rgba(255,255,255,.2);white-space:nowrap;flex-shrink:0}
+    /* PROGRESSO GERAL */
+    .prog-bar{height:5px;background:rgba(255,255,255,.2);border-radius:3px;margin-top:8px;overflow:hidden}
+    .prog-fill{height:5px;background:#f59e0b;border-radius:3px;transition:width .4s}
+    /* PESSOA TABS */
+    .ptabs{display:flex;gap:8px;padding:12px 12px 0;overflow-x:auto;scrollbar-width:none}
+    .ptabs::-webkit-scrollbar{display:none}
+    .ptab{flex-shrink:0;display:flex;align-items:center;gap:7px;padding:8px 14px;border-radius:20px;border:none;background:#fff;border:1.5px solid #ddd6fe;cursor:pointer;font-size:.78rem;font-weight:700;color:#7c6f9f;font-family:inherit;transition:all .15s;position:relative}
+    .ptab.on{background:#7c3aed;color:#fff;border-color:#7c3aed}
+    .ptab .av{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;color:#fff;flex-shrink:0}
+    .ptab .cnt{position:absolute;top:-5px;right:-5px;background:#f59e0b;color:#1e1b4b;border-radius:20px;font-size:.58rem;font-weight:900;padding:1px 5px;min-width:18px;text-align:center;border:2px solid #f5f3ff}
+    /* CATEGORIA CHIPS */
+    .cat-chips{display:flex;gap:6px;padding:10px 12px;overflow-x:auto;scrollbar-width:none}
+    .cat-chips::-webkit-scrollbar{display:none}
+    .cat-chip{flex-shrink:0;padding:5px 11px;border-radius:20px;font-size:.72rem;font-weight:700;cursor:pointer;border:1.5px solid #ddd6fe;background:#fff;color:#7c6f9f;font-family:inherit;transition:all .15s}
+    .cat-chip.on{background:#7c3aed;color:#fff;border-color:#7c3aed}
+    /* ITEMS */
+    .cat-section{padding:0 12px 8px}
+    .cat-header{display:flex;align-items:center;gap:8px;padding:10px 2px 6px;font-size:.78rem;font-weight:800;color:#4c1d95}
+    .cat-header .ic{font-size:1rem}
+    .cat-progress{flex:1;height:5px;background:#ede9fe;border-radius:3px;overflow:hidden}
+    .cat-progress-fill{height:5px;border-radius:3px;background:#7c3aed;transition:width .3s}
+    .cat-pct{font-size:.65rem;color:#7c6f9f;font-weight:700}
+    .item{display:flex;align-items:center;gap:10px;padding:11px 13px;background:#fff;border-radius:12px;margin-bottom:7px;box-shadow:0 1px 6px rgba(124,58,237,.06);border:1px solid #ede9fe;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity .15s}
+    .item:active{opacity:.7}
+    .item.done .itx{text-decoration:line-through;color:#9ca3af}
+    .chk{width:22px;height:22px;border-radius:7px;border:2px solid #ddd6fe;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:all .18s;background:#fff}
+    .item.done .chk{background:#7c3aed;border-color:#7c3aed;color:#fff}
+    .itx{flex:1;font-size:.83rem;font-weight:600}
+    .tag{font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:20px;background:#ede9fe;color:#7c3aed;flex-shrink:0}
+    .vazio{text-align:center;color:#7c6f9f;padding:40px 20px;font-size:.85rem;font-weight:600}
+    /* ADD ITEM */
+    .add-bar{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom));left:12px;right:12px;display:flex;gap:8px;z-index:50}
+    .add-inp{flex:1;padding:12px 16px;border:1.5px solid #ddd6fe;border-radius:20px;font-size:.85rem;font-family:inherit;font-weight:600;background:#fff;box-shadow:0 4px 16px rgba(124,58,237,.15);outline:none}
+    .add-inp:focus{border-color:#7c3aed}
+    .add-btn{padding:12px 18px;background:linear-gradient(135deg,#7c3aed,#db2777);color:#fff;border:none;border-radius:20px;font-size:.85rem;font-weight:800;cursor:pointer;font-family:inherit;box-shadow:0 4px 16px rgba(124,58,237,.3);white-space:nowrap}
+    /* RESET BTN */
+    .reset-btn{display:block;margin:8px 12px 0;padding:9px;background:#fee2e2;color:#dc2626;border:none;border-radius:12px;font-size:.77rem;font-weight:700;cursor:pointer;font-family:inherit;width:calc(100%-24px)}
+  </style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<div class="top">
+  <a href="index.html">← Voltar</a>
+  <h1>🧳 Checklist de Mala</h1>
+  <div style="font-size:.72rem;color:rgba(255,255,255,.8);background:rgba(255,255,255,.12);padding:5px 9px;border-radius:20px;font-weight:700;flex-shrink:0" id="prog-txt">0%</div>
+</div>
+
+<!-- PESSOAS -->
+<div class="ptabs" id="ptabs"></div>
+
+<!-- CATEGORIA CHIPS -->
+<div class="cat-chips" id="cat-chips"></div>
+
+<!-- LISTA -->
+<div id="lista"></div>
+
+<!-- RESET -->
+<button class="reset-btn" onclick="resetarPessoa()">↺ Desmarcar tudo desta pessoa</button>
+
+<!-- ADD ITEM -->
+<div class="add-bar">
+  <input class="add-inp" id="add-inp" placeholder="Adicionar item personalizado..." onkeydown="if(event.key==='Enter')addItem()"/>
+  <button class="add-btn" onclick="addItem()">+ Add</button>
+</div>
+
+<script>
+const PESSOAS = [
+  {id:'olinto', nome:'Olinto',  cor:'#f59e0b', ic:'👨'},
+  {id:'marilia',nome:'Marília', cor:'#ec4899', ic:'👩'},
+  {id:'eliane', nome:'Eliane',  cor:'#8b5cf6', ic:'👵'},
+  {id:'lara',   nome:'Lara',    cor:'#10b981', ic:'👧'},
+  {id:'caio',   nome:'Caio',    cor:'#3b82f6', ic:'👦'},
+];
+
+const CATS = [
+  {id:'doc',  nome:'Documentos',  ic:'🢪'},
+  {id:'rou',  nome:'Roupas',      ic:'👕'},
+  {id:'ele',  nome:'Eletrônicos', ic:'🔌'},
+  {id:'med',  nome:'Medicamentos',ic:'💊'},
+  {id:'inf',  nome:'Infantil',    ic:'🧸'},
+  {id:'ext',  nome:'Extras',      ic:'🎢'},
+];
+
+const ITENS_BASE = {
+  doc: [
+    {txt:'Passaporte novo (válido)', todos:true},
+    {txt:'Passaporte antigo com visto (Marília, Lara, Caio)', ids:['marilia','lara','caio']},
+    {txt:'CNH física original', ids:['olinto']},
+    {txt:'PID — Permissão Internacional para Dirigir', ids:['olinto']},
+    {txt:'Cartão de crédito físico (caução carro)', ids:['olinto']},
+    {txt:'Cartões de débito internacionais', todos:true},
+    {txt:'Apólice Visa Altus / AIG (impressa)', todos:true},
+    {txt:'Apólice Ciclic / Generali (impressa)', todos:true},
+    {txt:'Impressão de todas as reservas', ids:['olinto']},
+    {txt:'Dinheiro em espécie (USD)', ids:['olinto','marilia']},
+  ],
+  rou: [
+    {txt:'Camisetas (mín. 7)', todos:true},
+    {txt:'Calças ou shorts (mín. 4)', todos:true},
+    {txt:'Moletom / blusa de frio leve', todos:true},
+    {txt:'Roupas íntimas (mín. 7 pares)', todos:true},
+    {txt:'Pijamas (mín. 2 conjuntos)', todos:true},
+    {txt:'Tênis confortável (para os parques)', todos:true},
+    {txt:'Sandálias ou chinelo', todos:true},
+    {txt:'Meias (mín. 7 pares)', todos:true},
+    {txt:'Capa de chuva compacta', todos:true},
+    {txt:'Fantasia de Halloween 🎃', todos:true},
+    {txt:'Roupa para festa de Natal', todos:true},
+    {txt:'Óculos de sol', todos:true},
+    {txt:'Boné / chapéu', todos:true},
+  ],
+  ele: [
+    {txt:'Carregador de celular', todos:true},
+    {txt:'Adaptador de tomada BR → EUA (tipo A/B)', todos:true},
+    {txt:'Power bank / carregador portátil', ids:['olinto','marilia']},
+    {txt:'Câmera fotográfica / GoPro', ids:['olinto']},
+    {txt:'Fones de ouvido', todos:true},
+    {txt:'Tablet das crianças (avião)', ids:['lara','caio']},
+    {txt:'Cabo USB / carregador extra', ids:['olinto','marilia']},
+    {txt:'Chip internacional / eSIM', ids:['olinto','marilia','eliane']},
+  ],
+  med: [
+    {txt:'Dipirona / Tylenol (paracetamol)', todos:true},
+    {txt:'Ibuprofeno (anti-inflamatório)', todos:true},
+    {txt:'Antihistamínico (alergia, enjoo)', todos:true},
+    {txt:'Antidiarreico (Imosec)', todos:true},
+    {txt:'Protetor solar FPS 50+', todos:true},
+    {txt:'Repelente de insetos', todos:true},
+    {txt:'Curativo / Band-Aid', todos:true},
+    {txt:'Termômetro', ids:['olinto']},
+    {txt:'Medicamentos de uso contínuo (Olinto)', ids:['olinto']},
+    {txt:'Medicamentos de uso contínuo (Marília)', ids:['marilia']},
+    {txt:'Medicamentos de uso contínuo (Eliane)', ids:['eliane']},
+    {txt:'Pomada cicatrizante', todos:true},
+    {txt:'Spray para dor de garganta', todos:true},
+  ],
+  inf: [
+    {txt:'Mochila das crianças (avião)', ids:['lara','caio']},
+    {txt:'Lanche para o avião', ids:['lara','caio']},
+    {txt:'Fone de ouvido infantil', ids:['lara','caio']},
+    {txt:'Brinquedo/livro favorito (avião)', ids:['lara','caio']},
+    {txt:'Carrinho de passeio (World Strollers)', ids:['caio']},
+    {txt:'Protetor solar facial infantil', ids:['lara','caio']},
+    {txt:'Óculos de sol das crianças', ids:['lara','caio']},
+    {txt:'Boné / chapéu das crianças', ids:['lara','caio']},
+    {txt:'Meias antiderrapantes (piscina)', ids:['lara','caio']},
+  ],
+  ext: [
+    {txt:'Saco bag / proteção para mala despachada', ids:['olinto']},
+    {txt:'Cadeado para malas', ids:['olinto']},
+    {txt:'Sacolas reutilizáveis (compras)', ids:['marilia']},
+    {txt:'Guarda-chuva compacto', ids:['olinto','marilia']},
+    {txt:'Pasta organizadora de documentos', ids:['olinto']},
+    {txt:'Almofada de pescoço (avião)', todos:true},
+    {txt:'Tapa-olhos e tampaão de ouvido (avião)', ids:['olinto','marilia','eliane']},
+    {txt:'Adaptador multi-tomadas', ids:['olinto']},
+  ],
+};
+
+let pessoaAtual = 'olinto';
+let catAtual = 'todos';
+let checks = JSON.parse(localStorage.getItem('malaChecks')||'{}');
+let customItems = JSON.parse(localStorage.getItem('malaCustom')||'{}');
+
+function save(){
+  localStorage.setItem('malaChecks', JSON.stringify(checks));
+  localStorage.setItem('malaCustom', JSON.stringify(customItems));
+}
+
+function getItensPessoa(pid) {
+  const itens = [];
+  Object.entries(ITENS_BASE).forEach(([catId, lista]) => {
+    lista.forEach((item, i) => {
+      if(item.todos || (item.ids && item.ids.includes(pid))) {
+        itens.push({id:`base-${catId}-${i}`, cat:catId, txt:item.txt, custom:false});
+      }
+    });
+  });
+  const custom = customItems[pid] || [];
+  custom.forEach(c => itens.push({id:c.id, cat:c.cat||'ext', txt:c.txt, custom:true}));
+  return itens;
+}
+
+function getProgresso(pid) {
+  const itens = getItensPessoa(pid);
+  if(!itens.length) return 0;
+  const done = itens.filter(i => checks[pid]?.[i.id]).length;
+  return Math.round(done / itens.length * 100);
+}
+
+function renderTabs() {
+  document.getElementById('ptabs').innerHTML = PESSOAS.map(p => {
+    const pct = getProgresso(p.id);
+    return `<button class="ptab ${pessoaAtual===p.id?'on':''}" onclick="selecionarPessoa('${p.id}')">
+      <div class="av" style="background:${p.cor}">${p.ic}</div>
+      ${p.nome}
+      ${pct>0?`<span class="cnt">${pct}%</span>`:''}
+    </button>`;
+  }).join('');
+}
+
+function renderCatChips() {
+  const cats = [{id:'todos',nome:'Todos',ic:'🗂️'}, ...CATS];
+  document.getElementById('cat-chips').innerHTML = cats.map(c =>
+    `<button class="cat-chip ${catAtual===c.id?'on':''}" onclick="selecionarCat('${c.id}')">${c.ic} ${c.nome}</button>`
+  ).join('');
+}
+
+function renderLista() {
+  const itens = getItensPessoa(pessoaAtual);
+  const filtrados = catAtual === 'todos' ? itens : itens.filter(i => i.cat === catAtual);
+  const el = document.getElementById('lista');
+
+  // Calcular progresso geral
+  const total = itens.length;
+  const done = itens.filter(i => checks[pessoaAtual]?.[i.id]).length;
+  const pct = total ? Math.round(done/total*100) : 0;
+  document.getElementById('prog-txt').textContent = `${pct}%`;
+
+  if(!filtrados.length) { el.innerHTML = `<div class="vazio">Nenhum item para exibir nesta categoria.</div>`; return; }
+
+  // Agrupar por categoria
+  const grupos = {};
+  filtrados.forEach(i => { if(!grupos[i.cat]) grupos[i.cat] = []; grupos[i.cat].push(i); });
+
+  el.innerHTML = Object.entries(grupos).map(([catId, items]) => {
+    const cat = CATS.find(c=>c.id===catId) || {ic:'📦',nome:'Outros'};
+    const catDone = items.filter(i=>checks[pessoaAtual]?.[i.id]).length;
+    const catPct = items.length ? catDone/items.length*100 : 0;
+    return `<div class="cat-section">
+      <div class="cat-header">
+        <span class="ic">${cat.ic}</span>
+        ${cat.nome}
+        <div class="cat-progress"><div class="cat-progress-fill" style="width:${catPct}%"></div></div>
+        <span class="cat-pct">${catDone}/${items.length}</span>
+      </div>
+      ${items.map(item => `
+        <div class="item ${checks[pessoaAtual]?.[item.id]?'done':''}" onclick="toggleItem('${item.id}')">
+          <div class="chk">${checks[pessoaAtual]?.[item.id]?'✓':''}</div>
+          <div class="itx">${item.txt}</div>
+          ${item.custom?`<button class="tag" onclick="event.stopPropagation();removerCustom('${item.id}')" style="background:#fee2e2;color:#dc2626">✕</button>`:''}
+        </div>`).join('')}
+    </div>`;
+  }).join('');
+}
+
+function renderAll() { renderTabs(); renderCatChips(); renderLista(); }
+
+function selecionarPessoa(id) { pessoaAtual = id; renderAll(); }
+function selecionarCat(id) { catAtual = id; renderCatChips(); renderLista(); }
+
+function toggleItem(id) {
+  if(!checks[pessoaAtual]) checks[pessoaAtual] = {};
+  checks[pessoaAtual][id] = !checks[pessoaAtual][id];
+  save(); renderAll();
+}
+
+function addItem() {
+  const inp = document.getElementById('add-inp');
+  const txt = inp.value.trim();
+  if(!txt) return;
+  if(!customItems[pessoaAtual]) customItems[pessoaAtual] = [];
+  const cat = catAtual === 'todos' ? 'ext' : catAtual;
+  customItems[pessoaAtual].push({id:'c-'+Date.now(), cat, txt});
+  save(); inp.value=''; renderAll(); toast('✅ Item adicionado!');
+}
+
+function removerCustom(id) {
+  if(!customItems[pessoaAtual]) return;
+  customItems[pessoaAtual] = customItems[pessoaAtual].filter(c=>c.id!==id);
+  if(checks[pessoaAtual]) delete checks[pessoaAtual][id];
+  save(); renderAll(); toast('🗑️ Removido');
+}
+
+function resetarPessoa() {
+  if(!confirm(`Desmarcar todos os itens de ${PESSOAS.find(p=>p.id===pessoaAtual)?.nome}?`)) return;
+  checks[pessoaAtual] = {};
+  save(); renderAll(); toast('↺ Desmarcado');
+}
+
+let _tt;
+function toast(msg,dur=2800){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('on');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('on'),dur);}
+
+renderAll();
+</script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="theme-color" content="#1e1b4b"/>
+  <title>Book da Viagem — Orlando 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Nunito','Segoe UI',system-ui,sans-serif;background:#faf5ff;color:#1e1b4b;min-height:100vh}
+    /* TOPBAR (escondida na impressão) */
+    .top{background:linear-gradient(135deg,#1e1b4b,#4c1d95);color:#fff;padding:13px 16px;padding-top:calc(13px + env(safe-area-inset-top));display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:60;box-shadow:0 2px 12px rgba(30,27,75,.3)}
+    .top h1{font-size:.93rem;font-weight:800;flex:1;text-align:center}
+    .top a{color:#fff;text-decoration:none;font-size:.76rem;background:rgba(255,255,255,.15);padding:6px 12px;border-radius:20px;font-weight:700;border:1px solid rgba(255,255,255,.2);white-space:nowrap;flex-shrink:0}
+    .print-btn{background:linear-gradient(135deg,#7c3aed,#db2777);color:#fff;border:none;border-radius:20px;padding:7px 16px;font-size:.8rem;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0}
+    /* BOOK CONTENT */
+    .book{max-width:800px;margin:0 auto;padding:20px 16px 60px}
+    /* CAPA */
+    .capa{background:linear-gradient(135deg,#1e1b4b 0%,#4c1d95 45%,#7c3aed 75%,#db2777 100%);color:#fff;border-radius:24px;padding:40px 30px;text-align:center;margin-bottom:24px;position:relative;overflow:hidden}
+    .capa::after{content:'🏰';position:absolute;right:20px;bottom:-10px;font-size:8rem;opacity:.1;line-height:1}
+    .capa .emoji{font-size:4rem;margin-bottom:8px}
+    .capa h1{font-size:2rem;font-weight:900;margin-bottom:6px}
+    .capa .sub{font-size:1rem;opacity:.85;margin-bottom:20px;font-weight:600}
+    .capa .stats{display:flex;justify-content:center;gap:30px;flex-wrap:wrap}
+    .capa .stat .n{font-size:2rem;font-weight:900}
+    .capa .stat .l{font-size:.75rem;opacity:.8;text-transform:uppercase;letter-spacing:.05em}
+    /* SECTION HEADERS */
+    .sec-title{display:flex;align-items:center;gap:10px;font-size:1.1rem;font-weight:900;color:#4c1d95;margin:24px 0 12px;padding-bottom:8px;border-bottom:2px solid #ede9fe}
+    /* TABLES */
+    table{width:100%;border-collapse:collapse;font-size:.81rem;margin-bottom:12px}
+    th{background:#f5f3ff;padding:8px 10px;text-align:left;font-size:.72rem;text-transform:uppercase;color:#7c6f9f;font-weight:700;border-bottom:2px solid #ede9fe}
+    td{padding:8px 10px;border-bottom:1px solid #f5f3ff;font-weight:600}
+    tr:last-child td{border-bottom:none}
+    /* INFO ROWS */
+    .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+    @media(max-width:500px){.info-grid{grid-template-columns:1fr}}
+    .info-card{background:#fff;border-radius:12px;padding:12px;border:1px solid #ede9fe}
+    .info-card .lbl{font-size:.67rem;text-transform:uppercase;color:#7c6f9f;font-weight:700;letter-spacing:.05em;margin-bottom:3px}
+    .info-card .val{font-size:.88rem;font-weight:800;color:#1e1b4b}
+    /* PESSOA CARDS */
+    .pessoa-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:12px}
+    .pessoa-card{background:#fff;border-radius:14px;padding:13px;text-align:center;border:1px solid #ede9fe}
+    .pessoa-card .av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:900;color:#fff;margin:0 auto 6px}
+    .pessoa-card strong{font-size:.82rem;font-weight:800;display:block}
+    .pessoa-card span{font-size:.7rem;color:#7c6f9f;font-weight:600}
+    /* ROTEIRO TIMELINE */
+    .dia{display:flex;gap:12px;margin-bottom:10px;padding:10px 12px;background:#fff;border-radius:12px;border:1px solid #ede9fe;page-break-inside:avoid}
+    .dia-dt{background:#7c3aed;color:#fff;border-radius:9px;padding:6px 10px;text-align:center;min-width:52px;flex-shrink:0}
+    .dia-dt .mes{font-size:.58rem;text-transform:uppercase;font-weight:700;opacity:.9}
+    .dia-dt .num{font-size:1.1rem;font-weight:900;line-height:1}
+    .dia-info{flex:1;min-width:0}
+    .dia-info strong{font-size:.85rem;font-weight:800;display:block;margin-bottom:2px}
+    .dia-info span{font-size:.73rem;color:#7c6f9f;font-weight:600}
+    /* BADGE */
+    .bx{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:.7rem;font-weight:700;margin-left:6px}
+    .bv{background:#dcfce7;color:#16a34a}.br{background:#fee2e2;color:#dc2626}.ba{background:#ede9fe;color:#7c3aed}.bam{background:#fef9c3;color:#92400e}
+    /* PENDÊNCIAS */
+    .pend-item{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid #f5f3ff;font-size:.8rem;align-items:flex-start}
+    .pend-item:last-child{border-bottom:none}
+    .pend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+    /* PRINT STYLES */
+    @media print {
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .top { display: none !important; }
+      body { background: #fff; }
+      .book { padding: 0; max-width: 100%; }
+      .capa { border-radius: 0; margin-bottom: 16px; }
+      .dia { page-break-inside: avoid; }
+      .sec-title { page-break-after: avoid; }
+    }
+  </style>
+</head>
+<body>
+<div class="top">
+  <a href="index.html">← Voltar</a>
+  <h1>🖨️ Book da Viagem</h1>
+  <button class="print-btn" onclick="window.print()">🖨️ Imprimir / PDF</button>
+</div>
+
+<div class="book" id="book">
+
+  <!-- CAPA -->
+  <div class="capa">
+    <div class="emoji">🎡</div>
+    <h1>Orlando 2026</h1>
+    <div class="sub">Família Arruda · 30 outubro – 13 novembro</div>
+    <div class="stats">
+      <div class="stat"><div class="n">15</div><div class="l">Dias</div></div>
+      <div class="stat"><div class="n">5</div><div class="l">Pessoas</div></div>
+      <div class="stat"><div class="n">3</div><div class="l">Parques</div></div>
+      <div class="stat"><div class="n">4</div><div class="l">Voos</div></div>
+    </div>
+  </div>
+
+  <!-- FAMÍLIA -->
+  <div class="sec-title">👨‍👩‍👧‍👦 Família</div>
+  <div class="pessoa-cards" id="book-familia"></div>
+
+  <!-- PASSAPORTES -->
+  <div class="sec-title">🢪 Passaportes e Vistos</div>
+  <table>
+    <thead><tr><th>Nome</th><th>Passaporte novo</th><th>Validade</th><th>Visto</th><th>Passaporte com visto</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Olinto</strong></td><td>FX968459</td><td>21/01/2029</td><td>B1/B2 — FX968459</td><td>1 passaporte</td></tr>
+      <tr><td><strong>Marília</strong></td><td>GO209390</td><td>26/04/2036</td><td>B1/B2 — FR463305</td><td>⚠️ Levar 2 passaportes</td></tr>
+      <tr><td><strong>Lara</strong></td><td>GO209391</td><td>26/04/2031</td><td>B1/B2 — FW779755</td><td>⚠️ Levar 2 passaportes</td></tr>
+      <tr><td><strong>Caio</strong></td><td>GO209392</td><td>26/04/2031</td><td>B1/B2 — GD695510</td><td>⚠️ Levar 2 passaportes</td></tr>
+      <tr><td><strong>Eliane</strong></td><td>FW215092</td><td>11/06/2028</td><td>B1/B2 — FW215092</td><td>1 passaporte</td></tr>
+    </tbody>
+  </table>
+  <div style="background:#fef3c7;border-radius:10px;padding:10px 12px;font-size:.78rem;color:#92400e;margin-bottom:20px">
+    ⚠️ <strong>Atenção crítica:</strong> Marília, Lara e Caio têm visto nos passaportes <strong>antigos</strong>. É obrigatório levar o passaporte novo + antigo com visto.
+  </div>
+
+  <!-- VOOS -->
+  <div class="sec-title">✈️ Voos</div>
+  <table>
+    <thead><tr><th>Voo</th><th>Data</th><th>Rota</th><th>Horário</th><th>Localizador</th><th>Assentos</th></tr></thead>
+    <tbody>
+      <tr><td>LA3657</td><td>28/10</td><td>BSB → GRU</td><td>04:25 → 06:05</td><td>ECUZZE</td><td>4A · 4C · 4D · 4B</td></tr>
+      <tr><td>LA8186</td><td>30/10</td><td>GRU → MCO</td><td>11:40 → 19:30</td><td>FMUQAO / AXCDQL</td><td>13C · 13D · 13A · 13B</td></tr>
+      <tr><td>LA8187</td><td>13/11</td><td>MCO → GRU</td><td>22:15 → 08:50+1</td><td>FMUQAO / AXCDQL</td><td>13C · 13D · 13B · 13A</td></tr>
+      <tr><td>LA3257</td><td>14/11</td><td>GRU → BSB</td><td>15:50 → 17:30</td><td>YLSEUS</td><td>5D · 5B · 5A · 5C</td></tr>
+    </tbody>
+  </table>
+
+  <!-- HOSPEDAGEM -->
+  <div class="sec-title">🏨 Hospedagem</div>
+  <div class="info-grid">
+    <div class="info-card"><div class="lbl">28–30/out · Hotel Panamby</div><div class="val">Rodovia Dutra 7830, Guarulhos</div><div style="font-size:.73rem;color:#7c6f9f;margin-top:3px">Conf: 5955.294.246 · PIN: 7016 · +55 11 2714-7300</div></div>
+    <div class="info-card"><div class="lbl">30/out–13/nov · Airbnb Kissimmee</div><div class="val">4837 Dedication St, Kissimmee, FL</div><div style="font-size:.73rem;color:#7c6f9f;margin-top:3px">Conf: HMH5ESDJPY · Lucas: +1 407-230-1272</div></div>
+    <div class="info-card"><div class="lbl">02–03/nov · Loews Royal Pacific</div><div class="val">6300 Hollywood Way, Orlando, FL</div><div style="font-size:.73rem;color:#7c6f9f;margin-top:3px">Conf: 542541346300 · +1 407-503-3000</div></div>
+    <div class="info-card"><div class="lbl">Express Pass Unlimited</div><div class="val" style="color:#7c3aed">⚡ Universal Studios + Islands</div><div style="font-size:.73rem;color:#dc2626;margin-top:3px">Não válido: Epic Universe · Volcano Bay</div></div>
+  </div>
+
+  <!-- CARRO -->
+  <div class="sec-title">🚗 Carro Alugado</div>
+  <div class="info-grid">
+    <div class="info-card"><div class="lbl">Locadora</div><div class="val">Alamo via Rentcars</div></div>
+    <div class="info-card"><div class="lbl">Veículo</div><div class="val">Minivan Toyota Sienna · 8 passageiros</div></div>
+    <div class="info-card"><div class="lbl">Confirmação</div><div class="val">2105771024</div></div>
+    <div class="info-card"><div class="lbl">Retirada / Devolução</div><div class="val">30/10 · 21h → 13/11 · 19h · MCO</div></div>
+  </div>
+  <div style="background:#fee2e2;border-radius:10px;padding:10px 12px;font-size:.78rem;color:#dc2626;margin-bottom:20px">
+    ⚠️ <strong>Obrigatório:</strong> CNH física (digital não aceita) · Passaporte · Cartão de crédito físico em nome de Olinto · Fazer vistoria e tirar fotos antes de sair
+  </div>
+
+  <!-- INGRESSOS -->
+  <div class="sec-title">🎟️ Ingressos</div>
+  <table>
+    <thead><tr><th>Evento</th><th>Data</th><th>Confirmação</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Universal 3-Day Park-to-Park + 2 Free</td><td>02–08/nov</td><td>17637344709-2TRDC</td><td>Pago</td><td><span class="bx bv">Confirmado</span></td></tr>
+      <tr><td>🎃 Halloween Party — Magic Kingdom</td><td>31/out</td><td>MBVK83414038</td><td>US$ 1.198,15</td><td><span class="bx bv">Confirmado</span></td></tr>
+      <tr><td>❄️ Festa de Natal — Magic Kingdom</td><td>12/nov</td><td>—</td><td>—</td><td><span class="bx br">Pendente</span></td></tr>
+    </tbody>
+  </table>
+  <div style="background:#fef3c7;border-radius:10px;padding:10px 12px;font-size:.78rem;color:#92400e;margin-bottom:20px">
+    📋 <strong>Halloween físico:</strong> Retirar no Ticket Office do Magic Kingdom com e-mail de confirmação + comprovante + documento com foto.
+  </div>
+
+  <!-- SEGUROS -->
+  <div class="sec-title">🛡️ Seguros</div>
+  <div class="info-grid">
+    <div class="info-card"><div class="lbl">💳 Visa Altus / AIG</div><div class="val">USD 175.000 cobertura médica</div><div style="font-size:.73rem;color:#7c6f9f;margin-top:3px">Brasil: 0800 891 3679 · EUA: +1 800 396 9665</div></div>
+    <div class="info-card"><div class="lbl">🛡️ Ciclic 60 / Generali</div><div class="val">USD 60.000 cobertura médica</div><div style="font-size:.73rem;color:#7c6f9f;margin-top:3px">WhatsApp 24h: +55 11 5039-9095 · Vigência: 30/10–14/11</div></div>
+    <div class="info-card"><div class="lbl">Emergência EUA</div><div class="val" style="color:#dc2626;font-size:1.3rem">🚨 911</div></div>
+    <div class="info-card"><div class="lbl">Hospital mais próximo</div><div class="val">HCA Florida Osceola Hospital</div><div style="font-size:.73rem;color:#7c6f9f;margin-top:3px">700 W Oak St, Kissimmee · +1 407-396-3900</div></div>
+  </div>
+
+  <!-- ROTEIRO -->
+  <div class="sec-title">📅 Roteiro dia a dia</div>
+  <div id="book-roteiro"></div>
+
+  <!-- PENDÊNCIAS -->
+  <div class="sec-title">⚠️ Pendências em aberto</div>
+  <div id="book-pend"></div>
+
+  <!-- CONTATOS -->
+  <div class="sec-title">📞 Contatos úteis</div>
+  <table>
+    <thead><tr><th>Contato</th><th>Telefone</th></tr></thead>
+    <tbody>
+      <tr><td>🏠 Lucas (anfitrião Airbnb)</td><td><strong>+1 407-230-1272</strong></td></tr>
+      <tr><td>🏨 Hotel Panamby Guarulhos</td><td><strong>+55 11 2714-7300</strong></td></tr>
+      <tr><td>🎢 Universal Orlando</td><td><strong>+1 407-363-8000</strong></td></tr>
+      <tr><td>🏨 Loews Royal Pacific</td><td><strong>+1 407-503-3000</strong></td></tr>
+      <tr><td>🚗 Alamo MCO</td><td><strong>+1 844 370 3164</strong></td></tr>
+      <tr><td>✈️ LATAM (capitais)</td><td><strong>4002 5700</strong></td></tr>
+      <tr><td>💳 Visa Altus EUA</td><td><strong>+1 800 396 9665</strong></td></tr>
+      <tr><td>🛡️ Ciclic WhatsApp 24h</td><td><strong>+55 11 5039-9095</strong></td></tr>
+      <tr><td>🚨 Emergência EUA</td><td><strong style="color:#dc2626">911</strong></td></tr>
+      <tr><td>🇧🇷 Consulado Brasileiro (Miami)</td><td><strong>+1 305 285 6200</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div style="text-align:center;margin-top:30px;font-size:.75rem;color:#9ca3af;padding-bottom:20px">
+    Impresso em: <span id="print-date"></span> · Orlando 2026 — Família Arruda
+  </div>
+</div>
+
+<script>
+document.getElementById('print-date').textContent = new Date().toLocaleDateString('pt-BR', {day:'2-digit',month:'long',year:'numeric'});
+
+// FAMÍLIA
+try {
+  const PERFIS_DEF = [
+    {id:'olinto',nome:'Olinto',cor:'#f59e0b',ini:'N',papel:'Adulto · Condutor'},
+    {id:'marilia',nome:'Marília',cor:'#db2777',ini:'M',papel:'Adulta'},
+    {id:'eliane',nome:'Eliane',cor:'#7c3aed',ini:'E',papel:'Adulta · Avó'},
+    {id:'lara',nome:'Lara',cor:'#16a34a',ini:'L',papel:'Criança · 9 anos'},
+    {id:'caio',nome:'Caio',cor:'#ea580c',ini:'C',papel:'Criança · 7 anos'},
+  ];
+  const perfis = JSON.parse(localStorage.getItem('perfis')||'null') || PERFIS_DEF;
+  document.getElementById('book-familia').innerHTML = perfis.map(p=>`
+    <div class="pessoa-card">
+      <div class="av" style="background:${p.cor}">${p.ini||p.ic||'?'}</div>
+      <strong>${p.nome}</strong>
+      <span>${p.papel}</span>
+      ${p.altura?`<span style="font-size:.68rem;color:#7c6f9f">📏 ${p.altura} cm</span>`:''}
+      ${p.medicamentos?`<span style="font-size:.67rem;color:#7c6f9f">💊 ${p.medicamentos.substring(0,30)}${p.medicamentos.length>30?'…':''}</span>`:''}
+    </div>`).join('');
+} catch(e) {}
+
+// ROTEIRO
+const DIAS = [
+  {cor:'#1a73e8',mes:'OUT',num:'28',titulo:'Partida de Brasília',sub:'✈️ LA3657 BSB→GRU · Check-in Hotel Panamby'},
+  {cor:'#6b7280',mes:'OUT',num:'29',titulo:'Descanso em Guarulhos',sub:'Preparação para o voo internacional'},
+  {cor:'#16a34a',mes:'OUT',num:'30',titulo:'Chegada em Orlando! 🇺🇸',sub:'✈️ GRU→MCO · Carro Alamo · Check-in Airbnb'},
+  {cor:'#f97316',mes:'OUT',num:'31',titulo:'🎃 Halloween no Magic Kingdom!',sub:"Mickey's Not-So-Scary Halloween Party · 19h–0h"},
+  {cor:'#6b7280',mes:'NOV',num:'01',titulo:'Recuperação pós-festa',sub:'Mercado · descanso · jet lag'},
+  {cor:'#7c3aed',mes:'NOV',num:'02',titulo:'🎢 Universal + Royal Pacific',sub:'Check-in Loews Royal Pacific · Express Pass'},
+  {cor:'#7c3aed',mes:'NOV',num:'03',titulo:'🎢 2º dia Universal + Express',sub:'Checkout Royal Pacific às 11h'},
+  {cor:'#6b7280',mes:'NOV',num:'04',titulo:'Descanso ou Outlets',sub:'Premium Outlets · compras · descanso'},
+  {cor:'#7c3aed',mes:'NOV',num:'05',titulo:'🌍 Epic Universe',sub:'Sem Express neste parque'},
+  {cor:'#6b7280',mes:'NOV',num:'06',titulo:'Parque a definir',sub:'Disney ou Universal'},
+  {cor:'#6b7280',mes:'NOV',num:'07',titulo:'Descanso ou Legoland',sub:'Legoland · piscina · compras'},
+  {cor:'#dc2626',mes:'NOV',num:'08',titulo:'⚠️ ÚLTIMO DIA Universal',sub:'Prazo final do ticket de 5 dias'},
+  {cor:'#6b7280',mes:'NOV',num:'09-11',titulo:'Disney & compras finais',sub:'EPCOT · Animal Kingdom · Magic Kingdom'},
+  {cor:'#db2777',mes:'NOV',num:'12',titulo:'❄️ Festa de Natal (pendente)',sub:"Mickey's Very Merry Christmas Party"},
+  {cor:'#1a73e8',mes:'NOV',num:'13',titulo:'Retorno para o Brasil ✈️',sub:'Checkout · Devolver carro · Voo MCO→GRU'},
+  {cor:'#16a34a',mes:'NOV',num:'14',titulo:'Chegada em Guarulhos e BSB 🇧🇷',sub:'GRU às 08:50 · Voo GRU→BSB às 15:50'},
+];
+document.getElementById('book-roteiro').innerHTML = DIAS.map(d=>`
+  <div class="dia">
+    <div class="dia-dt" style="background:${d.cor}"><div class="mes">${d.mes}</div><div class="num">${d.num}</div></div>
+    <div class="dia-info"><strong>${d.titulo}</strong><span>${d.sub}</span></div>
+  </div>`).join('');
+
+// PENDÊNCIAS
+try {
+  const PEND_ALL = [
+    {id:'p1',pri:'alta',txt:'Confirmar/comprar voos domésticos da Eliane (Fortaleza ↔ Guarulhos)'},
+    {id:'p2',pri:'alta',txt:'Confirmar assentos da Eliane nos voos GRU ↔ MCO'},
+    {id:'p3',pri:'alta',txt:'Organizar passaportes novos + antigos com visto (Marília, Lara e Caio)'},
+    {id:'p4',pri:'alta',txt:'Enviar endereço da casa à World Strollers'},
+    {id:'p5',pri:'alta',txt:'Emitir PID (Permissão Internacional para Dirigir)'},
+    {id:'p6',pri:'alta',txt:'Verificar cartão de crédito físico internacional do Olinto'},
+    {id:'p7',pri:'alta',txt:'Comprar ingressos Disney regulares e festa de Natal (12/11)'},
+    {id:'p8',pri:'alta',txt:'Retirar ingressos físicos do Halloween no Ticket Office'},
+    {id:'p9',pri:'media',txt:'Confirmar se fotos/PhotoPass estão incluídas no Halloween'},
+    {id:'p10',pri:'media',txt:'Confirmar Visitor Toll Pass para pedágios em Orlando'},
+    {id:'p11',pri:'media',txt:'Contatar BB Altus sobre benefícios'},
+    {id:'p12',pri:'media',txt:'Comprar saco bag / proteções para malas'},
+    {id:'p13',pri:'media',txt:'Planejar fantasia de Halloween'},
+    {id:'p14',pri:'media',txt:'Imprimir/baixar offline todos os vouchers'},
+    {id:'p15',pri:'media',txt:'Preparar pasta de emergência médica'},
+    {id:'p16',pri:'baixa',txt:'Revalidar horários dos parques 30–60 dias antes'},
+    {id:'p17',pri:'baixa',txt:'Conferir regras de malas próximas ao check-in'},
+  ];
+  const done = JSON.parse(localStorage.getItem('donePend')||'{}');
+  const pendentes = PEND_ALL.filter(p=>!done[p.id]);
+  const cores = {alta:'#dc2626',media:'#d97706',baixa:'#16a34a'};
+  document.getElementById('book-pend').innerHTML = pendentes.length
+    ? pendentes.map(p=>`<div class="pend-item"><div class="pend-dot" style="background:${cores[p.pri]}"></div><div>${p.txt}</div></div>`).join('')
+    : '<p style="color:#16a34a;font-size:.85rem;padding:12px 0">✅ Todas as pendências concluídas! Boa viagem!</p>';
+} catch(e) {}
+</script>
+</body>
+</html>
