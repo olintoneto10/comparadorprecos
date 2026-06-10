@@ -1,0 +1,354 @@
+{
+  "atualizado_em": "2026-06-09T11:58:08.336371+00:00",
+  "total_estimado": 1467.73,
+  "cupons": {
+    "bambulab": [],
+    "bestbuy": [],
+    "amazon": [],
+    "walmart": [],
+    "target": [],
+    "costco": []
+  },
+  "items": {
+    "p2s-combo": {
+      "nome": "Bambu Lab P2S Combo (AMS 2 Pro)",
+      "categoria": "impressora",
+      "qty": 1,
+      "lojas_precos": {
+        "bambulab": {
+          "preco": null,
+          "url_produto": "https://us.store.bambulab.com/products/p2s",
+          "url_carrinho": null
+        },
+        "bestbuy": {
+          "preco": 799.99,
+          "url_produto": "https://www.bestbuy.com/site/bambu-lab-p2s-combo-fdm-3d-printer-with-ams-2-pro/6647058.p",
+          "url_carrinho": null
+        },
+        "walmart": {
+          "preco": null,
+          "url_produto": "https://www.walmart.com/search?q=Bambu%20Lab%20P2S%20Combo%203D%20Printer%20AMS",
+          "url_carrinho": null
+        },
+        "target": {
+          "preco": null,
+          "url_produto": "https://www.target.com/s?searchTerm=Bambu%20Lab%20P2S%203D%20Printer",
+          "url_carrinho": null
+        },
+        "costco": {
+          "preco": null,
+          "url_produto": "https://www.costco.com/CatalogSearch?dept=All&keyword=Bambu%20Lab%20P2S%203D%20Printer",
+          "url_carrinho": null
+        }
+      },
+      "melhor_loja": "bestbuy",
+      "preco_atual": 799.99,
+      "preco_minimo": 799.0,
+      "historico": [
+        {"data": "2026-06-06T12:00:00+00:00", "preco": 799.0, "loja": "bambulab"},
+        {"data": "2026-06-06T23:49:26.489940+00:00", "preco": 799.99, "loja": "bestbuy"},
+        {"data": "2026-06-09T11:58:08.336371+00:00", "preco": 799.99, "loja": "bestbuy"}
+      ],
+      "brasil": null
+    },
+    "hotend-02-ss": {
+      "nome": "Hotend 0.2mm Stainless Steel (P2S)",
+      "categoria": "acessorio",
+      "qty": 1,
+      "lojas_precos": {
+        "bambulab": {"preco": null, "url_produto": "https://us.store.bambulab.com/products/bambu-hotend-h2-p2s", "url_carrinho": null},
+        "amazon": {"preco": null, "url_produto": "https://www.amazon.com/dp/B0CDWBWTMQ", "url_carrinho": null}
+      },
+      "melhor_loja": null,
+      "preco_atual": null,
+      "preco_minimo": 20.99,
+      "historico": [{"data": "2026-06-06T12:00:00+00:00", "preco": 20.99, "loja": "bambulab"}],
+      "brasil": null
+    },
+    "hotend-04-hs": {
+      "nome": "Hotend 0.4mm Hardened Steel (P2S)",
+      "categoria": "acessorio",
+      "qty": 1,
+      "lojas_precos": {
+        "bambulab": {"preco": null, "url_produto": "https://us.store.bambulab.com/products/bambu-hotend-h2-p2s", "url_carrinho": null},
+        "amazon": {"preco": null, "url_produto": "https://www.amazon.com/dp/B0CDWBWTMQ", "url_carrinho": null}
+      },
+      "melhor_loja": null,
+      "preco_atual": null,
+      "preco_minimo": 20.99,
+      "historico": [{"data": "2026-06-06T12:00:00+00:00", "preco": 20.99, "loja": "bambulab"}],
+      "brasil": null
+    },
+    "pei-plate": {
+      "nome": "Bambu Dual-Texture PEI Plate",
+      "categoria": "acessorio",
+      "qty": 1,
+      "lojas_precos": {
+        "bambulab": {"preco": null, "url_produto": "https://us.store.bambulab.com/products/bambu-dual-texture-pei-plate", "url_carrinho": null},
+        "amazon": {"preco": null, "url_produto": "https://www.amazon.com/dp/B0C6BVPQZ5", "url_carrinho": null},
+        "walmart": {"preco": null, "url_produto": "https://www.walmart.com/search?q=Bambu%20Lab%20PEI%20Plate%20Dual%20Texture", "url_carrinho": null}
+      },
+      "melhor_loja": null,
+      "preco_atual": null,
+      "preco_minimo": null,
+      "historico": [],
+      "brasil": null
+    },
+    "liquid-glue": {
+      "nome": "Bambu Liquid Glue",
+      "categoria": "acessorio",
+      "qty": 1,
+      "lojas_precos": {
+        "bambulab": {"preco": null, "url_produto": "https://us.store.bambulab.com/products/liquid-glue-for-build-plate", "url_carrinho": null},
+        "amazon": {"preco": 23.99, "url_produto": "https://www.amazon.com/dp/B0DK6TBF1D", "url_carrinho": null},
+        "walmart": {"preco": null, "url_produto": "https://www.walmart.com/search?q=Bambu%20Lab%20Liquid%20Glue%203D%20printer", "url_carrinho": null}
+      },
+      "melhor_loja": "amazon",
+      "preco_atual": 23.99,
+      "preco_minimo": 23.99,
+      "historico": [
+        {"data": "2026-06-06T23:49:26.489940+00:00", "preco": 23.99, "loja": "amazon"},
+        {"data": "2026-06-07T17:56:50.421359+00:00", "preco": 23.99, "loja": "amazon"},
+        {"data": "2026-06-08T16:25:34.452783+00:00", "preco": 23.99, "loja": "amazon"},
+        {"data": "2026-06-08T16:46:42.928611+00:00", "preco": 23.99, "loja": "amazon"},
+        {"data": "2026-06-09T07:33:20.971221+00:00", "preco": 23.99, "loja": "amazon"},
+        {"data": "2026-06-09T07:49:05.320229+00:00", "preco": 23.99, "loja": "amazon"},
+        {"data": "2026-06-09T08:58:19.787369+00:00", "preco": 23.99, "loja": "amazon"},
+        {"data": "2026-06-09T11:58:08.336371+00:00", "preco": 23.99, "loja": "amazon"}
+      ],
+      "brasil": null
+    },
+    "nozzle-wiper": {
+      "nome": "Nozzle Wiper",
+      "categoria": "acessorio",
+      "qty": 2,
+      "lojas_precos": {
+        "bambulab": {"preco": null, "url_produto": "https://us.store.bambulab.com/products/nozzle-wiper", "url_carrinho": null},
+        "amazon": {"preco": 17.16, "url_produto": "https://www.amazon.com/dp/B0GSSB8GDQ", "url_carrinho": null}
+      },
+      "melhor_loja": "amazon",
+      "preco_atual": 17.16,
+      "preco_minimo": 17.16,
+      "historico": [
+        {"data": "2026-06-06T20:51:07.314487+00:00", "preco": 17.16, "loja": "amazon"},
+        {"data": "2026-06-06T23:04:35.101775+00:00", "preco": 17.16, "loja": "amazon"},
+        {"data": "2026-06-06T23:07:26.635879+00:00", "preco": 17.16, "loja": "amazon"},
+        {"data": "2026-06-06T23:49:26.489940+00:00", "preco": 17.16, "loja": "amazon"},
+        {"data": "2026-06-07T17:56:50.421359+00:00", "preco": 17.16, "loja": "amazon"},
+        {"data": "2026-06-08T16:25:34.452783+00:00", "preco": 17.16, "loja": "amazon"},
+        {"data": "2026-06-08T16:46:42.928611+00:00", "preco": 17.16, "loja": "amazon"},
+        {"data": "2026-06-09T07:33:20.971221+00:00", "preco": 17.16, "loja": "amazon"},
+        {"data": "2026-06-09T07:49:05.320229+00:00", "preco": 17.16, "loja": "amazon"},
+        {"data": "2026-06-09T08:58:19.787369+00:00", "preco": 17.16, "loja": "amazon"},
+        {"data": "2026-06-09T11:58:08.336371+00:00", "preco": 17.16, "loja": "amazon"}
+      ],
+      "brasil": null
+    },
+    "pla-silk-red-gold": {
+      "nome": "PLA Silk Dual Color (Red-Gold)",
+      "categoria": "filamento",
+      "qty": 2,
+      "lojas_precos": {
+        "bambulab": {"preco": null, "url_produto": "https://us.store.bambulab.com/products/pla-silk-dual-color", "url_carrinho": null},
+        "amazon": {"preco": 28.99, "url_produto": "https://www.amazon.com/dp/B0FQPPLP3S", "url_carrinho": null},
+        "walmart": {"preco": null, "url_produto": "https://www.walmart.com/search?q=Bambu%20Lab%20PLA%20Silk%20Dual%20Color%20Red%20Gold%20filament", "url_carrinho": null}
+      },
+      "melhor_loja": "amazon",
+      "preco_atual": 28.99,
+      "preco_minimo": 28.99,
+      "historico": [
+        {"data": "2026-06-06T20:51:07.314487+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-06T23:04:35.101775+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-06T23:07:26.635879+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-06T23:49:26.489940+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-07T17:56:50.421359+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-08T16:25:34.452783+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-08T16:46:42.928611+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-09T07:33:20.971221+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-09T07:49:05.320229+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-09T08:58:19.787369+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-09T11:58:08.336371+00:00", "preco": 28.99, "loja": "amazon"}
+      ],
+      "brasil": null
+    },
+    "pla-silk-blue-purple": {
+      "nome": "PLA Silk Dual Color (Blue-Purple)",
+      "categoria": "filamento",
+      "qty": 2,
+      "lojas_precos": {
+        "bambulab": {"preco": null, "url_produto": "https://us.store.bambulab.com/products/pla-silk-dual-color", "url_carrinho": null},
+        "amazon": {"preco": 28.99, "url_produto": "https://www.amazon.com/dp/B0FQPPLP3S", "url_carrinho": null},
+        "walmart": {"preco": null, "url_produto": "https://www.walmart.com/search?q=Bambu%20Lab%20PLA%20Silk%20Dual%20Color%20Blue%20Purple%20filament", "url_carrinho": null}
+      },
+      "melhor_loja": "amazon",
+      "preco_atual": 28.99,
+      "preco_minimo": 28.99,
+      "historico": [
+        {"data": "2026-06-06T20:51:07.314487+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-06T23:04:35.101775+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-06T23:07:26.635879+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-06T23:49:26.489940+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-07T17:56:50.421359+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-08T16:25:34.452783+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-08T16:46:42.928611+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-09T07:33:20.971221+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-09T07:49:05.320229+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-09T08:58:19.787369+00:00", "preco": 28.99, "loja": "amazon"},
+        {"data": "2026-06-09T11:58:08.336371+00:00", "preco": 28.99, "loja": "amazon"}
+      ],
+      "brasil": null
+    },
+    "pla-matte-charcoal": {
+      "nome": "PLA Matte Charcoal",
+      "categoria": "filamento",
+      "qty": 2,
+      "lojas_precos": {
+        "bambulab": {"preco": null, "url_produto": "https://us.store.bambulab.com/products/pla-matte", "url_carrinho": null},
+        "amazon": {"preco": 33.25, "url_produto": "https://www.amazon.com/dp/B0G4ZVJDM7", "url_carrinho": null},
+        "walmart": {"preco": null, "url_produto": "https://www.walmart.com/search?q=Bambu%20Lab%20PLA%20Matte%20Charcoal%20filament%201kg", "url_carrinho": null}
+      },
+      "melhor_loja": "amazon",
+      "preco_atual": 33.25,
+      "preco_minimo": 22.28,
+      "historico": [
+        {"data": "2026-06-06T12:00:00+00:00", "preco": 22.28, "loja": "bambulab"},
+        {"data": "2026-06-06T23:49:26.489940+00:00", "preco": 33.0, "loja": "amazon"},
+        {"data": "2026-06-07T17:56:50.421359+00:00", "preco": 33.0, "loja": "amazon"},
+        {"data": "2026-06-08T16:25:34.452783+00:00", "preco": 32.9, "loja": "amazon"},
+        {"data": "2026-06-08T16:46:42.928611+00:00", "preco": 32.9, "loja": "amazon"},
+        {"data": "2026-06-09T07:33:20.971221+00:00", "preco": 32.9, "loja": "amazon"},
+        {"data": "2026-06-09T07:49:05.320229+00:00", "preco": 32.9, "loja": "amazon"},
+        {"data": "2026-06-09T08:58:19.787369+00:00", "preco": 33.99, "loja": "amazon"},
+        {"data": "2026-06-09T11:58:08.336371+00:00", "preco": 33.25, "loja": "amazon"}
+      ],
+      "brasil": null
+    },
+    "pla-matte-terracotta": {
+      "nome": "PLA Matte Terracotta",
+      "categoria": "filamento",
+      "qty": 2,
+      "lojas_precos": {
+        "bambulab": {"preco": null, "url_produto": "https://us.store.bambulab.com/products/pla-matte", "url_carrinho": null},
+        "amazon": {"preco": 29.5, "url_produto": "https://www.amazon.com/dp/B0G5175G82", "url_carrinho": null},
+        "walmart": {"preco": null, "url_produto": "https://www.walmart.com/search?q=Bambu%20Lab%20PLA%20Matte%20Terracotta%20filament%201kg", "url_carrinho": null}
+      },
+      "melhor_loja": "amazon",
+      "preco_atual": 29.5,
+      "preco_minimo": 22.28,
+      "historico": [
+        {"data": "2026-06-06T12:00:00+00:00", "preco": 22.28, "loja": "bambulab"},
+        {"data": "2026-06-06T23:49:26.489940+00:00", "preco": 29.06, "loja": "amazon"},
+        {"data": "2026-06-07T17:56:50.421359+00:00", "preco": 28.95, "loja": "amazon"},
+        {"data": "2026-06-08T16:25:34.452783+00:00", "preco": 29.95, "loja": "amazon"},
+        {"data": "2026-06-08T16:46:42.928611+00:00", "preco": 29.32, "loja": "amazon"},
+        {"data": "2026-06-09T07:33:20.971221+00:00", "preco": 28.73, "loja": "amazon"},
+        {"data": "2026-06-09T07:49:05.320229+00:00", "preco": 28.94, "loja": "amazon"},
+        {"data": "2026-06-09T08:58:19.787369+00:00", "preco": 33.99, "loja": "amazon"},
+        {"data": "2026-06-09T11:58:08.336371+00:00", "preco": 29.5, "loja": "amazon"}
+      ],
+      "brasil": null
+    },
+    "pla-glow": {
+      "nome": "PLA Glow-in-the-Dark",
+      "categoria": "filamento",
+      "qty": 1,
+      "lojas_precos": {
+        "bambulab": {"preco": null, "url_produto": "https://us.store.bambulab.com/products/pla-glow", "url_carrinho": null},
+        "amazon": {"preco": null, "url_produto": "https://www.amazon.com/dp/B0CV6Y88B4", "url_carrinho": null},
+        "walmart": {"preco": null, "url_produto": "https://www.walmart.com/search?q=Bambu%20Lab%20PLA%20Glow%20in%20the%20Dark%20filament", "url_carrinho": null}
+      },
+      "melhor_loja": null,
+      "preco_atual": null,
+      "preco_minimo": null,
+      "historico": [],
+      "brasil": null
+    },
+    "pla-basic-black": {
+      "nome": "PLA Basic Preto",
+      "categoria": "filamento",
+      "qty": 1,
+      "lojas_precos": {
+        "bambulab": {"preco": null, "url_produto": "https://us.store.bambulab.com/products/pla-basic-filament", "url_carrinho": null},
+        "amazon": {"preco": 33.99, "url_produto": "https://www.amazon.com/dp/B0C4GBJCSV", "url_carrinho": null},
+        "walmart": {"preco": null, "url_produto": "https://www.walmart.com/search?q=Bambu%20Lab%20PLA%20Basic%20Black%20filament%201kg", "url_carrinho": null}
+      },
+      "melhor_loja": "amazon",
+      "preco_atual": 33.99,
+      "preco_minimo": 16.99,
+      "historico": [
+        {"data": "2026-06-06T12:00:00+00:00", "preco": 16.99, "loja": "bambulab"},
+        {"data": "2026-06-06T20:51:07.314487+00:00", "preco": 22.99, "loja": "amazon"},
+        {"data": "2026-06-06T23:04:35.101775+00:00", "preco": 22.99, "loja": "amazon"},
+        {"data": "2026-06-06T23:07:26.635879+00:00", "preco": 22.99, "loja": "amazon"},
+        {"data": "2026-06-06T23:49:26.489940+00:00", "preco": 22.99, "loja": "amazon"},
+        {"data": "2026-06-07T17:56:50.421359+00:00", "preco": 29.99, "loja": "amazon"},
+        {"data": "2026-06-08T16:25:34.452783+00:00", "preco": 31.99, "loja": "amazon"},
+        {"data": "2026-06-08T16:46:42.928611+00:00", "preco": 31.99, "loja": "amazon"},
+        {"data": "2026-06-09T07:33:20.971221+00:00", "preco": 33.99, "loja": "amazon"},
+        {"data": "2026-06-09T07:49:05.320229+00:00", "preco": 33.99, "loja": "amazon"},
+        {"data": "2026-06-09T08:58:19.787369+00:00", "preco": 33.99, "loja": "amazon"},
+        {"data": "2026-06-09T11:58:08.336371+00:00", "preco": 33.99, "loja": "amazon"}
+      ],
+      "brasil": null
+    },
+    "pla-basic-white": {
+      "nome": "PLA Basic Branco",
+      "categoria": "filamento",
+      "qty": 1,
+      "lojas_precos": {
+        "bambulab": {"preco": null, "url_produto": "https://us.store.bambulab.com/products/pla-basic-filament", "url_carrinho": null},
+        "amazon": {"preco": 33.99, "url_produto": "https://www.amazon.com/dp/B0C4GB1TB1", "url_carrinho": null},
+        "walmart": {"preco": null, "url_produto": "https://www.walmart.com/search?q=Bambu%20Lab%20PLA%20Basic%20White%20filament%201kg", "url_carrinho": null}
+      },
+      "melhor_loja": "amazon",
+      "preco_atual": 33.99,
+      "preco_minimo": 16.99,
+      "historico": [
+        {"data": "2026-06-06T12:00:00+00:00", "preco": 16.99, "loja": "bambulab"},
+        {"data": "2026-06-06T20:51:07.314487+00:00", "preco": 18.99, "loja": "amazon"},
+        {"data": "2026-06-06T23:04:35.101775+00:00", "preco": 18.99, "loja": "amazon"},
+        {"data": "2026-06-06T23:07:26.635879+00:00", "preco": 18.99, "loja": "amazon"},
+        {"data": "2026-06-06T23:49:26.489940+00:00", "preco": 18.99, "loja": "amazon"},
+        {"data": "2026-06-07T17:56:50.421359+00:00", "preco": 18.99, "loja": "amazon"},
+        {"data": "2026-06-08T16:25:34.452783+00:00", "preco": 31.99, "loja": "amazon"},
+        {"data": "2026-06-08T16:46:42.928611+00:00", "preco": 31.99, "loja": "amazon"},
+        {"data": "2026-06-09T07:33:20.971221+00:00", "preco": 33.99, "loja": "amazon"},
+        {"data": "2026-06-09T07:49:05.320229+00:00", "preco": 33.99, "loja": "amazon"},
+        {"data": "2026-06-09T08:58:19.787369+00:00", "preco": 54.99, "loja": "amazon"},
+        {"data": "2026-06-09T11:58:08.336371+00:00", "preco": 33.99, "loja": "amazon"}
+      ],
+      "brasil": null
+    },
+    "ninja-crispi-pro": {
+      "nome": "Ninja Crispi Pro 6-in-1 Glass Air Fryer AS101DG Ash Grey",
+      "categoria": "eletronico",
+      "qty": 1,
+      "lojas_precos": {
+        "amazon": {"preco": 299.99, "url_produto": "https://www.amazon.com/dp/B0FPPJBKLS", "url_carrinho": null},
+        "bestbuy": {"preco": null, "url_produto": "https://www.bestbuy.com/site/ninja-crispi-pro-6-in-1-glass-air-fryer-system/6604834.p", "url_carrinho": null},
+        "walmart": {"preco": null, "url_produto": "https://www.walmart.com/search?q=Ninja%20Crispi%20Pro%20AS101DG%20Glass%20Air%20Fryer%20Ash%20Grey", "url_carrinho": null},
+        "target": {"preco": null, "url_produto": "https://www.target.com/s?searchTerm=Ninja%20Crispi%20Pro%20AS101DG%20Air%20Fryer", "url_carrinho": null},
+        "costco": {"preco": null, "url_produto": "https://www.costco.com/CatalogSearch?dept=All&keyword=Ninja%20Crispi%20Pro%20Glass%20Air%20Fryer", "url_carrinho": null}
+      },
+      "melhor_loja": "amazon",
+      "preco_atual": 299.99,
+      "preco_minimo": 299.99,
+      "historico": [
+        {"data": "2026-06-06T23:49:26.489940+00:00", "preco": 299.99, "loja": "amazon"},
+        {"data": "2026-06-07T17:56:50.421359+00:00", "preco": 299.99, "loja": "amazon"},
+        {"data": "2026-06-08T16:25:34.452783+00:00", "preco": 299.99, "loja": "amazon"},
+        {"data": "2026-06-08T16:46:42.928611+00:00", "preco": 299.99, "loja": "amazon"},
+        {"data": "2026-06-09T07:33:20.971221+00:00", "preco": 299.99, "loja": "amazon"},
+        {"data": "2026-06-09T07:49:05.320229+00:00", "preco": 299.99, "loja": "amazon"},
+        {"data": "2026-06-09T08:58:19.787369+00:00", "preco": 299.99, "loja": "amazon"},
+        {"data": "2026-06-09T11:58:08.336371+00:00", "preco": 299.99, "loja": "amazon"}
+      ],
+      "brasil": null
+    }
+  },
+  "cambio": {
+    "usd_brl": 5.8,
+    "fonte": "AwesomeAPI",
+    "atualizado_em": "2026-06-09T11:58:08.336371+00:00"
+  }
+}
