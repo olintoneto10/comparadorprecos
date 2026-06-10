@@ -1,0 +1,14 @@
+{
+  "name": "Orlando 2026 — Família Arruda",
+  "short_name": "Orlando 2026",
+  "description": "Planejador completo da viagem Orlando 2026",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1a73e8",
+  "theme_color": "#1a73e8",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
