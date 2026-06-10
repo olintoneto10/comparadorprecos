@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="theme-color" content="#1e1b4b"/>
+  <title>Compras Orlando 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Nunito','Segoe UI',system-ui,sans-serif;background:#f5f3ff;color:#1e1b4b;min-height:100vh;padding-bottom:100px}
+    .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e1b4b;color:#fff;padding:10px 20px;border-radius:24px;font-size:.83rem;font-weight:700;opacity:0;transition:all .3s;z-index:300;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
+    .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+    .top{background:linear-gradient(135deg,#1e1b4b,#4c1d95);color:#fff;padding:13px 16px;padding-top:calc(13px + env(safe-area-inset-top));display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:60;box-shadow:0 2px 12px rgba(30,27,75,.3)}
+    .top h1{font-size:.93rem;font-weight:800;flex:1;text-align:center}
+    .top-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:20px;padding:6px 11px;font-size:.8rem;font-weight:800;cursor:pointer;font-family:inherit;flex-shrink:0;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;gap:4px;transition:opacity .15s}
+    .top-btn:active{opacity:.7}
+    .top-btn:disabled{opacity:.4;cursor:default}
+    .summary-panel{margin:12px;border-radius:18px;overflow:hidden;box-shadow:0 6px 24px rgba(124,58,237,.25)}
+    .summary-hero{background:linear-gradient(135deg,#7c3aed,#db2777);color:#fff;padding:20px 16px 16px;text-align:center}
+    .sh-label{font-size:.72rem;font-weight:700;opacity:.8;margin-bottom:4px}
+    .sh-value{font-size:2.2rem;font-weight:900;letter-spacing:-.02em;line-height:1.1}
+    .sh-sub{font-size:.7rem;opacity:.75;margin-top:6px;font-weight:600}
+    .sh-parcial{display:inline-block;background:rgba(255,255,255,.2);border-radius:12px;padding:2px 10px;font-size:.65rem;font-weight:700;margin-top:6px}
+    .summary-grid{background:#fff;display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #f3f0ff}
+    .sg-cell{padding:12px 14px;border-right:1px solid #f3f0ff;border-bottom:1px solid #f3f0ff}
+    .sg-cell:nth-child(even){border-right:none}
+    .sg-cell:nth-last-child(-n+2){border-bottom:none}
+    .sg-lbl{font-size:.65rem;font-weight:700;color:#9ca3af;margin-bottom:3px}
+    .sg-val{font-size:.92rem;font-weight:900;color:#1e1b4b}
+    .sg-val.eua{color:#1d4ed8}
+    .sg-val.br{color:#16a34a}
+    .sg-val.eco{color:#10b981}
+    .summary-badges{background:#fff;display:flex;gap:8px;padding:12px 14px;flex-wrap:wrap;border-top:1px solid #f3f0ff}
+    .sb{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:.68rem;font-weight:700}
+    .sb-eua{background:#dbeafe;color:#1d4ed8}
+    .sb-br{background:#dcfce7;color:#16a34a}
+    .sb-sem{background:#f3f4f6;color:#6b7280}
+    .sb-atualiz{background:#ede9fe;color:#7c3aed;margin-left:auto}
+    .how-calc{background:#fff;margin:0 12px 8px;border-radius:14px;overflow:hidden;border:1px solid #ede9fe;box-shadow:0 1px 6px rgba(124,58,237,.06)}
+    .how-calc-toggle{width:100%;background:none;border:none;font-family:inherit;font-size:.73rem;font-weight:700;color:#7c3aed;cursor:pointer;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;-webkit-tap-highlight-color:transparent}
+    .how-calc-body{display:none;padding:0 14px 12px;font-size:.73rem;color:#4c1d95;line-height:1.65;font-weight:600}
+    .how-calc-body.open{display:block}
+    .how-step{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px}
+    .how-num{background:#7c3aed;color:#fff;width:18px;height:18px;min-width:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:900;margin-top:1px;flex-shrink:0}
+    .cambio-bar{background:#ede9fe;margin:0 12px 8px;border-radius:10px;padding:7px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+    .cambio-info{font-size:.72rem;font-weight:700;color:#4c1d95;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+    .cambio-rate{font-size:.85rem;font-weight:900;color:#7c3aed}
+    .cambio-note{font-size:.62rem;color:#7c6f9f;font-weight:600}
+    .cat-chips{display:flex;gap:6px;padding:4px 12px 10px;overflow-x:auto;scrollbar-width:none}
+    .cat-chips::-webkit-scrollbar{display:none}
+    .cat-chip{flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:.75rem;font-weight:700;cursor:pointer;border:1.5px solid #ddd6fe;background:#fff;color:#7c6f9f;font-family:inherit;transition:all .15s}
+    .cat-chip.on{background:#7c3aed;color:#fff;border-color:#7c3aed}
+    .section-header{display:flex;align-items:center;gap:8px;padding:8px 14px 4px;font-size:.78rem;font-weight:800;color:#4c1d95}
+    .section-badge{background:#ede9fe;color:#7c3aed;border-radius:20px;font-size:.65rem;font-weight:800;padding:2px 8px}
+    .item-card{background:#fff;border-radius:14px;margin:0 12px 10px;padding:14px;box-shadow:0 1px 8px rgba(124,58,237,.08);border:1px solid #ede9fe}
+    .item-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}
+    .item-name{font-size:.85rem;font-weight:800;color:#1e1b4b;flex:1}
+    .item-badges{display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+    .badge{font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap}
+    .badge-qty{background:#ede9fe;color:#7c3aed}
+    .badge-custom{background:#fef3c7;color:#d97706}
+    .badge-min{background:#d1fae5;color:#10b981}
+    .badge-eua{background:#dbeafe;color:#1d4ed8}
+    .badge-br{background:#dcfce7;color:#16a34a}
+    .badge-stale{background:#fef3c7;color:#d97706}
+    .badge-sem{background:#f3f4f6;color:#6b7280}
+    .mini-chart{display:flex;gap:2px;align-items:flex-end;height:20px;margin-bottom:8px}
+    .bar{background:#ddd6fe;border-radius:2px;flex:1;min-height:3px}
+    .bar.last{background:#7c3aed}
+    .price-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:4px}
+    .price-current{font-size:1.35rem;font-weight:900;color:#7c3aed}
+    .price-null{font-size:.82rem;font-weight:700;color:#9ca3af;font-style:italic}
+    .price-subtotal{font-size:.72rem;font-weight:700;color:#7c6f9f;margin-bottom:8px}
+    .stores{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;border-top:1px solid #f3f0ff;padding-top:8px}
+    .store-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .store-name{font-size:.72rem;font-weight:700;color:#7c6f9f;min-width:90px;flex-shrink:0}
+    .store-price{font-size:.8rem;font-weight:800;color:#1e1b4b;flex:1;min-width:80px}
+    .store-price.best{color:#7c3aed}
+    .store-price.null{color:#c4b5fd;font-weight:600;font-style:italic}
+    .store-price.manual{color:#d97706}
+    .store-links{display:flex;gap:4px;flex-wrap:wrap;flex-shrink:0;align-items:center}
+    .store-link{font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:20px;text-decoration:none;white-space:nowrap;border:1.5px solid #ddd6fe;color:#7c3aed;background:#f5f3ff;transition:opacity .15s}
+    .store-link.cart{background:linear-gradient(135deg,#7c3aed,#db2777);color:#fff;border-color:transparent}
+    .store-link:active{opacity:.7}
+    .btn-edit-price{background:none;border:none;font-size:.75rem;cursor:pointer;color:#9ca3af;padding:2px 4px;border-radius:6px;transition:all .15s;line-height:1;flex-shrink:0}
+    .btn-edit-price:hover{background:#fef3c7;color:#d97706}
+    .cmp-section{border-top:1px solid #f3f0ff;margin-top:6px;padding-top:6px}
+    .cmp-toggle{width:100%;text-align:left;background:none;border:none;font-family:inherit;font-size:.72rem;font-weight:700;color:#7c6f9f;cursor:pointer;padding:4px 0;display:flex;align-items:center;justify-content:space-between;gap:4px;-webkit-tap-highlight-color:transparent}
+    .cmp-toggle .cmp-rec-inline{font-size:.68rem;padding:2px 8px;border-radius:20px;font-weight:800}
+    .cmp-rec-eua{background:#dbeafe;color:#1d4ed8}
+    .cmp-rec-br{background:#dcfce7;color:#16a34a}
+    .cmp-rec-igual{background:#f3f4f6;color:#6b7280}
+    .cmp-body{padding:8px 0 2px;display:none}
+    .cmp-body.open{display:block}
+    .cmp-row{display:flex;justify-content:space-between;align-items:center;font-size:.74rem;font-weight:700;padding:3px 0;gap:8px}
+    .cmp-row .label{color:#7c6f9f;flex:1}
+    .cmp-row .val{color:#1e1b4b;text-align:right}
+    .cmp-row .val.winner{color:#10b981;font-size:.8rem}
+    .cmp-row .val.loser{color:#9ca3af;text-decoration:line-through}
+    .cmp-row .val.neutral{color:#1e1b4b}
+    .cmp-rec-badge{font-size:.75rem;font-weight:800;padding:5px 12px;border-radius:10px;margin:6px 0;text-align:center;width:100%}
+    .cmp-nota{font-size:.62rem;color:#9ca3af;margin-top:5px;line-height:1.5}
+    .cmp-explanation{font-size:.74rem;font-weight:600;color:#1e1b4b;background:#f5f3ff;border-radius:8px;padding:8px 10px;margin:6px 0 4px;line-height:1.55}
+    .cmp-input-row{display:flex;gap:6px;align-items:center;margin-top:6px}
+    .cmp-input-row input{flex:1;padding:7px 10px;border:1.5px solid #ddd6fe;border-radius:8px;font-size:.78rem;font-family:inherit;font-weight:600;outline:none}
+    .cmp-input-row input:focus{border-color:#7c3aed}
+    .cmp-input-row button{padding:7px 12px;background:#7c3aed;color:#fff;border:none;border-radius:8px;font-size:.72rem;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap}
+    .cupons-card{background:#fff;border-radius:14px;margin:0 12px 12px;padding:14px 14px 10px;box-shadow:0 1px 8px rgba(124,58,237,.08);border:1px solid #fde68a}
+    .cupons-title{font-size:.82rem;font-weight:800;color:#1e1b4b;margin-bottom:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+    .cupons-title small{font-size:.65rem;font-weight:600;color:#9ca3af;margin-left:2px}
+    .cupom-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+    .cupom-loja{font-size:.7rem;font-weight:700;color:#7c6f9f;min-width:80px;flex-shrink:0}
+    .cupom-codigo{font-family:monospace;font-size:.82rem;font-weight:900;color:#b45309;background:#fffbeb;border:1.5px dashed #fcd34d;border-radius:8px;padding:4px 12px;letter-spacing:.06em;cursor:pointer;transition:all .15s;user-select:all;-webkit-user-select:all;flex-shrink:0}
+    .cupom-codigo:hover{background:#fef3c7}
+    .cupom-desc{font-size:.67rem;color:#9ca3af;font-weight:600;flex:1;min-width:0}
+    .cupom-fonte{font-size:.6rem;color:#7c3aed;font-weight:700;background:#ede9fe;border-radius:10px;padding:2px 7px;white-space:nowrap;flex-shrink:0}
+    .btn-main{width:100%;padding:10px;background:linear-gradient(135deg,#7c3aed,#db2777);color:#fff;border:none;border-radius:10px;font-size:.78rem;font-weight:800;cursor:pointer;font-family:inherit;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;transition:opacity .15s;-webkit-tap-highlight-color:transparent;margin-bottom:6px}
+    .btn-main:active{opacity:.7}
+    .btn-main.disabled{background:#e5e7eb;color:#9ca3af;cursor:default;pointer-events:none}
+    .btn-remove{width:100%;padding:8px;background:#fff;color:#dc2626;border:1.5px solid #fecaca;border-radius:10px;font-size:.74rem;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s}
+    .btn-remove:active{opacity:.7}
+    .loading{text-align:center;padding:60px 20px;color:#7c6f9f;font-weight:700;font-size:.9rem}
+    .error-box{margin:12px;padding:20px;background:#fee2e2;border-radius:14px;color:#dc2626;font-weight:700;font-size:.85rem;text-align:center}
+    .fab{position:fixed;right:16px;bottom:calc(82px + env(safe-area-inset-bottom));width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#db2777);color:#fff;border:none;font-size:1.7rem;font-weight:300;line-height:1;cursor:pointer;box-shadow:0 4px 20px rgba(124,58,237,.45);z-index:55;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:transform .15s}
+    .fab:active{transform:scale(.92)}
+    .sheet-bg{display:none;position:fixed;inset:0;background:rgba(30,27,75,.55);z-index:80}
+    .sheet-bg.on{display:block}
+    .sheet{position:fixed;bottom:-110%;left:0;right:0;background:#fff;border-radius:24px 24px 0 0;padding:12px 16px 32px;padding-bottom:calc(32px + env(safe-area-inset-bottom));z-index:90;transition:bottom .35s cubic-bezier(.4,0,.2,1);max-height:92vh;overflow-y:auto;box-shadow:0 -8px 40px rgba(30,27,75,.2)}
+    .sheet.on{bottom:0}
+    .sheet-handle{width:40px;height:4px;background:#ddd6fe;border-radius:2px;margin:0 auto 14px}
+    .sheet-title{font-size:1rem;font-weight:900;color:#1e1b4b;margin-bottom:14px}
+    .fgrp{margin-bottom:11px}
+    .fgrp label{display:block;font-size:.73rem;font-weight:700;color:#7c6f9f;margin-bottom:4px}
+    .fgrp input,.fgrp select{width:100%;padding:10px 12px;border:1.5px solid #ddd6fe;border-radius:10px;font-size:.83rem;font-family:inherit;font-weight:600;outline:none;background:#fff;color:#1e1b4b}
+    .fgrp input:focus,.fgrp select:focus{border-color:#7c3aed}
+    .frow{display:flex;gap:10px}
+    .frow .fgrp{flex:1}
+    .frow .fgrp.short{flex:0 0 72px}
+    .sheet-divider{font-size:.72rem;font-weight:700;color:#7c6f9f;margin:12px 0 8px;display:flex;align-items:center;gap:8px}
+    .sheet-divider::before,.sheet-divider::after{content:'';flex:1;height:1px;background:#ede9fe}
+    .btn-sheet-add{width:100%;padding:13px;background:linear-gradient(135deg,#7c3aed,#db2777);color:#fff;border:none;border-radius:12px;font-size:.9rem;font-weight:800;cursor:pointer;font-family:inherit;margin-top:8px}
+    .modal-bg{display:none;position:fixed;inset:0;background:rgba(30,27,75,.6);z-index:100;align-items:center;justify-content:center;padding:20px}
+    .modal-bg.on{display:flex}
+    .modal{background:#fff;border-radius:20px;padding:22px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(30,27,75,.3);max-height:90vh;overflow-y:auto}
+    .modal h2{font-size:1rem;font-weight:900;color:#1e1b4b;margin-bottom:4px}
+    .modal-sub{font-size:.73rem;color:#7c6f9f;font-weight:600;margin-bottom:14px}
+    .modal input{width:100%;padding:11px 14px;border:1.5px solid #ddd6fe;border-radius:12px;font-size:.83rem;font-family:inherit;font-weight:600;outline:none;margin-bottom:8px}
+    .modal input:focus{border-color:#7c3aed}
+    .modal-btns{display:flex;gap:8px;margin-top:4px}
+    .modal-ok{flex:1;padding:11px;background:linear-gradient(135deg,#7c3aed,#db2777);color:#fff;border:none;border-radius:12px;font-size:.85rem;font-weight:800;cursor:pointer;font-family:inherit}
+    .modal-cancel{padding:11px 16px;background:#f5f3ff;color:#7c6f9f;border:1.5px solid #ddd6fe;border-radius:12px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit}
+    .modal-link{display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#1e1b4b,#4c1d95);color:#fff;text-decoration:none;padding:12px 16px;border-radius:12px;font-size:.84rem;font-weight:800;margin-bottom:10px;transition:opacity .15s;-webkit-tap-highlight-color:transparent}
+    .modal-link:active{opacity:.7}
+    .modal-link-sec{display:flex;align-items:center;justify-content:center;gap:6px;background:#f5f3ff;color:#4c1d95;text-decoration:none;padding:10px 16px;border-radius:12px;font-size:.8rem;font-weight:800;border:1.5px solid #ddd6fe;transition:opacity .15s;margin-bottom:8px}
+    .modal-divider{font-size:.7rem;font-weight:700;color:#9ca3af;text-align:center;margin:14px 0 10px;display:flex;align-items:center;gap:8px}
+    .modal-divider::before,.modal-divider::after{content:'';flex:1;height:1px;background:#ede9fe}
+    .modal-obs{font-size:.68rem;color:#9ca3af;font-weight:600;text-align:center;margin-bottom:10px;line-height:1.5}
+    .modal-danger{font-size:.7rem;color:#dc2626;font-weight:700;cursor:pointer;text-align:center;margin-top:10px}
+    .token-steps{margin:8px 0 10px}
+    .token-step{display:flex;align-items:flex-start;gap:9px;margin-bottom:6px;font-size:.77rem;color:#4c1d95;font-weight:700;line-height:1.4}
+    .step-num{background:#7c3aed;color:#fff;width:20px;height:20px;min-width:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:900;margin-top:1px;flex-shrink:0}
+    .footer-total{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#1e1b4b,#4c1d95);color:#fff;padding:12px 20px;padding-bottom:calc(12px + env(safe-area-inset-bottom));display:flex;justify-content:space-between;align-items:center;box-shadow:0 -4px 20px rgba(30,27,75,.3);z-index:50}
+    .footer-label{font-size:.75rem;font-weight:700;opacity:.75}
+    .footer-value{font-size:1.3rem;font-weight:900}
+    .footer-sub{font-size:.65rem;font-weight:700;opacity:.7;margin-top:1px}
+  </style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<div class="sheet-bg" id="sheet-bg" onclick="fecharSheet()"></div>
+
+<div class="sheet" id="sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">&#x2795; Adicionar Produto</div>
+  <div class="fgrp"><label>Nome do produto *</label><input type="text" id="f-nome" placeholder="Ex: Nike Air Max 270..."/></div>
+  <div class="frow">
+    <div class="fgrp"><label>Categoria</label><select id="f-cat">
+      <option value="impressora">&#x1F5A8;&#xFE0F; Impressora</option>
+      <option value="acessorio">&#x1F527; Acess&#xF3;rio</option>
+      <option value="filamento">&#x1F9F5; Filamento</option>
+      <option value="calcados">&#x1F45F; Cal&#xE7;ados</option>
+      <option value="beleza">&#x1F484; Beleza</option>
+      <option value="eletronico">&#x1F4F1; Eletr&#xF4;nico</option>
+      <option value="geral" selected>&#x1F6CD;&#xFE0F; Geral</option>
+    </select></div>
+    <div class="fgrp short"><label>Qtd</label><input type="number" id="f-qty" value="1" min="1" max="99"/></div>
+  </div>
+  <div class="sheet-divider">Cole o link do produto em cada loja</div>
+  <div class="fgrp"><label>&#x1F7E1; Amazon</label><input type="url" id="f-amazon" placeholder="https://amazon.com/dp/..."/></div>
+  <div class="fgrp"><label>&#x1F535; Best Buy</label><input type="url" id="f-bestbuy" placeholder="https://bestbuy.com/..."/></div>
+  <div class="frow">
+    <div class="fgrp short"><label>Outra loja</label><input type="text" id="f-loja-nome" placeholder="Nike"/></div>
+    <div class="fgrp"><label>&nbsp;</label><input type="url" id="f-loja-url" placeholder="https://nike.com/..."/></div>
+  </div>
+  <button class="btn-sheet-add" onclick="adicionarProduto()">&#x2795; Adicionar &#xE0; Lista</button>
+</div>
+
+<div class="modal-bg" id="modal-update">
+  <div class="modal">
+    <h2>&#x1F504; Atualizar Pre&#xE7;os</h2>
+    <div class="modal-sub">A busca de pre&#xE7;os roda automaticamente a cada 2 dias. Para for&#xE7;ar agora:</div>
+    <a href="https://github.com/olintoneto10/orlando-2026/actions/workflows/price-tracker.yml" target="_blank" class="modal-link" onclick="fecharModalUpdate()">&#x1F680; Atualizar agora no GitHub &#x2192;</a>
+    <div class="modal-obs">Abre o GitHub, clique em <strong>Run workflow</strong> e aguarde ~7 minutos. Os pre&#xE7;os atualizam sozinhos.</div>
+    <div class="modal-divider">ou use token para atualizar direto daqui</div>
+    <button class="modal-link-sec" style="border:none;cursor:pointer;font-family:inherit;width:100%" onclick="fecharModalUpdate();abrirConfig()">&#x2699;&#xFE0F; Configurar token de atualiza&#xE7;&#xE3;o r&#xE1;pida</button>
+    <div class="modal-btns">
+      <button class="modal-cancel" style="width:100%" onclick="fecharModalUpdate()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-config">
+  <div class="modal">
+    <h2>&#x2699;&#xFE0F; Configura&#xE7;&#xF5;es</h2>
+    <div class="modal-sub">Configure um token para atualizar os pre&#xE7;os direto deste app, sem abrir o GitHub.</div>
+    <div class="token-steps">
+      <div class="token-step"><span class="step-num">1</span><span>Clique para abrir o GitHub j&#xE1; configurado:</span></div>
+    </div>
+    <a href="https://github.com/settings/tokens/new?scopes=workflow&description=compras-orlando-2026" target="_blank" class="modal-link">&#x1F517; Gerar Token no GitHub &#x2192;</a>
+    <div class="token-steps">
+      <div class="token-step"><span class="step-num">2</span><span>Em <strong>Expiration</strong> escolha <strong>No expiration</strong></span></div>
+      <div class="token-step"><span class="step-num">3</span><span>Marque o escopo <strong>workflow</strong> &#x2705;</span></div>
+      <div class="token-step"><span class="step-num">4</span><span>Clique <strong>Generate token</strong>, copie e cole abaixo:</span></div>
+    </div>
+    <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" aria-label="Token GitHub"/>
+    <div class="modal-obs">&#x1F512; Salvo s&#xF3; neste aparelho &middot; n&#xE3;o &#xE9; enviado para nenhum servidor &middot; usado apenas para disparar a atualiza&#xE7;&#xE3;o</div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="fecharConfig()">Cancelar</button>
+      <button class="modal-ok" onclick="salvarToken()">&#x1F4BE; Salvar Token</button>
+    </div>
+    <div class="modal-danger" id="btn-remover-token" style="display:none" onclick="limparToken()">Remover token salvo</div>
+  </div>
+</div>
+
+<div class="top">
+  <a href="index.html" class="top-btn">&#x2190; Voltar</a>
+  <h1>&#x1F6D2; Compras Orlando 2026</h1>
+  <button class="top-btn" id="btn-refresh" onclick="iniciarAtualizacao()">&#x1F504; Atualizar</button>
+  <button class="top-btn" onclick="abrirConfig()" title="Configura&#xE7;&#xF5;es" aria-label="Configura&#xE7;&#xF5;es">&#x2699;&#xFE0F;</button>
+</div>
+
+<div id="app"><div class="loading">&#x23F3; Carregando pre&#xE7;os...</div></div>
+<button class="fab" onclick="abrirSheet()" title="Adicionar produto" aria-label="Adicionar produto">+</button>
+
+<div class="footer-total">
+  <div>
+    <div class="footer-label">Menor custo total estimado</div>
+    <div class="footer-value" id="footer-total">&#x2014;</div>
+    <div class="footer-sub" id="footer-sub">calculando...</div>
+  </div>
+  <div style="text-align:right">
+    <div style="font-size:.7rem;font-weight:700;opacity:.7">6 lojas &middot; a cada 2 dias</div>
+    <div style="font-size:.62rem;font-weight:700;opacity:.55" id="footer-cambio-mini"></div>
+  </div>
+</div>
+
+<script>
+const REPO     = 'olintoneto10/orlando-2026';
+const WORKFLOW = 'price-tracker.yml';
+const CUSTOM_KEY     = 'compras_custom_v2';
+const MANUAL_KEY     = 'compras_precos_manual_v1';
+const BRL_MANUAL_KEY = 'compras_brl_manual_v1';
+
+const ORLANDO_TAX = 0.065;
+const SPREAD_RATE = 0.04;
+const IOF_SPREAD  = 1 + SPREAD_RATE;
+
+const STORE_INFO = {
+  bambulab:    { nome: 'Bambu Lab US',  emoji: '&#x1F7E2;' },
+  bestbuy:     { nome: 'Best Buy',      emoji: '&#x1F535;' },
+  amazon:      { nome: 'Amazon',        emoji: '&#x1F7E1;' },
+  walmart:     { nome: 'Walmart',       emoji: '&#x1F536;' },
+  target:      { nome: 'Target',        emoji: '&#x1F3AF;' },
+  costco:      { nome: 'Costco',        emoji: '&#x1F534;' },
+  newegg:      { nome: 'Newegg',        emoji: '&#x1F7E0;' },
+  bambulab_br: { nome: 'Bambu Lab BR',  emoji: '&#x1F1E7;&#x1F1F7;' },
+  mercadolivre:{ nome: 'Mercado Livre', emoji: '&#x1F6D2;' },
+  kabum:       { nome: 'Kabum',         emoji: '&#x1F1E7;&#x1F1F7;' },
+};
+const CATS = [
+  { id: 'todos',      nome: 'Todos',       ic: '&#x1F5C2;&#xFE0F;' },
+  { id: 'impressora', nome: 'Impressora',  ic: '&#x1F5A8;&#xFE0F;' },
+  { id: 'acessorio',  nome: 'Acess&#xF3;rios',  ic: '&#x1F527;' },
+  { id: 'filamento',  nome: 'Filamentos',  ic: '&#x1F9F5;' },
+  { id: 'calcados',   nome: 'Cal&#xE7;ados',    ic: '&#x1F45F;' },
+  { id: 'beleza',     nome: 'Beleza',      ic: '&#x1F484;' },
+  { id: 'eletronico', nome: 'Eletr&#xF4;nicos', ic: '&#x1F4F1;' },
+  { id: 'geral',      nome: 'Geral',       ic: '&#x1F6CD;&#xFE0F;' },
+];
+const CAT_ORDER = ['impressora','acessorio','filamento','calcados','beleza','eletronico','geral'];
+let catAtual = 'todos', dados = null;
+
+function fmt(v)    { return v == null ? null : '$' + Number(v).toFixed(2); }
+function fmtBrl(v) { return v == null ? null : 'R$' + Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmtData(iso) {
+  if (!iso) return '&#x2014;';
+  return new Date(iso).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+function miniChart(hist) {
+  if (!hist || hist.length < 2) return '';
+  const sl  = hist.slice(-12);
+  const mx  = Math.max(...sl.map(h => h.preco));
+  const mn  = Math.min(...sl.map(h => h.preco));
+  const rng = mx - mn || 1;
+  return `<div class="mini-chart">${sl.map((h,i) => {
+    const pct = Math.max(15, ((h.preco - mn) / rng) * 100);
+    return `<div class="bar ${i === sl.length-1 ? 'last' : ''}" style="height:${pct}%"></div>`;
+  }).join('')}</div>`;
+}
+function storeInfo(loja) {
+  return STORE_INFO[loja] || { nome: loja.charAt(0).toUpperCase() + loja.slice(1), emoji: '&#x1F517;' };
+}
+
+function getCustom()               { return JSON.parse(localStorage.getItem(CUSTOM_KEY) || '[]'); }
+function saveCustom(list)          { localStorage.setItem(CUSTOM_KEY, JSON.stringify(list)); }
+function getManualOverrides(pid)   { return JSON.parse(localStorage.getItem(MANUAL_KEY) || '{}')[pid] || {}; }
+function getBrlManual(pid)         { return JSON.parse(localStorage.getItem(BRL_MANUAL_KEY) || '{}')[pid] || null; }
+
+function setManualOverride(pid, loja, preco) {
+  const all = JSON.parse(localStorage.getItem(MANUAL_KEY) || '{}');
+  if (!all[pid]) all[pid] = {};
+  if (preco === null) delete all[pid][loja]; else all[pid][loja] = preco;
+  localStorage.setItem(MANUAL_KEY, JSON.stringify(all));
+}
+function setBrlManual(pid, brl) {
+  const all = JSON.parse(localStorage.getItem(BRL_MANUAL_KEY) || '{}');
+  if (brl === null) delete all[pid]; else all[pid] = brl;
+  localStorage.setItem(BRL_MANUAL_KEY, JSON.stringify(all));
+}
+
+function calcularPrecoItem(item) {
+  const ptax = dados?.cambio?.usd_brl || 0;
+  const taxaCartao = ptax * IOF_SPREAD;
+  const pid = item._id || item.nome || '';
+  const overrides = getManualOverrides(pid);
+  let precoEUA = item.preco_atual;
+  Object.entries(item.lojas_precos || {}).forEach(([loja, info]) => {
+    const p = overrides[loja] !== undefined ? overrides[loja] : info.preco;
+    if (p != null && (precoEUA === null || p < precoEUA)) precoEUA = p;
+  });
+  const custoEUA_usd = precoEUA != null ? precoEUA * (1 + ORLANDO_TAX) : null;
+  const custoEUA_brl = custoEUA_usd != null && ptax > 0 ? custoEUA_usd * taxaCartao : null;
+  let precoBrl = item.brasil?.preco_brl || null;
+  const brlManual = getBrlManual(pid);
+  if (brlManual) precoBrl = brlManual;
+  const custoBR_brl = precoBrl || null;
+  return { precoEUA, custoEUA_usd, custoEUA_brl, custoBR_brl, brlManual, taxaCartao, ptax };
+}
+
+function calcularTotais() {
+  if (!dados) return null;
+  let totalEUA_brl = 0, totalBR_brl = 0, totalRec_brl = 0, economiaRec = 0;
+  let contEUA = 0, contBR = 0, contIgual = 0, contSemPreco = 0;
+  let eua_completo = true, br_completo = true, rec_completo = true;
+  const nItems = Object.keys(dados.items).length;
+  Object.values(dados.items).forEach(item => {
+    const qty = item.qty || 1;
+    const { custoEUA_brl, custoBR_brl } = calcularPrecoItem(item);
+    if (custoEUA_brl != null) totalEUA_brl += custoEUA_brl * qty; else eua_completo = false;
+    if (custoBR_brl != null)  totalBR_brl  += custoBR_brl  * qty; else br_completo  = false;
+    if (custoEUA_brl != null && custoBR_brl != null) {
+      const diff    = Math.abs(custoEUA_brl - custoBR_brl);
+      const diffPct = diff / Math.max(custoEUA_brl, custoBR_brl);
+      if (diffPct < 0.03) { totalRec_brl += custoEUA_brl * qty; contIgual++; }
+      else if (custoEUA_brl < custoBR_brl) { totalRec_brl += custoEUA_brl * qty; economiaRec += (custoBR_brl - custoEUA_brl) * qty; contEUA++; }
+      else { totalRec_brl += custoBR_brl * qty; economiaRec += (custoEUA_brl - custoBR_brl) * qty; contBR++; }
+    } else if (custoEUA_brl != null) { totalRec_brl += custoEUA_brl * qty; }
+    else if (custoBR_brl != null) { totalRec_brl += custoBR_brl * qty; }
+    else { contSemPreco++; rec_completo = false; }
+  });
+  return { totalEUA_brl, totalBR_brl, totalRec_brl, economiaRec, contEUA, contBR, contIgual, contSemPreco, eua_completo, br_completo, rec_completo, nItems };
+}
+
+function summaryHtml(t) {
+  if (!t) return '';
+  const parcial = !t.rec_completo ? ` &middot; estimativa parcial (${t.contSemPreco} sem pre&#xE7;o)` : '';
+  const sgEUA   = t.eua_completo ? fmtBrl(t.totalEUA_brl)  : fmtBrl(t.totalEUA_brl) + '*';
+  const sgBR    = t.br_completo  ? fmtBrl(t.totalBR_brl)   : fmtBrl(t.totalBR_brl)  + '*';
+  const sgEco   = t.economiaRec > 0 ? fmtBrl(t.economiaRec) : '&#x2014;';
+  return `
+  <div class="summary-panel">
+    <div class="summary-hero">
+      <div class="sh-label">&#x1F4B0; Menor custo total estimado</div>
+      <div class="sh-value">${fmtBrl(t.totalRec_brl)}</div>
+      <div class="sh-sub">O app escolhe a op&#xE7;&#xE3;o mais barata para cada produto</div>
+      ${parcial ? `<div class="sh-parcial">&#x26A0;&#xFE0F; ${t.contSemPreco} produto${t.contSemPreco>1?'s':''} ainda sem pre&#xE7;o</div>` : ''}
+    </div>
+    <div class="summary-grid">
+      <div class="sg-cell"><div class="sg-lbl">&#x1F1FA;&#x1F1F8; Total se comprar tudo nos EUA</div><div class="sg-val eua">${sgEUA}</div></div>
+      <div class="sg-cell"><div class="sg-lbl">&#x1F1E7;&#x1F1F7; Total se comprar tudo no Brasil</div><div class="sg-val br">${sgBR}</div></div>
+      <div class="sg-cell"><div class="sg-lbl">&#x1F49A; Economia total estimada</div><div class="sg-val eco">${sgEco}</div></div>
+      <div class="sg-cell"><div class="sg-lbl">&#x1F4E6; Produtos rastreados</div><div class="sg-val">${t.nItems}</div></div>
+    </div>
+    <div class="summary-badges">
+      <span class="sb sb-eua">&#x1F1FA;&#x1F1F8; ${t.contEUA} mais baratos nos EUA</span>
+      <span class="sb sb-br">&#x1F1E7;&#x1F1F7; ${t.contBR} mais baratos no Brasil</span>
+      ${t.contSemPreco ? `<span class="sb sb-sem">&#x23F3; ${t.contSemPreco} sem pre&#xE7;o</span>` : ''}
+      <span class="sb sb-atualiz">&#x1F4C5; ${fmtData(dados?.atualizado_em)}</span>
+    </div>
+  </div>`;
+}
+
+function howCalcHtml() {
+  return `
+  <div class="how-calc">
+    <button class="how-calc-toggle" onclick="toggleHowCalc()" aria-expanded="false" id="how-calc-btn">
+      <span>&#x1F4D0; Como o app calcula os pre&#xE7;os?</span>
+      <span id="how-calc-arrow">&#x25BC;</span>
+    </button>
+    <div class="how-calc-body" id="how-calc-body">
+      <div class="how-step"><span class="how-num">1</span><span>Pegamos o menor pre&#xE7;o do produto em d&#xF3;lar entre todas as lojas americanas rastreadas.</span></div>
+      <div class="how-step"><span class="how-num">2</span><span>Somamos o imposto de venda de <strong>Orlando (6,5%)</strong>.</span></div>
+      <div class="how-step"><span class="how-num">3</span><span>Convertemos para reais usando a <strong>cota&#xE7;&#xE3;o do d&#xF3;lar do dia (Ptax)</strong> mais o <strong>spread de 4% do cart&#xE3;o BB Visa Altus</strong>.</span></div>
+      <div class="how-step"><span class="how-num">4</span><span>Comparamos com o pre&#xE7;o no Brasil.</span></div>
+      <div class="how-step"><span class="how-num">5</span><span>O app recomenda onde comprar e soma sempre a op&#xE7;&#xE3;o mais barata no total da lista.</span></div>
+      <div style="background:#f5f3ff;border-radius:8px;padding:8px 10px;margin-top:8px;font-size:.72rem;color:#7c3aed;font-weight:700">
+        &#x1F4CC; F&#xF3;rmula EUA em R$: <br>Pre&#xE7;o USD &times; 1,065 (imposto) &times; Ptax &times; 1,04 (spread BB Altus)
+      </div>
+    </div>
+  </div>`;
+}
+
+function cambioBannerHtml() {
+  const c = dados?.cambio;
+  if (!c || !c.usd_brl) return '';
+  const taxaCartao = (c.usd_brl * IOF_SPREAD).toFixed(2);
+  return `<div class="cambio-bar">
+    <div class="cambio-info">
+      <span>&#x1F4B1; Cota&#xE7;&#xE3;o:</span>
+      <span class="cambio-rate">R$${Number(c.usd_brl).toFixed(2)}/USD</span>
+      <span class="cambio-note">BB Altus &#x2248; R$${taxaCartao} (+4%)</span>
+    </div>
+    <span class="cambio-note">${new Date(c.atualizado_em || dados.atualizado_em).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}</span>
+  </div>`;
+}
+
+function cuponsHtml(cupons) {
+  if (!cupons) return '';
+  let linhas = '';
+  ['bambulab','bestbuy','amazon','walmart','target','costco'].forEach(loja => {
+    (cupons[loja] || []).forEach(c => {
+      const si = storeInfo(loja);
+      linhas += `<div class="cupom-row"><div class="cupom-loja">${si.emoji} ${si.nome}</div><div class="cupom-codigo" onclick="copiarCupom('${c.codigo}')" title="Toque para copiar">${c.codigo}</div>${c.descricao ? `<div class="cupom-desc">${c.descricao}</div>` : ''}<div class="cupom-fonte">${c.fonte || ''}</div></div>`;
+    });
+  });
+  if (!linhas) return '';
+  return `<div class="cupons-card"><div class="cupons-title">&#x1F3F7;&#xFE0F; Cupons Dispon&#xED;veis<small>(toque para copiar)</small></div>${linhas}</div>`;
+}
+function copiarCupom(code) {
+  navigator.clipboard.writeText(code)
+    .then(() => toast('&#x2705; Cupom ' + code + ' copiado!'))
+    .catch(() => toast('&#x1F4CB; Cupom: ' + code));
+}
+
+function recBadge(item) {
+  const { custoEUA_brl, custoBR_brl } = calcularPrecoItem(item);
+  if (!custoEUA_brl && !custoBR_brl) return '<span class="badge badge-sem">&#x23F3; Aguardando pre&#xE7;o</span>';
+  if (!custoEUA_brl || !custoBR_brl) return '';
+  const diff    = Math.abs(custoEUA_brl - custoBR_brl);
+  const diffPct = diff / Math.max(custoEUA_brl, custoBR_brl);
+  if (diffPct < 0.03) return '';
+  return custoEUA_brl < custoBR_brl
+    ? '<span class="badge badge-eua">&#x1F1FA;&#x1F1F8; Melhor nos EUA</span>'
+    : '<span class="badge badge-br">&#x1F1E7;&#x1F1F7; Melhor no Brasil</span>';
+}
+
+function storesHtml(item) {
+  const lp = item.lojas_precos || {};
+  if (!Object.keys(lp).length) return '';
+  const pid       = item._id || item.nome || '';
+  const overrides = getManualOverrides(pid);
+  const rows = Object.entries(lp).map(([loja, info]) => {
+    const si       = storeInfo(loja);
+    const override = overrides[loja];
+    const preco    = override !== undefined ? override : info.preco;
+    const temP     = preco != null;
+    const isMelhor = loja === item.melhor_loja && override === undefined;
+    const isManual = override !== undefined;
+    const verBtn   = info.url_produto  ? `<a href="${info.url_produto}"  target="_blank" class="store-link">&#x1F517; Ver</a>`  : '';
+    const cartBtn  = info.url_carrinho ? `<a href="${info.url_carrinho}" target="_blank" class="store-link cart">&#x1F6D2;</a>` : '';
+    const editBtn  = `<button class="btn-edit-price" onclick="editarPreco('${pid}','${loja}','${si.nome}')" title="Inserir pre&#xE7;o manualmente" aria-label="Inserir pre&#xE7;o de ${si.nome}">&#x270F;&#xFE0F;</button>`;
+    return `<div class="store-row">
+      <div class="store-name">${si.emoji} ${si.nome}</div>
+      <div class="store-price ${temP ? (isManual?'manual':isMelhor?'best':'') : 'null'}">${temP ? fmt(preco)+(isManual?' &#x270F;&#xFE0F;':'') : '&#x2014;'}</div>
+      <div class="store-links">${verBtn}${cartBtn}${editBtn}</div>
+    </div>`;
+  }).join('');
+  return `<div class="stores">${rows}</div>`;
+}
+
+function comparacaoHtml(item) {
+  const ptax = dados?.cambio?.usd_brl || 0;
+  if (!ptax) return '';
+  const pid = item._id || item.nome || '';
+  const { precoEUA, custoEUA_usd, custoEUA_brl, custoBR_brl, brlManual, taxaCartao } = calcularPrecoItem(item);
+  const lojaNomeBr = item.brasil?.loja_nome || 'Brasil';
+  const lojaEmojiBr = lojaNomeBr === 'Mercado Livre' ? '&#x1F6D2;' : lojaNomeBr === 'Kabum' ? '&#x1F1E7;&#x1F1F7;' : '&#x1F517;';
+  const urlBr = item.brasil?.url || '';
+  let rec = '', recClass = '', explicacao = '';
+  if (custoEUA_brl && custoBR_brl) {
+    const diff    = Math.abs(custoEUA_brl - custoBR_brl);
+    const pct     = (diff / Math.max(custoEUA_brl, custoBR_brl) * 100).toFixed(0);
+    const econR   = fmtBrl(diff);
+    const diffPct = diff / Math.max(custoEUA_brl, custoBR_brl);
+    if (diffPct < 0.03) { rec = '&#x2696;&#xFE0F; Pre&#xE7;os praticamente iguais'; recClass = 'cmp-rec-igual'; explicacao = `A diferen&#xE7;a &#xE9; menor que 3%.`; }
+    else if (custoEUA_brl < custoBR_brl) { rec = `&#x1F1FA;&#x1F1F8; ${pct}% mais barato nos EUA`; recClass = 'cmp-rec-eua'; explicacao = `Vale comprar nos EUA: voc&#xEA; economiza ${econR} (${pct}%).`; }
+    else { rec = `&#x1F1E7;&#x1F1F7; ${pct}% mais barato no Brasil`; recClass = 'cmp-rec-br'; explicacao = `Vale comprar no Brasil: voc&#xEA; economiza ${econR} (${pct}%).`; }
+  }
+  const winnerEUA = custoBR_brl != null ? (custoEUA_brl <= custoBR_brl ? 'winner' : 'loser') : 'neutral';
+  const rowEUA = custoEUA_brl != null ? `
+    <div class="cmp-row"><div class="label">&#x1F1FA;&#x1F1F8; Custo total nos EUA (em R$)</div><div class="val ${winnerEUA}">${fmtBrl(custoEUA_brl)}</div></div>
+    <div class="cmp-row" style="opacity:.65;font-size:.66rem;flex-wrap:wrap"><div class="label" style="display:flex;gap:8px;flex-wrap:wrap"><span>&#x1F4B5; Pre&#xE7;o: <b>$${precoEUA.toFixed(2)}</b></span><span>&#x1F3DB;&#xFE0F; Orlando 6,5%: <b>$${custoEUA_usd.toFixed(2)}</b></span><span>&#x1F4B3; Spread BB Altus 4%: <b>R$${taxaCartao.toFixed(2)}/USD</b></span></div></div>` :
+    `<div class="cmp-row"><div class="label" style="color:#9ca3af">&#x1F1FA;&#x1F1F8; Pre&#xE7;o EUA n&#xE3;o dispon&#xED;vel</div></div>`;
+  const winnerBR = custoEUA_brl != null ? (custoBR_brl <= custoEUA_brl ? 'winner' : 'loser') : 'neutral';
+  const rowBR = custoBR_brl != null ? `<div class="cmp-row"><div class="label">&#x1F1E7;&#x1F1F7; Custo no Brasil &mdash; ${lojaNomeBr}</div><div class="val ${winnerBR}">${fmtBrl(custoBR_brl)}</div></div>` : '';
+  const rowDiff = custoEUA_brl && custoBR_brl ? `<div class="cmp-row" style="border-top:1px solid #ede9fe;margin-top:4px;padding-top:4px"><div class="label">&#x1F4B0; Voc&#xEA; economiza</div><div class="val" style="color:#10b981;font-weight:900">${fmtBrl(Math.abs(custoEUA_brl - custoBR_brl))}</div></div>` : '';
+  const explicacaoHtml = explicacao ? `<div class="cmp-explanation">${explicacao}</div>` : '';
+  const rowBRloja = urlBr && !brlManual ? `<a href="${urlBr}" target="_blank" style="font-size:.68rem;color:#7c3aed;font-weight:700;">${lojaEmojiBr} Ver no ${lojaNomeBr} &#x2192;</a>` : '';
+  const brlInputId = `brl-input-${pid.replace(/[^a-z0-9]/gi,'_')}`;
+  const brlInputHtml = brlManual ? `
+    <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:10px 12px;margin-top:8px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+        <div><div style="font-size:.65rem;font-weight:700;color:#16a34a;margin-bottom:2px">&#x1F512; Pre&#xE7;o salvo por voc&#xEA;</div><div style="font-size:1rem;font-weight:900;color:#15803d">${fmtBrl(brlManual)}</div></div>
+        <button onclick="removerBrlManual('${pid}')" style="background:#fff;color:#dc2626;border:1.5px solid #fecaca;border-radius:8px;padding:5px 10px;font-size:.7rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap">&#x2715; Remover</button>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:6px;align-items:center">
+        <input type="number" id="${brlInputId}" placeholder="Novo valor em R$" step="0.01" min="1" style="flex:1;padding:6px 10px;border:1.5px solid #bbf7d0;border-radius:8px;font-size:.78rem;font-family:inherit;font-weight:600;outline:none;background:#fff"/>
+        <button onclick="salvarBrlManual('${pid}','${brlInputId}')" style="padding:6px 12px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-size:.72rem;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap">&#x270F;&#xFE0F; Alterar</button>
+      </div>
+    </div>` : `
+    <div style="margin-top:8px">
+      <div class="cmp-input-row">
+        <input type="number" id="${brlInputId}" placeholder="Cole aqui o pre&#xE7;o que viu no Brasil (R$)" step="0.01" min="1" value=""/>
+        <button onclick="salvarBrlManual('${pid}','${brlInputId}')">&#x1F4BE; Salvar</button>
+      </div>
+      <div class="cmp-nota">${custoBR_brl ? `&#x1F916; Autom&#xE1;tico via ${lojaNomeBr}: ${fmtBrl(custoBR_brl)} &middot; ` : ''}Digite para fixar</div>
+    </div>`;
+  const nota = `<div class="cmp-nota" style="margin-top:5px">&#x1F4CC; Ptax: R$${ptax.toFixed(2)} &middot; Spread BB Altus 4% = R$${taxaCartao.toFixed(2)}/USD no cart&#xE3;o</div>`;
+  const uid = `cmp-${pid.replace(/[^a-z0-9]/gi,'_')}`;
+  const openClass = custoEUA_brl ? 'open' : '';
+  return `<div class="cmp-section">
+    <button class="cmp-toggle" onclick="toggleCmp('${uid}')" aria-expanded="${!!custoEUA_brl}">
+      <span>&#x1F30E; BR &times; EUA</span>
+      ${rec ? `<span class="cmp-rec-inline ${recClass}">${rec}</span>` : (custoEUA_brl ? `<span style="font-size:.68rem;font-weight:700;color:#4c1d95">${fmtBrl(custoEUA_brl)}</span>` : '<span style="font-size:.65rem;color:#c4b5fd">&#x25BC;</span>')}
+    </button>
+    <div class="cmp-body ${openClass}" id="${uid}">
+      ${rec ? `<div class="cmp-rec-badge ${recClass}">${rec}</div>` : ''}
+      ${explicacaoHtml}${rowEUA}${rowBR}${rowDiff}
+      <div style="margin-top:4px">${rowBRloja}</div>
+      ${brlInputHtml}${nota}
+    </div>
+  </div>`;
+}
+
+function itemCard(item) {
+  const temPreco = item.preco_atual != null;
+  const pid      = item._id || item.nome || '';
+  const ehMin    = temPreco && item.preco_atual === item.preco_minimo;
+  const subtotal = temPreco ? item.preco_atual * (item.qty || 1) : null;
+  const isCustom = item._custom || false;
+  const melhorInfo = item.lojas_precos && item.melhor_loja ? item.lojas_precos[item.melhor_loja] : null;
+  const cartUrl    = melhorInfo?.url_carrinho || melhorInfo?.url_produto || null;
+  return `<div class="item-card">
+    <div class="item-top">
+      <div class="item-name">${item.nome}</div>
+      <div class="item-badges">
+        ${(item.qty || 1) > 1 ? `<span class="badge badge-qty">&times;${item.qty}</span>` : ''}
+        ${recBadge(item)}
+        ${temPreco && ehMin ? '<span class="badge badge-min">&#x1F3C6; Menor pre&#xE7;o</span>' : ''}
+        ${isCustom && !temPreco ? '<span class="badge badge-custom">&#x23F3; Aguardando</span>' : ''}
+      </div>
+    </div>
+    ${miniChart(item.historico)}
+    <div class="price-row">
+      ${temPreco ? `<div class="price-current">${fmt(item.preco_atual)}</div>` : '<div class="price-null">Pre&#xE7;o ainda sendo buscado</div>'}
+    </div>
+    ${subtotal ? `<div class="price-subtotal">Subtotal: ${fmt(subtotal)}${(item.qty||1) > 1 ? ` (${item.qty}&times;${fmt(item.preco_atual)})` : ''}</div>` : ''}
+    ${storesHtml(item)}
+    ${comparacaoHtml(item)}
+    <a href="${cartUrl || '#'}" target="_blank" class="btn-main ${!cartUrl ? 'disabled' : ''}">
+      &#x1F6D2; ${cartUrl ? 'Melhor Pre&#xE7;o &mdash; Ver na loja' : 'Aguardando rastreamento de pre&#xE7;o'}
+    </a>
+    ${isCustom ? `<button class="btn-remove" onclick="removerCustom('${item._id}')">&#x1F5D1;&#xFE0F; Remover da lista</button>` : ''}
+  </div>`;
+}
+
+function renderItems() {
+  const items    = Object.values(dados.items);
+  const filtrados = catAtual === 'todos' ? items : items.filter(i => i.categoria === catAtual);
+  const porCat   = {};
+  filtrados.forEach(i => { (porCat[i.categoria] = porCat[i.categoria] || []).push(i); });
+  const ordem = [...CAT_ORDER, ...Object.keys(porCat).filter(c => !CAT_ORDER.includes(c))];
+  return ordem.map(cat => {
+    if (!porCat[cat]) return '';
+    const c = CATS.find(x => x.id === cat) || { ic: '&#x1F6CD;&#xFE0F;', nome: cat };
+    return `<div class="section-header"><span>${c.ic}</span>${c.nome}<span class="section-badge">${porCat[cat].length}</span></div>${porCat[cat].map(itemCard).join('')}`;
+  }).join('');
+}
+
+function renderChips() {
+  const existentes = new Set(Object.values(dados.items).map(i => i.categoria));
+  const visiveis   = CATS.filter(c => c.id === 'todos' || existentes.has(c.id));
+  return `<div class="cat-chips">${visiveis.map(c =>
+    `<button class="cat-chip ${catAtual === c.id ? 'on' : ''}" onclick="filtrar('${c.id}')">${c.ic} ${c.nome}</button>`
+  ).join('')}</div>`;
+}
+
+function render() {
+  const t      = calcularTotais();
+  const nItems = Object.keys(dados.items).length;
+  const c      = dados.cambio;
+  if (t) {
+    document.getElementById('footer-total').textContent = fmtBrl(t.totalRec_brl);
+    document.getElementById('footer-sub').textContent   = t.rec_completo ? `${nItems} produtos &middot; escolha inteligente` : `estimativa &middot; ${t.contSemPreco} sem pre&#xE7;o`;
+  } else {
+    document.getElementById('footer-total').textContent = '&#x2014;';
+    document.getElementById('footer-sub').textContent   = 'carregando...';
+  }
+  if (c?.usd_brl) document.getElementById('footer-cambio-mini').textContent = 'USD/BRL R$' + Number(c.usd_brl).toFixed(2);
+  document.getElementById('app').innerHTML =
+    summaryHtml(t) + howCalcHtml() + cambioBannerHtml() + cuponsHtml(dados.cupons) + renderChips() + renderItems();
+}
+
+function filtrar(cat) { catAtual = cat; render(); }
+function toggleHowCalc() {
+  const body = document.getElementById('how-calc-body');
+  const arrow = document.getElementById('how-calc-arrow');
+  body.classList.toggle('open');
+  arrow.textContent = body.classList.contains('open') ? '&#x25B2;' : '&#x25BC;';
+}
+
+async function carregar() {
+  try {
+    const r = await fetch('compras/precos.json?t=' + Date.now());
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    dados = await r.json();
+    const custom = getCustom();
+    custom.forEach(p => {
+      if (!dados.items[p.id]) dados.items[p.id] = { ...p, _id: p.id };
+      else { dados.items[p.id]._id = p.id; dados.items[p.id]._custom = true; }
+    });
+    Object.entries(dados.items).forEach(([id, item]) => { if (!item._id) item._id = id; });
+    render();
+  } catch (e) {
+    document.getElementById('app').innerHTML = `
+      <div class="error-box">
+        &#x26A0;&#xFE0F; N&#xE3;o foi poss&#xED;vel carregar a lista de pre&#xE7;os agora.<br>
+        <small style="font-weight:600">Verifique sua conex&#xE3;o e tente novamente.</small>
+      </div>`;
+  }
+}
+
+function editarPreco(pid, loja, nomeLoja) {
+  const override = getManualOverrides(pid)[loja];
+  const atual    = override !== undefined ? override : dados?.items?.[pid]?.lojas_precos?.[loja]?.preco;
+  const input    = prompt(`${nomeLoja} &mdash; Insira o pre&#xE7;o em USD.\n(deixe vazio para remover)`, atual != null ? atual.toFixed(2) : '');
+  if (input === null) return;
+  if (input.trim() === '') { setManualOverride(pid, loja, null); toast('&#x2705; Pre&#xE7;o manual removido'); }
+  else {
+    const v = parseFloat(input.replace('$','').replace(',','.').trim());
+    if (isNaN(v) || v <= 0) { toast('&#x26A0;&#xFE0F; Valor inv&#xE1;lido'); return; }
+    setManualOverride(pid, loja, v);
+    toast(`&#x2705; ${nomeLoja}: $${v.toFixed(2)} salvo`);
+  }
+  carregar();
+}
+
+function salvarBrlManual(pid, inputId) {
+  const el = document.getElementById(inputId);
+  if (!el) return;
+  const v = parseFloat(el.value.replace(',','.'));
+  if (isNaN(v) || v <= 0) { toast('&#x26A0;&#xFE0F; Valor inv&#xE1;lido'); return; }
+  setBrlManual(pid, v);
+  toast(`&#x2705; Pre&#xE7;o BR salvo: R$${v.toFixed(2)}`);
+  carregar();
+}
+function removerBrlManual(pid) { setBrlManual(pid, null); toast('&#x2705; Pre&#xE7;o BR manual removido'); carregar(); }
+function toggleCmp(uid) { const el = document.getElementById(uid); if (el) el.classList.toggle('open'); }
+
+function adicionarProduto() {
+  const nome = document.getElementById('f-nome').value.trim();
+  if (!nome) { toast('&#x26A0;&#xFE0F; Informe o nome do produto'); return; }
+  const lojas = {};
+  const amzUrl = document.getElementById('f-amazon').value.trim();
+  if (amzUrl) lojas.amazon   = { url: amzUrl };
+  const bbUrl  = document.getElementById('f-bestbuy').value.trim();
+  if (bbUrl)  lojas.bestbuy  = { url: bbUrl };
+  const lNome = document.getElementById('f-loja-nome').value.trim();
+  const lUrl  = document.getElementById('f-loja-url').value.trim();
+  if (lNome && lUrl) lojas[lNome.toLowerCase().replace(/\s+/g,'_')] = { url: lUrl };
+  const id = 'custom-' + Date.now();
+  const produto = {
+    id, nome,
+    categoria: document.getElementById('f-cat').value,
+    qty: parseInt(document.getElementById('f-qty').value) || 1,
+    adicionado_em: new Date().toISOString(),
+    lojas, _custom: true, _id: id,
+    preco_atual: null, preco_minimo: null, melhor_loja: null,
+    lojas_precos: Object.fromEntries(Object.entries(lojas).map(([k,v]) => [k,{preco:null,url_produto:v.url,url_carrinho:null}])),
+    historico: []
+  };
+  const lista = getCustom(); lista.push(produto); saveCustom(lista);
+  salvarListaGitHub(lista);
+  if (dados) { dados.items[id] = produto; render(); }
+  fecharSheet(); limparFormulario();
+  toast('&#x2705; Produto adicionado! Clique em Atualizar para buscar o pre&#xE7;o.');
+}
+function removerCustom(id) {
+  if (!confirm('Remover este produto da lista?')) return;
+  const lista = getCustom().filter(p => p.id !== id); saveCustom(lista);
+  salvarListaGitHub(lista);
+  if (dados) { delete dados.items[id]; render(); }
+  toast('&#x1F5D1;&#xFE0F; Removido');
+}
+async function salvarListaGitHub(lista) {
+  const token = localStorage.getItem('gh_token');
+  if (!token) return;
+  const paraGH = lista.map(p => ({ id:p.id, nome:p.nome, categoria:p.categoria, qty:p.qty, adicionado_em:p.adicionado_em, lojas:p.lojas }));
+  try {
+    const getR = await fetch(`https://api.github.com/repos/${REPO}/contents/compras/lista.json`,
+      { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' } });
+    const body = {
+      message: 'chore: atualiza lista de produtos',
+      content: btoa(unescape(encodeURIComponent(JSON.stringify(paraGH, null, 2)))),
+      branch: 'master'
+    };
+    if (getR.ok) { const d = await getR.json(); body.sha = d.sha; }
+    await fetch(`https://api.github.com/repos/${REPO}/contents/compras/lista.json`, {
+      method: 'PUT',
+      headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+  } catch (e) { /* falha silenciosa */ }
+}
+function limparFormulario() {
+  ['f-nome','f-amazon','f-bestbuy','f-loja-nome','f-loja-url'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  document.getElementById('f-qty').value = '1';
+  document.getElementById('f-cat').value = 'geral';
+}
+function abrirSheet()  { document.getElementById('sheet-bg').classList.add('on'); document.getElementById('sheet').classList.add('on'); setTimeout(()=>document.getElementById('f-nome').focus(),350); }
+function fecharSheet() { document.getElementById('sheet-bg').classList.remove('on'); document.getElementById('sheet').classList.remove('on'); }
+
+function iniciarAtualizacao() {
+  const token = localStorage.getItem('gh_token');
+  if (token) { dispararWorkflow(token); } else { abrirModalUpdate(); }
+}
+function abrirModalUpdate()  { document.getElementById('modal-update').classList.add('on'); }
+function fecharModalUpdate() { document.getElementById('modal-update').classList.remove('on'); }
+
+function abrirConfig() {
+  const temToken = !!localStorage.getItem('gh_token');
+  document.getElementById('btn-remover-token').style.display = temToken ? 'block' : 'none';
+  document.getElementById('token-input').value = '';
+  document.getElementById('modal-config').classList.add('on');
+  setTimeout(() => document.getElementById('token-input').focus(), 100);
+}
+function fecharConfig() { document.getElementById('modal-config').classList.remove('on'); }
+
+function salvarToken() {
+  const t = document.getElementById('token-input').value.trim();
+  if (!t) { toast('&#x26A0;&#xFE0F; Cole o token antes de salvar'); return; }
+  localStorage.setItem('gh_token', t);
+  fecharConfig();
+  toast('&#x2705; Token salvo &mdash; tentando atualizar...');
+  dispararWorkflow(t);
+}
+function limparToken() { localStorage.removeItem('gh_token'); fecharConfig(); toast('&#x1F5D1;&#xFE0F; Token removido'); }
+
+async function dispararWorkflow(token) {
+  const btn = document.getElementById('btn-refresh');
+  btn.textContent = '&#x23F3;...'; btn.disabled = true;
+  try {
+    const r = await fetch(`https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW}/dispatches`, {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ref: 'master' })
+    });
+    if      (r.status === 204) { toast('&#x2705; Atualiza&#xE7;&#xE3;o iniciada! Os pre&#xE7;os aparecem em ~7 minutos.', 4500); }
+    else if (r.status === 401) { localStorage.removeItem('gh_token'); toast('&#x274C; Token expirado ou inv&#xE1;lido.', 5000); }
+    else if (r.status === 403) { toast('&#x26A0;&#xFE0F; Token sem permiss&#xE3;o.', 5500); }
+    else if (r.status === 404) { toast('&#x26A0;&#xFE0F; Configura&#xE7;&#xE3;o n&#xE3;o encontrada.', 4000); }
+    else                        { toast('&#x26A0;&#xFE0F; Erro ao atualizar (' + r.status + ').', 4500); abrirModalUpdate(); }
+  } catch (e) {
+    toast('&#x274C; Sem conex&#xE3;o.', 4000);
+  } finally {
+    btn.textContent = '&#x1F504; Atualizar'; btn.disabled = false;
+  }
+}
+
+let _tt;
+function toast(msg, dur = 3500) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('on');
+  clearTimeout(_tt); _tt = setTimeout(() => el.classList.remove('on'), dur);
+}
+
+carregar();
+</script>
+</body>
+</html>
