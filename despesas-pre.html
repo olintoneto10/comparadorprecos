@@ -307,8 +307,8 @@ function renderCats(){
   if(items.length){
     let ang=0;
     const stops=items.map(([cat,val])=>{const pct=val/total*100;const f=ang.toFixed(1);ang+=pct;return`${CAT[cat]?.cor||'#6b7280'} ${f}% ${ang.toFixed(1)}%`;});
-    document.getElementById('donut').style.background=`conic-gradient(${stops.join(',')})`;}
-  else {document.getElementById('donut').style.background='#e5e7eb';}
+    document.getElementById('donut').style.background=`conic-gradient(${stops.join(',')})`;
+  } else {document.getElementById('donut').style.background='#e5e7eb';}
   document.getElementById('donut-total').textContent=`R$ ${total.toFixed(0)}`;
   document.getElementById('legenda').innerHTML=items.map(([cat,val])=>{
     const c=CAT[cat]||CAT.outros;const pct=total?(val/total*100).toFixed(1):0;
@@ -325,7 +325,7 @@ function calcBal(){
   despesas.forEach(d=>{
     if(!d.quemPagou)return;
     const total=toBRL(d.val,d.moe);
-    let members=d.splitType==='igual'?perfis.map(p=>p.id):d.splitType==='custom'?d.divide||[]:[];
+    let members=d.splitType==='igual'?perfis.map(p=>p.id):d.splitType==='custom'?d.divide||[]:[]
     if(!members.length)return;
     const share=total/members.length;
     bal[d.quemPagou]+= total;
@@ -381,7 +381,7 @@ function buildPerfilGrid(cid,name,sel,selArr=null){
   el.innerHTML=perfis.map(p=>{
     const on=selArr!==null?selArr.includes(p.id):p.id===sel;
     const type=selArr!==null?'checkbox':'radio';
-    return `<label style="cursor:pointer"><input type="${type}" name="${name}" value="${p.id}" ${on?'checked':''} style="display:none" onchange="toggleChip(this,'${p.cor}')"/><span class="pchip" style="border-color:${p.cor};${on?`background:${p.cor};color:#fff`:''}}">${p.ic} ${p.nome}</span></label>`;
+    return `<label style="cursor:pointer"><input type="${type}" name="${name}" value="${p.id}" ${on?'checked':''} style="display:none" onchange="toggleChip(this,'${p.cor}')"/><span class="pchip" style="border-color:${p.cor};${on?`background:${p.cor};color:#fff`:''}"> ${p.ic} ${p.nome}</span></label>`;
   }).join('');
 }
 
