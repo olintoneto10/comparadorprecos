@@ -1,0 +1,40 @@
+name: Rastreador de Precos
+
+on:
+  schedule:
+    - cron: '0 14 */2 * *'
+  workflow_dispatch:
+
+jobs:
+  rastrear:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependencias
+        run: pip install --no-cache-dir -r requirements.txt
+
+      - name: Executar rastreador
+        env:
+          BESTBUY_API_KEY: ${{ secrets.BESTBUY_API_KEY }}
+          SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
+        run: python compras/tracker.py
+
+      - name: Validar JSON gerado
+        run: python -c 'import json,sys; d=json.load(open("compras/precos.json")); assert "items" in d and "cambio" in d; print("JSON valido:", len(d["items"]), "produtos")'
+
+      - name: Commit dos precos atualizados
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add compras/precos.json
+          git diff --staged --quiet || git commit -m "chore: precos atualizados $(date -u '+%Y-%m-%d')"
+          git pull --rebase origin master
+          git push
