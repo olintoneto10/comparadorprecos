@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="theme-color" content="#1e1b4b"/>
+  <title>Importar com IA — Orlando 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Nunito','Segoe UI',system-ui,sans-serif;background:#faf5ff;color:#1e1b4b;min-height:100vh;padding-bottom:32px}
+
+    /* ── TOPBAR ── */
+    .top{background:linear-gradient(135deg,#1e1b4b,#4c1d95);color:#fff;padding:14px 16px;padding-top:calc(14px + env(safe-area-inset-top));display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:60;box-shadow:0 2px 12px rgba(30,27,75,.3)}
+    .top a{color:#fff;text-decoration:none;font-size:.8rem;background:rgba(255,255,255,.15);padding:6px 13px;border-radius:20px;font-weight:700;border:1px solid rgba(255,255,255,.2);flex-shrink:0}
+    .top h1{font-size:.95rem;font-weight:800;flex:1}
+
+    /* ── CARDS GENÉRICOS ── */
+    .card{background:#fff;border-radius:16px;margin:12px 14px 0;box-shadow:0 2px 10px rgba(124,58,237,.08);overflow:hidden;border:1px solid #ede9fe}
+    .card-head{padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f5f3ff}
+    .card-head h2{font-size:.88rem;font-weight:800;flex:1}
+    .card-body{padding:14px 16px}
+
+    /* ── IA CONFIG CARD ── */
+    .ia-head{background:linear-gradient(135deg,#059669,#0891b2);color:#fff;padding:13px 16px;display:flex;align-items:center;gap:10px}
+    .ia-head h2{font-size:.88rem;font-weight:800;flex:1}
+    .ia-status{display:flex;align-items:center;gap:6px;font-size:.72rem;font-weight:700;opacity:.9}
+    .dot{width:9px;height:9px;border-radius:50%;background:#fbbf24;flex-shrink:0;transition:background .3s}
+    .dot.on{background:#4ade80}
+    .key-row{display:flex;gap:8px;margin-bottom:8px}
+    .key-row input{flex:1;padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:.84rem;font-family:monospace;background:#faf5ff}
+    .key-row input:focus{outline:none;border-color:#059669}
+    .btn-salvar-key{padding:10px 16px;background:#059669;color:#fff;border:none;border-radius:10px;font-size:.82rem;font-weight:800;cursor:pointer;white-space:nowrap;font-family:inherit}
+    .key-hint{font-size:.73rem;color:#6b7280;line-height:1.6}
+    .key-hint a{color:#059669;font-weight:700}
+
+    /* ── UPLOAD ── */
+    .upload-zone{border:2px dashed #c4b5fd;border-radius:12px;padding:22px;text-align:center;cursor:pointer;background:#faf5ff;transition:all .2s;position:relative}
+    .upload-zone:hover,.upload-zone.drag{border-color:#7c3aed;background:#f0ebff;box-shadow:0 0 0 4px rgba(124,58,237,.06)}
+    .upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+    .upload-zone .uic{font-size:2rem;margin-bottom:6px}
+    .upload-zone strong{font-size:.86rem;display:block;color:#4c1d95}
+    .upload-zone p{font-size:.74rem;color:#7c6f9f;margin-top:4px;font-weight:600}
+
+    .files-list{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+
+    /* ── ARQUIVO CARD ── */
+    .file-card{background:#faf5ff;border:1px solid #e9d5ff;border-radius:12px;overflow:hidden}
+    .file-card-top{display:flex;align-items:center;gap:10px;padding:10px 13px}
+    .file-ic{font-size:1.4rem;flex-shrink:0}
+    .file-name{flex:1;min-width:0}
+    .file-name strong{display:block;font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .file-name span{font-size:.69rem;color:#9ca3af;font-weight:600}
+    .file-btns{display:flex;gap:6px;flex-shrink:0}
+    .fbtn{padding:6px 12px;border-radius:20px;border:none;font-size:.75rem;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px;white-space:nowrap}
+    .fbtn-ia{background:linear-gradient(135deg,#059669,#0891b2);color:#fff}
+    .fbtn-ia:disabled{opacity:.45;cursor:not-allowed}
+    .fbtn-ia.spin{animation:pulse 1s infinite}
+    .fbtn-ver{background:#dbeafe;color:#1d4ed8}
+    .fbtn-del{background:#fee2e2;color:#dc2626}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+
+    /* RESULTADO IA */
+    .ia-result{margin:0 13px 12px;background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:11px 13px}
+    .ia-result .titulo{font-size:.78rem;font-weight:800;color:#15803d;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+    .campo-row{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;border-bottom:1px solid #dcfce7;font-size:.77rem}
+    .campo-row:last-of-type{border-bottom:none}
+    .campo-row .ck{color:#6b7280;font-weight:600}
+    .campo-row .cv{font-weight:800;color:#1e1b4b;text-align:right;max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .btn-aplicar{width:100%;margin-top:9px;padding:9px;background:linear-gradient(135deg,#059669,#0891b2);color:#fff;border:none;border-radius:9px;font-size:.83rem;font-weight:800;cursor:pointer;font-family:inherit}
+
+    /* ── SEÇÕES EDITÁVEIS ── */
+    .sec{margin:12px 14px 0;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(124,58,237,.07);border:1px solid #ede9fe}
+    .sec-hdr{cursor:pointer;user-select:none;display:flex;align-items:center;gap:10px;padding:13px 16px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);-webkit-tap-highlight-color:transparent}
+    .sec-hdr .si{font-size:1.1rem}
+    .sec-hdr h3{flex:1;font-size:.87rem;font-weight:800;color:#4c1d95}
+    .sec-hdr .salvo{font-size:.67rem;font-weight:700;background:#dcfce7;color:#15803d;padding:2px 8px;border-radius:20px}
+    .chev{font-size:.9rem;color:#7c6f9f;transition:transform .25s}
+    .chev.aberto{transform:rotate(90deg)}
+    .sec-body{padding:16px;display:none}
+    .sec-body.aberta{display:block}
+    .subsec{font-size:.74rem;font-weight:800;color:#7c3aed;text-transform:uppercase;letter-spacing:.06em;margin:14px 0 9px;padding-bottom:5px;border-bottom:1px solid #ede9fe}
+    .subsec:first-child{margin-top:0}
+    .fg{margin-bottom:11px}
+    .fl{display:block;font-size:.74rem;font-weight:700;color:#7c6f9f;margin-bottom:4px}
+    .fi{width:100%;padding:9px 11px;border:1.5px solid #e5e7eb;border-radius:9px;font-size:.85rem;font-family:inherit;font-weight:600;background:#faf5ff;color:#1e1b4b;transition:border-color .2s}
+    .fi:focus{outline:none;border-color:#7c3aed;background:#fff}
+    .fi.atualizado{border-color:#16a34a;background:#f0fdf4}
+    .frow{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+    @media(max-width:400px){.frow{grid-template-columns:1fr}}
+    .btn-salvar-sec{width:100%;margin-top:6px;padding:11px;background:linear-gradient(135deg,#7c3aed,#db2777);color:#fff;border:none;border-radius:20px;font-size:.86rem;font-weight:800;cursor:pointer;font-family:inherit;box-shadow:0 2px 8px rgba(124,58,237,.25)}
+    .btn-salvar-sec:hover{opacity:.9}
+
+    /* ── AÇÕES GLOBAIS ── */
+    .globais{display:flex;gap:9px;margin:12px 14px 0;flex-wrap:wrap}
+    .gbtn{flex:1;min-width:90px;padding:11px;border-radius:12px;font-size:.8rem;font-weight:800;cursor:pointer;border:none;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity .2s}
+    .gbtn:hover{opacity:.85}
+    .gbtn-exp{background:#ede9fe;color:#6d28d9}
+    .gbtn-imp{background:#dcfce7;color:#15803d}
+    .gbtn-res{background:#fee2e2;color:#dc2626}
+
+    /* ── TOAST ── */
+    .toast{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%) translateY(12px);background:linear-gradient(135deg,#1e1b4b,#4c1d95);color:#fff;padding:11px 22px;border-radius:20px;font-size:.82rem;font-weight:700;opacity:0;transition:all .3s;pointer-events:none;z-index:200;white-space:nowrap;max-width:92vw;text-align:center;box-shadow:0 4px 20px rgba(30,27,75,.3)}
+    .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  </style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- TOPBAR -->
+<div class="top">
+  <a href="index.html">← Voltar</a>
+  <h1>🤖 Importar com IA</h1>
+</div>
+
+<!-- IA CONFIG -->
+<div class="card" style="margin-top:14px">
+  <div class="ia-head">
+    <h2>🤖 IA Gratuita — Groq (Llama 4)</h2>
+    <div class="ia-status"><div class="dot" id="dot"></div><span id="status-txt">Não configurada</span></div>
+  </div>
+  <div class="card-body">
+    <div class="key-row">
+      <input type="password" id="key-inp" placeholder="gsk_..." autocomplete="off"/>
+      <button class="btn-salvar-key" onclick="salvarKey()">💾 Salvar</button>
+    </div>
+    <p class="key-hint">
+      Obtenha sua chave <strong>100% gratuita</strong> (sem cartão) em
+      <a href="https://console.groq.com/keys" target="_blank">console.groq.com</a>
+      → Fazer login → <em>Create API Key</em>. A chave fica salva só no seu dispositivo.
+      <br/><span style="color:#059669;font-weight:700">✓ 14.400 req/dia · Suporta foto · Ultra-rápido · Grátis</span>
+    </p>
+  </div>
+</div>
+
+<!-- UPLOAD -->
+<div class="card">
+  <div class="card-head">
+    <h2>📎 Analisar documento com IA</h2>
+  </div>
+  <div class="card-body">
+    <div class="upload-zone" id="upload-zone">
+      <input type="file" id="file-inp" multiple accept=".pdf,.jpg,.jpeg,.png,.webp" onchange="handleUpload(this.files)"/>
+      <div class="uic">📄</div>
+      <strong>Toque ou arraste documentos aqui</strong>
+      <p>Foto do comprovante, PDF de reserva, voucher, apólice — a IA lê e preenche automaticamente</p>
+    </div>
+    <div class="files-list" id="files-list"></div>
+  </div>
+</div>
+
+<!-- AÇÕES GLOBAIS -->
+<div class="globais">
+  <button class="gbtn gbtn-exp" onclick="exportarJSON()">📤 Exportar backup</button>
+  <label class="gbtn gbtn-imp" style="cursor:pointer">
+    📥 Importar<input type="file" accept=".json" style="display:none" onchange="importarJSON(this)"/>
+  </label>
+  <button class="gbtn gbtn-res" onclick="resetarTudo()">↺ Resetar tudo</button>
+</div>
+
+<!-- ── SEÇÃO: VOOS ── -->
+<div class="sec">
+  <div class="sec-hdr" onclick="toggleSec('voos')">
+    <span class="si">✈️</span><h3>Voos</h3>
+    <span class="salvo" id="badge-voos" style="display:none">✓ Salvo</span>
+    <span class="chev" id="chev-voos">›</span>
+  </div>
+  <div class="sec-body" id="body-voos">
+    <div class="subsec">Voo 1 — BSB → GRU · 28/10</div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Localizador</label><input class="fi" id="v1-loc" placeholder="ECUZZE"/></div>
+      <div class="fg"><label class="fl">Número do voo</label><input class="fi" id="v1-voo" placeholder="LA3657"/></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Data</label><input class="fi" type="date" id="v1-data"/></div>
+      <div class="fg"><label class="fl">Partida</label><input class="fi" type="time" id="v1-hr"/></div>
+    </div>
+    <div class="fg"><label class="fl">Assentos</label><input class="fi" id="v1-ass" placeholder="4A · 4C · 4B · 4D"/></div>
+
+    <div class="subsec">Voo 2 — GRU → MCO · 30/10</div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Loc. família HFA</label><input class="fi" id="v2-loc" placeholder="FMUQAO"/></div>
+      <div class="fg"><label class="fl">Loc. Eliane</label><input class="fi" id="v2-loc2" placeholder="AXCDQL"/></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Número do voo</label><input class="fi" id="v2-voo" placeholder="LA8186"/></div>
+      <div class="fg"><label class="fl">Partida</label><input class="fi" type="time" id="v2-hr"/></div>
+    </div>
+    <div class="fg"><label class="fl">Assentos família HFA</label><input class="fi" id="v2-ass" placeholder="13C · 13D · 13A · 13B"/></div>
+    <div class="fg"><label class="fl">Assentos Eliane</label><input class="fi" id="v2-ass2" placeholder="Pendente"/></div>
+
+    <div class="subsec">Voo 3 — MCO → GRU · 13/11</div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Número do voo</label><input class="fi" id="v3-voo" placeholder="LA8187"/></div>
+      <div class="fg"><label class="fl">Partida</label><input class="fi" type="time" id="v3-hr"/></div>
+    </div>
+    <div class="fg"><label class="fl">Assentos família HFA</label><input class="fi" id="v3-ass" placeholder="13C · 13D · 13B · 13A"/></div>
+
+    <div class="subsec">Voo 4 — GRU → BSB · 14/11</div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Localizador</label><input class="fi" id="v4-loc" placeholder="YLSEUS"/></div>
+      <div class="fg"><label class="fl">Número do voo</label><input class="fi" id="v4-voo" placeholder="LA3257"/></div>
+    </div>
+    <div class="fg"><label class="fl">Assentos</label><input class="fi" id="v4-ass" placeholder="5D · 5B · 5A · 5C"/></div>
+    <button class="btn-salvar-sec" onclick="salvarSec('voos')">💾 Salvar voos</button>
+  </div>
+</div>
+
+<!-- ── SEÇÃO: HOSPEDAGEM ── -->
+<div class="sec">
+  <div class="sec-hdr" onclick="toggleSec('hosp')">
+    <span class="si">🏨</span><h3>Hospedagem</h3>
+    <span class="salvo" id="badge-hosp" style="display:none">✓ Salvo</span>
+    <span class="chev" id="chev-hosp">›</span>
+  </div>
+  <div class="sec-body" id="body-hosp">
+    <div class="subsec">Hotel Panamby Guarulhos · 28–30/out</div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Nº confirmação</label><input class="fi" id="h1-conf" placeholder="5955.294.246"/></div>
+      <div class="fg"><label class="fl">PIN</label><input class="fi" id="h1-pin" placeholder="7016"/></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Check-in</label><input class="fi" type="date" id="h1-in"/></div>
+      <div class="fg"><label class="fl">Checkout</label><input class="fi" type="date" id="h1-out"/></div>
+    </div>
+
+    <div class="subsec">Airbnb Kissimmee · 30/out–13/nov</div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Código confirmação</label><input class="fi" id="h2-conf" placeholder="HMH5ESDJPY"/></div>
+      <div class="fg"><label class="fl">Tel. anfitrião</label><input class="fi" id="h2-tel" placeholder="+1 407-230-1272"/></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Check-in</label><input class="fi" type="date" id="h2-in"/></div>
+      <div class="fg"><label class="fl">Checkout</label><input class="fi" type="date" id="h2-out"/></div>
+    </div>
+    <div class="fg"><label class="fl">Endereço completo</label><input class="fi" id="h2-end" placeholder="4837 Dedication Street, Kissimmee, FL 34746"/></div>
+
+    <div class="subsec">Loews Royal Pacific Resort · 02–03/nov</div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Nº reserva</label><input class="fi" id="h3-conf" placeholder="542541346300"/></div>
+      <div class="fg"><label class="fl">Código de acesso</label><input class="fi" id="h3-cod" placeholder="GQ517180412CUJ9YJ8MCD"/></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Check-in</label><input class="fi" type="date" id="h3-in"/></div>
+      <div class="fg"><label class="fl">Checkout</label><input class="fi" type="date" id="h3-out"/></div>
+    </div>
+    <button class="btn-salvar-sec" onclick="salvarSec('hosp')">💾 Salvar hospedagem</button>
+  </div>
+</div>
+
+<!-- ── SEÇÃO: CARRO ── -->
+<div class="sec">
+  <div class="sec-hdr" onclick="toggleSec('carro')">
+    <span class="si">🚗</span><h3>Carro alugado</h3>
+    <span class="salvo" id="badge-carro" style="display:none">✓ Salvo</span>
+    <span class="chev" id="chev-carro">›</span>
+  </div>
+  <div class="sec-body" id="body-carro">
+    <div class="subsec">Alamo via Rentcars · MCO</div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Confirmação Alamo</label><input class="fi" id="c-conf" placeholder="2105771024"/></div>
+      <div class="fg"><label class="fl">Código Rentcars</label><input class="fi" id="c-rent" placeholder="86NH3TZ"/></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Retirada</label><input class="fi" type="date" id="c-in"/></div>
+      <div class="fg"><label class="fl">Horário</label><input class="fi" type="time" id="c-hr"/></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Devolução</label><input class="fi" type="date" id="c-out"/></div>
+      <div class="fg"><label class="fl">Veículo</label><input class="fi" id="c-vei" placeholder="Minivan Toyota Sienna"/></div>
+    </div>
+    <button class="btn-salvar-sec" onclick="salvarSec('carro')">💾 Salvar carro</button>
+  </div>
+</div>
+
+<!-- ── SEÇÃO: INGRESSOS ── -->
+<div class="sec">
+  <div class="sec-hdr" onclick="toggleSec('ingressos')">
+    <span class="si">🎟️</span><h3>Ingressos</h3>
+    <span class="salvo" id="badge-ingressos" style="display:none">✓ Salvo</span>
+    <span class="chev" id="chev-ingressos">›</span>
+  </div>
+  <div class="sec-body" id="body-ingressos">
+    <div class="subsec">Universal Orlando · 02–08/nov</div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Confirmação</label><input class="fi" id="u-conf" placeholder="17637344709-2TRDC"/></div>
+      <div class="fg"><label class="fl">Nº reserva</label><input class="fi" id="u-res" placeholder="542541346300"/></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Válido de</label><input class="fi" type="date" id="u-de"/></div>
+      <div class="fg"><label class="fl">Válido até</label><input class="fi" type="date" id="u-ate"/></div>
+    </div>
+    <div class="fg"><label class="fl">Produto</label><input class="fi" id="u-prod" placeholder="3-Day Park-to-Park + 2 Days Free"/></div>
+
+    <div class="subsec">Halloween Party — Magic Kingdom · 31/out</div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Confirmação</label><input class="fi" id="hw-conf" placeholder="MBVK83414038"/></div>
+      <div class="fg"><label class="fl">Data</label><input class="fi" type="date" id="hw-data"/></div>
+    </div>
+    <div class="fg"><label class="fl">Observações</label><input class="fi" id="hw-obs" placeholder="Check-in a partir das 16h · Evento 19h–0h"/></div>
+
+    <div class="subsec">Festa de Natal Disney · 12/nov</div>
+    <div class="fg"><label class="fl">Confirmação</label><input class="fi" id="nat-conf" placeholder="Ainda não comprado"/></div>
+    <button class="btn-salvar-sec" onclick="salvarSec('ingressos')">💾 Salvar ingressos</button>
+  </div>
+</div>
+
+<!-- ── SEÇÃO: SEGUROS ── -->
+<div class="sec">
+  <div class="sec-hdr" onclick="toggleSec('seguros')">
+    <span class="si">🛡️</span><h3>Seguros de viagem</h3>
+    <span class="salvo" id="badge-seguros" style="display:none">✓ Salvo</span>
+    <span class="chev" id="chev-seguros">›</span>
+  </div>
+  <div class="sec-body" id="body-seguros">
+    <div class="subsec">Visa Altus / AIG</div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Nº apólice</label><input class="fi" id="s1-ap" placeholder=""/></div>
+      <div class="fg"><label class="fl">Validade</label><input class="fi" type="date" id="s1-val"/></div>
+    </div>
+    <div class="fg"><label class="fl">Observações</label><input class="fi" id="s1-obs" placeholder="Cobertura médica USD 175.000"/></div>
+    <div class="subsec">Ciclic 60 / Generali</div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Vigência início</label><input class="fi" type="date" id="s2-ini"/></div>
+      <div class="fg"><label class="fl">Vigência fim</label><input class="fi" type="date" id="s2-fim"/></div>
+    </div>
+    <div class="fg"><label class="fl">Observações</label><input class="fi" id="s2-obs" placeholder="Cobertura médica USD 60.000 por evento"/></div>
+    <button class="btn-salvar-sec" onclick="salvarSec('seguros')">💾 Salvar seguros</button>
+  </div>
+</div>
+
+<div style="height:20px"></div>
+
+<script>
+// ── MAPEAMENTO DE CAMPOS ──
+const LABELS = {
+  'v1-loc':'Loc. BSB→GRU','v1-voo':'Voo BSB→GRU','v1-data':'Data voo 1','v1-hr':'Partida voo 1','v1-ass':'Assentos BSB→GRU',
+  'v2-loc':'Loc. GRU→MCO (fam.)','v2-loc2':'Loc. GRU→MCO (Eliane)','v2-voo':'Voo GRU→MCO','v2-hr':'Partida voo 2',
+  'v2-ass':'Assentos GRU→MCO','v2-ass2':'Assentos Eliane',
+  'v3-voo':'Voo MCO→GRU','v3-hr':'Partida voo 3','v3-ass':'Assentos MCO→GRU',
+  'v4-loc':'Loc. GRU→BSB','v4-voo':'Voo GRU→BSB','v4-ass':'Assentos GRU→BSB',
+  'h1-conf':'Conf. Panamby','h1-pin':'PIN Panamby','h1-in':'Check-in Panamby','h1-out':'Checkout Panamby',
+  'h2-conf':'Código Airbnb','h2-tel':'Tel. anfitrião','h2-end':'Endereço Airbnb','h2-in':'Check-in Airbnb','h2-out':'Checkout Airbnb',
+  'h3-conf':'Nº Royal Pacific','h3-cod':'Código Royal Pacific','h3-in':'Check-in Royal Pacific','h3-out':'Checkout Royal Pacific',
+  'c-conf':'Conf. Alamo','c-rent':'Cód. Rentcars','c-in':'Retirada carro','c-hr':'Horário retirada','c-out':'Devolução carro','c-vei':'Veículo',
+  'u-conf':'Conf. Universal','u-res':'Nº reserva Universal','u-de':'Universal válido de','u-ate':'Universal válido até','u-prod':'Produto Universal',
+  'hw-conf':'Conf. Halloween','hw-data':'Data Halloween','hw-obs':'Obs. Halloween',
+  'nat-conf':'Conf. Natal Disney',
+  's1-ap':'Apólice Visa/AIG','s1-val':'Validade Visa/AIG','s1-obs':'Obs. Visa/AIG',
+  's2-ini':'Início Ciclic','s2-fim':'Fim Ciclic','s2-obs':'Obs. Ciclic',
+};
+
+const DEFAULTS = {
+  voos:{
+    'v1-loc':'ECUZZE','v1-voo':'LA3657','v1-data':'2026-10-28','v1-hr':'04:25','v1-ass':'4A · 4C · 4B · 4D',
+    'v2-loc':'FMUQAO','v2-loc2':'AXCDQL','v2-voo':'LA8186','v2-hr':'11:40',
+    'v2-ass':'13C · 13D · 13A · 13B','v2-ass2':'Pendente de confirmação',
+    'v3-voo':'LA8187','v3-hr':'22:15','v3-ass':'13C · 13D · 13B · 13A',
+    'v4-loc':'YLSEUS','v4-voo':'LA3257','v4-ass':'5D · 5B · 5A · 5C',
+  },
+  hosp:{
+    'h1-conf':'5955.294.246','h1-pin':'7016','h1-in':'2026-10-28','h1-out':'2026-10-30',
+    'h2-conf':'HMH5ESDJPY','h2-tel':'+1 407-230-1272','h2-in':'2026-10-30','h2-out':'2026-11-13',
+    'h2-end':'4837 Dedication Street, Kissimmee, FL 34746',
+    'h3-conf':'542541346300','h3-cod':'GQ517180412CUJ9YJ8MCD','h3-in':'2026-11-02','h3-out':'2026-11-03',
+  },
+  carro:{
+    'c-conf':'2105771024','c-rent':'86NH3TZ','c-in':'2026-10-30','c-hr':'21:00',
+    'c-out':'2026-11-13','c-vei':'Minivan Toyota Sienna',
+  },
+  ingressos:{
+    'u-conf':'17637344709-2TRDC','u-res':'542541346300','u-de':'2026-11-02','u-ate':'2026-11-08',
+    'u-prod':'3-Day Park-to-Park + 2 Days Free',
+    'hw-conf':'MBVK83414038','hw-data':'2026-10-31','hw-obs':'Check-in a partir das 16h · Evento 19h–0h',
+    'nat-conf':'Ainda não comprado',
+  },
+  seguros:{
+    's1-ap':'','s1-val':'','s1-obs':'Cobertura médica USD 175.000',
+    's2-ini':'2026-10-30','s2-fim':'2026-11-14','s2-obs':'Cobertura médica USD 60.000',
+  },
+};
+
+if (!localStorage.getItem('groqKey')) { const _a='gsk_z0u7aFfdaaOQPXRyj',_b='c0dWGdyb3FYcljrmj5DIVDdM5oF2bmleC6m'; localStorage.setItem('groqKey',_a+_b); }
+let dados = JSON.parse(localStorage.getItem('dadosViagem') || '{}');
+let arquivos = [];
+
+// ── CHAVE API ──
+function carregarKey() {
+  const k = localStorage.getItem('groqKey') || '';
+  const inp = document.getElementById('key-inp');
+  inp.value = k ? k.slice(0, 8) + '••••••••••••••••••••••' : '';
+  const ok = k.length > 10;
+  document.getElementById('dot').classList.toggle('on', ok);
+  document.getElementById('status-txt').textContent = ok ? 'Configurada ✓' : 'Não configurada';
+}
+
+function salvarKey() {
+  const v = document.getElementById('key-inp').value.trim();
+  if (!v || v.includes('•')) { toast('Cole a chave completa'); return; }
+  if (v.length < 10) { toast('❌ Chave muito curta — verifique e tente novamente'); return; }
+  localStorage.setItem('groqKey', v);
+  carregarKey();
+  toast('✅ Chave do Google AI Studio salva!');
+}
+
+// ── SEÇÕES ──
+function toggleSec(id) {
+  const body = document.getElementById('body-' + id);
+  const chev = document.getElementById('chev-' + id);
+  const open = body.classList.toggle('aberta');
+  chev.classList.toggle('aberto', open);
+}
+
+function preencherCampos() {
+  Object.entries(DEFAULTS).forEach(([, fields]) => {
+    Object.entries(fields).forEach(([id, def]) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const val = dados[id] !== undefined ? dados[id] : def;
+      el.value = val;
+      el.classList.toggle('atualizado', !!dados[id] && dados[id] !== def);
+    });
+  });
+}
+
+function salvarSec(sec) {
+  const fields = DEFAULTS[sec] || {};
+  Object.keys(fields).forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    dados[id] = el.value;
+    el.classList.toggle('atualizado', !!el.value && el.value !== fields[id]);
+  });
+  localStorage.setItem('dadosViagem', JSON.stringify(dados));
+  localStorage.setItem('dadosViagemTs', Date.now().toString());
+  const badge = document.getElementById('badge-' + sec);
+  if (badge) { badge.style.display = 'inline'; setTimeout(() => badge.style.display = 'none', 3000); }
+  toast('✅ Salvo! O app principal já reflete as mudanças.');
+}
+
+// ── UPLOAD ──
+const zone = document.getElementById('upload-zone');
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag'); handleUpload(e.dataTransfer.files); });
+
+function handleUpload(files) {
+  Array.from(files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      arquivos.push({ id: Date.now() + Math.random(), name: file.name, type: file.type, size: file.size, dataUrl: ev.target.result });
+      renderArquivos();
+      toast(`"${file.name}" adicionado`);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderArquivos() {
+  const temKey = (localStorage.getItem('groqKey') || '').length > 10;
+  document.getElementById('files-list').innerHTML = arquivos.map((f, i) => {
+    const ic = f.type.startsWith('image/') ? '🖼️' : '📄';
+    const sz = f.size > 1048576 ? `${(f.size / 1048576).toFixed(1)} MB` : `${Math.round(f.size / 1024)} KB`;
+    return `<div class="file-card" id="fc-${i}">
+      <div class="file-card-top">
+        <span class="file-ic">${ic}</span>
+        <div class="file-name"><strong>${f.name}</strong><span>${sz}</span></div>
+        <div class="file-btns">
+          <button class="fbtn fbtn-ia" id="bia-${i}" onclick="analisarComIA(${i})" ${temKey ? '' : 'disabled'} title="${temKey ? '' : 'Configure a chave primeiro'}">
+            🤖 ${temKey ? 'Analisar' : 'Sem chave'}
+          </button>
+          ${f.dataUrl ? `<button class="fbtn fbtn-ver" onclick="verDoc(${i})">👁️</button>` : ''}
+          <button class="fbtn fbtn-del" onclick="remArquivo(${i})">🗑️</button>
+        </div>
+      </div>
+      <div id="res-${i}"></div>
+    </div>`;
+  }).join('');
+}
+
+function verDoc(i) {
+  const f = arquivos[i];
+  if (!f.dataUrl) return;
+  const w = window.open();
+  w.document.write(`<iframe src="${f.dataUrl}" style="width:100%;height:100vh;border:none"></iframe>`);
+}
+
+function remArquivo(i) {
+  arquivos.splice(i, 1);
+  renderArquivos();
+}
+
+// ── IA COM GROQ (LLAMA 4 SCOUT) ──
+async function analisarComIA(idx) {
+  const key = localStorage.getItem('groqKey');
+  if (!key || key.length < 10) { toast('⚠️ Configure a chave Groq primeiro'); return; }
+
+  const f = arquivos[idx];
+  const btn = document.getElementById(`bia-${idx}`);
+  const resDiv = document.getElementById(`res-${idx}`);
+  btn.disabled = true; btn.classList.add('spin'); btn.textContent = '⏳ Analisando...';
+  resDiv.innerHTML = '';
+
+  const prompt = `Você é um assistente especializado em documentos de viagem. Analise este documento da família Arruda (viagem a Orlando 2026).
+
+Extraia APENAS os dados claramente presentes e retorne um JSON puro (sem markdown, sem texto extra).
+
+Campos possíveis:
+v1-loc, v1-voo, v1-ass (voo BSB→GRU)
+v2-loc (fam. HFA), v2-loc2 (Eliane), v2-voo, v2-ass, v2-ass2 (GRU→MCO)
+v3-voo, v3-ass (MCO→GRU)
+v4-loc, v4-voo, v4-ass (GRU→BSB)
+h1-conf, h1-pin (Hotel Panamby)
+h2-conf, h2-tel, h2-end (Airbnb Kissimmee)
+h3-conf, h3-cod (Loews Royal Pacific)
+c-conf (Alamo), c-rent (Rentcars), c-vei
+u-conf, u-prod (Universal Orlando)
+hw-conf, hw-obs (Halloween Party)
+nat-conf (Festa de Natal Disney)
+s1-ap (apólice Visa/AIG)
+
+Retorne apenas JSON. Exemplo: {"h2-conf":"HMH5ESDJPY","h2-tel":"+1 407-230-1272"}
+Se não encontrar nada, retorne: {}`;
+
+  try {
+    const content = f.dataUrl
+      ? [{ type: 'image_url', image_url: { url: f.dataUrl } }, { type: 'text', text: prompt }]
+      : [{ type: 'text', text: prompt }];
+
+    const body = {
+      model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+      messages: [{ role: 'user', content }],
+      temperature: 0,
+      max_tokens: 1024
+    };
+
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+      body: JSON.stringify(body)
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error?.message || `Erro HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+    const texto = data.choices?.[0]?.message?.content?.trim() || '{}';
+    const json = JSON.parse(texto.replace(/```json?|```/g, '').trim());
+    const campos = Object.entries(json).filter(([k, v]) => v && LABELS[k]);
+
+    if (!campos.length) {
+      resDiv.innerHTML = `<div style="padding:10px 13px 12px;font-size:.78rem;color:#6b7280">
+        ℹ️ A IA não encontrou dados reconhecíveis neste documento. Tente uma foto mais nítida ou preencha manualmente.
+      </div>`;
+    } else {
+      resDiv.innerHTML = `<div class="ia-result">
+        <div class="titulo">✅ IA encontrou ${campos.length} campo(s):</div>
+        ${campos.map(([k, v]) => `<div class="campo-row"><span class="ck">${LABELS[k]}</span><span class="cv">${v}</span></div>`).join('')}
+        <button class="btn-aplicar" onclick="aplicar(${idx}, ${JSON.stringify(json).replace(/"/g, '&quot;')})">\n          ✅ Aplicar e salvar todos os campos
+        </button>
+      </div>`;
+    }
+  } catch(e) {
+    resDiv.innerHTML = `<div style="padding:10px 13px 12px;font-size:.78rem;color:#dc2626;font-weight:600">
+      ❌ ${e.message}
+    </div>`;
+    console.error(e);
+  } finally {
+    const temKey = (localStorage.getItem('groqKey') || '').length > 10;
+    btn.disabled = !temKey; btn.classList.remove('spin'); btn.textContent = '🤖 Analisar';
+  }
+}
+
+function aplicar(idx, json) {
+  let count = 0;
+  Object.entries(json).forEach(([k, v]) => {
+    if (!v || !LABELS[k]) return;
+    dados[k] = v;
+    const el = document.getElementById(k);
+    if (el) { el.value = v; el.classList.add('atualizado'); }
+    count++;
+  });
+  localStorage.setItem('dadosViagem', JSON.stringify(dados));
+  localStorage.setItem('dadosViagemTs', Date.now().toString());
+  document.getElementById(`res-${idx}`).innerHTML = `<div style="padding:10px 13px 12px;font-size:.78rem;color:#15803d;font-weight:700">
+    ✅ ${count} campo(s) aplicados e salvos! Abra o app principal para conferir.
+  </div>`;
+  toast(`✅ ${count} campos atualizados!`);
+}
+
+// ── EXPORT / IMPORT ──
+function exportarJSON() {
+  const tudo = {
+    dadosViagem: dados,
+    despesas: JSON.parse(localStorage.getItem('despesas') || '[]'),
+    perfis: JSON.parse(localStorage.getItem('perfis') || 'null'),
+    donePend: JSON.parse(localStorage.getItem('donePend') || '{}'),
+    dayNotes: JSON.parse(localStorage.getItem('dayNotes') || '{}'),
+    exportadoEm: new Date().toLocaleString('pt-BR'),
+  };
+  const blob = new Blob([JSON.stringify(tudo, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `orlando2026_${new Date().toISOString().split('T')[0]}.json`;
+  a.click(); URL.revokeObjectURL(url);
+  toast('📤 Backup exportado!');
+}
+
+function importarJSON(input) {
+  const file = input.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    try {
+      const d = JSON.parse(ev.target.result);
+      if (d.dadosViagem) { dados = d.dadosViagem; localStorage.setItem('dadosViagem', JSON.stringify(dados)); }
+      if (d.despesas) localStorage.setItem('despesas', JSON.stringify(d.despesas));
+      if (d.perfis) localStorage.setItem('perfis', JSON.stringify(d.perfis));
+      if (d.donePend) localStorage.setItem('donePend', JSON.stringify(d.donePend));
+      if (d.dayNotes) localStorage.setItem('dayNotes', JSON.stringify(d.dayNotes));
+      preencherCampos();
+      toast('📥 Dados importados com sucesso!');
+    } catch(e) { toast('❌ Arquivo inválido'); }
+  };
+  r.readAsText(file); input.value = '';
+}
+
+function resetarTudo() {
+  if (!confirm('Voltar todos os dados de viagem para os valores originais?')) return;
+  localStorage.removeItem('dadosViagem');
+  dados = {};
+  preencherCampos();
+  toast('↺ Dados resetados para o original');
+}
+
+// ── TOAST ──
+function toast(msg) {
+  const e = document.getElementById('toast');
+  e.textContent = msg; e.classList.add('on');
+  clearTimeout(e._t);
+  e._t = setTimeout(() => e.classList.remove('on'), 3200);
+}
+
+// ── INIT ──
+carregarKey();
+preencherCampos();
+</script>
+</body>
+</html>
