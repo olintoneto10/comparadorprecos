@@ -38,3 +38,4 @@ jobs:
           git diff --staged --quiet || git commit -m "chore: precos atualizados $(date -u '+%Y-%m-%d')"
           git pull --rebase origin master
           git push
+# atualizado
