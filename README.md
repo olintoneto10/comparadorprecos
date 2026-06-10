@@ -1,13 +1,5 @@
-# ✈️ Planejador de Viagens
+# Orlando 2026 — Planejador de Viagem
 
-Um app simples para organizar seus destinos dos sonhos.
+App estático para organizar a viagem da família Arruda a Orlando em 2026.
 
-## O que ele faz
-
-- Adiciona viagens com destino, datas e orçamento
-- Salva tudo no navegador (sem precisar de internet)
-- Remove viagens quando quiser
-
-## Como usar
-
-Abra o arquivo `index.html` no seu navegador e comece a planejar!
+Acesse em: https://olintoneto10.github.io/orlando-2026/
