@@ -1,6 +1,8 @@
 name: Rastreador de Precos
 
 on:
+  push:
+    branches: [master]
   schedule:
     - cron: '0 14 */2 * *'
   workflow_dispatch:
