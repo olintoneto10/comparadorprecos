@@ -1,6 +1,6 @@
 {
-  "atualizado_em": "2026-06-10T22:50:55.351722+00:00",
-  "total_estimado": 598.2,
+  "atualizado_em": "2026-06-11T06:46:43.914564+00:00",
+  "total_estimado": 1462.63,
   "cupons": {
     "bambulab": [],
     "bestbuy": [],
@@ -21,7 +21,7 @@
           "url_carrinho": null
         },
         "bestbuy": {
-          "preco": null,
+          "preco": 799.99,
           "url_produto": "https://www.bestbuy.com/site/bambu-lab-p2s-combo-fdm-3d-printer-with-ams-2-pro/6647058.p",
           "url_carrinho": null
         },
@@ -41,8 +41,8 @@
           "url_carrinho": null
         }
       },
-      "melhor_loja": null,
-      "preco_atual": null,
+      "melhor_loja": "bestbuy",
+      "preco_atual": 799.99,
       "preco_minimo": 799.0,
       "historico": [
         {
@@ -57,6 +57,11 @@
         },
         {
           "data": "2026-06-09T11:58:08.336371+00:00",
+          "preco": 799.99,
+          "loja": "bestbuy"
+        },
+        {
+          "data": "2026-06-11T06:46:43.914564+00:00",
           "preco": 799.99,
           "loja": "bestbuy"
         }
@@ -220,6 +225,11 @@
           "data": "2026-06-10T22:50:55.351722+00:00",
           "preco": 23.99,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-06-11T06:46:43.914564+00:00",
+          "preco": 23.99,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -306,6 +316,11 @@
         },
         {
           "data": "2026-06-10T22:50:55.351722+00:00",
+          "preco": 17.16,
+          "loja": "amazon"
+        },
+        {
+          "data": "2026-06-11T06:46:43.914564+00:00",
           "preco": 17.16,
           "loja": "amazon"
         }
@@ -399,6 +414,11 @@
         },
         {
           "data": "2026-06-10T22:50:55.351722+00:00",
+          "preco": 28.99,
+          "loja": "amazon"
+        },
+        {
+          "data": "2026-06-11T06:46:43.914564+00:00",
           "preco": 28.99,
           "loja": "amazon"
         }
@@ -499,6 +519,11 @@
           "data": "2026-06-10T22:50:55.351722+00:00",
           "preco": 28.99,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-06-11T06:46:43.914564+00:00",
+          "preco": 28.99,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -514,7 +539,7 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 14.99,
+          "preco": 33.25,
           "url_produto": "https://www.amazon.com/dp/B0G4ZVJDM7",
           "url_carrinho": null
         },
@@ -525,7 +550,7 @@
         }
       },
       "melhor_loja": "amazon",
-      "preco_atual": 14.99,
+      "preco_atual": 33.25,
       "preco_minimo": 14.99,
       "historico": [
         {
@@ -582,6 +607,11 @@
           "data": "2026-06-10T22:50:55.351722+00:00",
           "preco": 14.99,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-06-11T06:46:43.914564+00:00",
+          "preco": 33.25,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -597,7 +627,7 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 14.99,
+          "preco": 28.95,
           "url_produto": "https://www.amazon.com/dp/B0G5175G82",
           "url_carrinho": null
         },
@@ -608,7 +638,7 @@
         }
       },
       "melhor_loja": "amazon",
-      "preco_atual": 14.99,
+      "preco_atual": 28.95,
       "preco_minimo": 14.99,
       "historico": [
         {
@@ -664,6 +694,11 @@
         {
           "data": "2026-06-10T22:50:55.351722+00:00",
           "preco": 14.99,
+          "loja": "amazon"
+        },
+        {
+          "data": "2026-06-11T06:46:43.914564+00:00",
+          "preco": 28.95,
           "loja": "amazon"
         }
       ],
@@ -790,6 +825,11 @@
           "data": "2026-06-10T22:50:55.351722+00:00",
           "preco": 31.99,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-06-11T06:46:43.914564+00:00",
+          "preco": 31.99,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -888,6 +928,11 @@
           "data": "2026-06-10T22:50:55.351722+00:00",
           "preco": 31.99,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-06-11T06:46:43.914564+00:00",
+          "preco": 31.99,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -976,14 +1021,19 @@
           "data": "2026-06-10T22:50:55.351722+00:00",
           "preco": 299.99,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-06-11T06:46:43.914564+00:00",
+          "preco": 299.99,
+          "loja": "amazon"
         }
       ],
       "brasil": null
     }
   },
   "cambio": {
-    "usd_brl": 5.1922,
+    "usd_brl": 5.8,
     "fonte": "AwesomeAPI",
-    "atualizado_em": "2026-06-10T22:50:55.351722+00:00"
+    "atualizado_em": "2026-06-11T06:46:43.914564+00:00"
   }
 }
