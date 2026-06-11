@@ -76,16 +76,16 @@ def hdrs(referer=None):
         h["Referer"] = referer
     return h
 
-def scraperapi_get(url, timeout=70):
-    """GET via ScraperAPI (proxy residencial US). Contorna bloqueio de IP.
-    Retorna requests.Response com status 200 ou None."""
+def scraperapi_get(url, timeout=70, country="us"):
+    """GET via ScraperAPI (proxy residencial). Contorna bloqueio de IP.
+    Use country='br' para sites brasileiros. Retorna requests.Response ou None."""
     if not SCRAPER_API_KEY:
         return None
     try:
         r = requests.get(
             "http://api.scraperapi.com",
             params={"api_key": SCRAPER_API_KEY, "url": url,
-                    "keep_headers": "true", "country_code": "us"},
+                    "keep_headers": "true", "country_code": country},
             timeout=timeout,
         )
         print(f"      [ScraperAPI] HTTP {r.status_code}, {len(r.text)} bytes")
@@ -309,7 +309,7 @@ def fetch_mercadolivre(query, max_results=10):
     except Exception as e:
         print(f"      [ML] erro direto: {e}")
 
-    r2 = scraperapi_get(api_url)
+    r2 = scraperapi_get(api_url, country="br")
     if r2:
         try:
             if r2.text.lstrip().startswith("{"):
@@ -318,7 +318,7 @@ def fetch_mercadolivre(query, max_results=10):
             print(f"      [ML] ScraperAPI parse erro: {e}")
 
     html_url = "https://www.mercadolivre.com.br/busca?q=" + requests.utils.quote(query)
-    r3 = scraperapi_get(html_url)
+    r3 = scraperapi_get(html_url, country="br")
     if r3 and HAS_BS4:
         p, url = _parse_ml_html(r3.text, query)
         if p:
@@ -837,7 +837,7 @@ def fetch_bambulab_br(handle, variant_hint=None):
     ml_hdrs = {"Accept": "application/json", "Accept-Language": "pt-BR,pt;q=0.9",
                "User-Agent": random.choice(USER_AGENTS),
                "Referer": "https://br.store.bambulab.com/"}
-    r = scraperapi_get(url)
+    r = scraperapi_get(url, country="br")
     if r:
         price, _ = _parse_bl_json(r, handle, variant_hint)
         if price:
@@ -863,7 +863,7 @@ def fetch_amazon_br(asin_br=None, query=None):
         url = "https://www.amazon.com.br/s?k=" + requests.utils.quote(query)
     else:
         return None, None
-    r = scraperapi_get(url)
+    r = scraperapi_get(url, country="br")
     if not r or not HAS_BS4:
         return None, None
     try:
@@ -893,7 +893,7 @@ def fetch_amazon_br(asin_br=None, query=None):
 def fetch_kabum(query):
     """Busca preco no Kabum.com.br via ScraperAPI."""
     search_url = "https://www.kabum.com.br/busca?string=" + requests.utils.quote(query)
-    r = scraperapi_get(search_url)
+    r = scraperapi_get(search_url, country="br")
     if not r or not HAS_BS4:
         return None, None
     try:
@@ -1364,7 +1364,13 @@ def processar_item(pid, p, item, now):
         print(f"    {si['emoji']} {si['nome']}: {status}")
         time.sleep(random.uniform(0.8, 1.5))
 
-    validos = {l: d["preco"] for l, d in item["lojas_precos"].items() if d.get("preco")}
+    # Limites plausíveis por categoria (evita preços claramente errados)
+    _PRECO_MIN = {"impressora": 300, "acessorio": 5, "filamento": 5,
+                  "fritadeira": 80, "eletronico": 20}
+    min_plausivel = _PRECO_MIN.get(p.get("categoria", ""), 1)
+
+    validos = {l: d["preco"] for l, d in item["lojas_precos"].items()
+               if d.get("preco") and d["preco"] >= min_plausivel}
     if validos:
         melhor_loja  = min(validos, key=validos.get)
         melhor_preco = validos[melhor_loja]
@@ -1373,8 +1379,9 @@ def processar_item(pid, p, item, now):
         hist = item.get("historico", [])
         hist.append({"data": now, "preco": melhor_preco, "loja": melhor_loja})
         item["historico"]    = hist[-90:]
-        item["preco_minimo"] = min(h["preco"] for h in item["historico"])
-        if prev and melhor_preco < prev:
+        item["preco_minimo"] = min(h["preco"] for h in item["historico"]
+                                   if h["preco"] >= min_plausivel)
+        if prev and melhor_preco < prev * 0.7:
             pct = (prev - melhor_preco) / prev * 100
             quedas_item.append(f"{p['nome']}: ${prev:.2f} -> ${melhor_preco:.2f} ({pct:.1f}% off)")
     else:
