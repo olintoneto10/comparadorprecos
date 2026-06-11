@@ -94,6 +94,91 @@ def scraperapi_get(url, timeout=70):
         print(f"      [ScraperAPI] {e}")
     return None
 
+# ---------------------------------------------------------------------------
+# Navegador real (SeleniumBase modo UC) — fallback final contra Cloudflare.
+# Usado para Bambu Lab e Best Buy quando ScraperAPI/requests falham.
+# Desative com USE_BROWSER=0.
+# ---------------------------------------------------------------------------
+USE_BROWSER = os.environ.get("USE_BROWSER", "1") == "1"
+_BROWSER = None
+_BROWSER_FAILED = False
+_BROWSER_CACHE = {}
+
+def _get_browser():
+    """Inicializa (uma unica vez) o Chrome em modo undetected."""
+    global _BROWSER, _BROWSER_FAILED
+    if _BROWSER is not None or _BROWSER_FAILED:
+        return _BROWSER
+    if not USE_BROWSER:
+        _BROWSER_FAILED = True
+        return None
+    try:
+        from seleniumbase import Driver
+        try:
+            _BROWSER = Driver(uc=True, headless=False, xvfb=True)
+        except TypeError:
+            _BROWSER = Driver(uc=True, headless=True)
+        print("      [Browser] Chrome UC iniciado")
+    except Exception as e:
+        print(f"      [Browser] indisponivel: {e}")
+        _BROWSER_FAILED = True
+    return _BROWSER
+
+def browser_get(url, label=""):
+    """Busca HTML via navegador real (contorna Cloudflare). Retorna page_source ou None."""
+    if url in _BROWSER_CACHE:
+        return _BROWSER_CACHE[url]
+    drv = _get_browser()
+    if drv is None:
+        return None
+    try:
+        drv.uc_open_with_reconnect(url, reconnect_time=5)
+        time.sleep(2)
+        html = drv.page_source or ""
+        if "Just a moment" in html[:3000] or "challenge-platform" in html[:5000]:
+            try:
+                drv.uc_gui_click_captcha()
+                time.sleep(4)
+                html = drv.page_source or ""
+            except Exception:
+                pass
+        print(f"      [Browser] {label or url[:60]}: {len(html)} bytes")
+        _BROWSER_CACHE[url] = html
+        return html
+    except Exception as e:
+        print(f"      [Browser] {label or url[:60]}: {e}")
+        return None
+
+def close_browser():
+    global _BROWSER
+    if _BROWSER is not None:
+        try:
+            _BROWSER.quit()
+            print("  [Browser] encerrado")
+        except Exception:
+            pass
+        _BROWSER = None
+
+class _FakeResp:
+    """Embrulha texto JSON num objeto compativel com requests.Response."""
+    def __init__(self, text):
+        self.status_code = 200
+        self.text = text
+    def json(self):
+        return json.loads(self.text)
+
+def _json_de_pre(html):
+    """Extrai JSON renderizado pelo Chrome dentro de <pre>...</pre>."""
+    if not html:
+        return None
+    m = re.search(r"<pre[^>]*>(\{.*\})</pre>", html, re.DOTALL)
+    if m:
+        return m.group(1)
+    s = html.strip()
+    if s.startswith("{") and s.endswith("}"):
+        return s
+    return None
+
 def fetch_brl_usd():
     """Busca taxa de cambio USD->BRL. Tenta direto, depois via ScraperAPI."""
     url = "https://economia.awesomeapi.com.br/json/last/USD-BRL"
@@ -602,6 +687,23 @@ def fetch_bambulab(handle, variant_hint=None):
     except Exception as e:
         print(f"      [BL] HTML fallback erro: {e}")
 
+    # Fallback final: navegador real (contorna Cloudflare)
+    raw = browser_get(url, f"BL {handle}.json")
+    json_txt = _json_de_pre(raw)
+    if json_txt:
+        price, vid = _parse_bl_json(_FakeResp(json_txt), handle, variant_hint)
+        if price:
+            print(f"      [BL] {handle}: ${price} via navegador (JSON)")
+            return price, vid
+
+    page_html = browser_get(f"https://us.store.bambulab.com/products/{handle}",
+                            f"BL {handle} pagina")
+    if page_html and len(page_html) > 10000:
+        p, vid = _parse_bl_shopify_html(page_html, handle, variant_hint)
+        if p:
+            print(f"      [BL] {handle}: ${p} via navegador (HTML)")
+            return p, vid
+
     return None, None
 
 
@@ -902,9 +1004,23 @@ def fetch_bestbuy(sku=None, url_produto=None, search_query=None):
                         return float(val)
         except requests.exceptions.Timeout:
             print(f"      [BB] timeout — IP bloqueado")
-            return None
         except Exception as e:
             print(f"      [BB] API interna erro: {e}")
+
+    # Fallback final: navegador real (contorna Cloudflare/bloqueio de IP)
+    if target_url:
+        html = browser_get(target_url, f"BB {sku or target_url[:40]}")
+        if html and len(html) > 10000:
+            p = _parse_price_html(html, [
+                ".priceView-hero-price span[aria-hidden]",
+                "[data-testid='customer-price'] span",
+                ".priceView-customer-price span",
+                "[class*='priceView'] span[aria-hidden]",
+                "[data-testid='large-price'] span",
+            ])
+            if p:
+                print(f"      [BB] preco via navegador: ${p}")
+                return p
     return None
 
 _AMZ_SELECTORS = [
@@ -1394,6 +1510,8 @@ def main():
         cupons_data[loja] = buscar_cupons(loja)
     data["cupons"] = cupons_data
     print(f"  Total de cupons: {sum(len(v) for v in cupons_data.values())}")
+
+    close_browser()
 
     with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)

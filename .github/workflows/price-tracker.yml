@@ -21,9 +21,12 @@ jobs:
           python-version: '3.12'
 
       - name: Instalar dependencias
-        run: pip install --no-cache-dir -r requirements.txt
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq xvfb
+          pip install --no-cache-dir -r requirements.txt
 
       - name: Executar rastreador
+        timeout-minutes: 45
         env:
           BESTBUY_API_KEY: ${{ secrets.BESTBUY_API_KEY }}
           SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
