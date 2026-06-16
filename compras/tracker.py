@@ -345,7 +345,7 @@ def fetch_mercadolivre(query, max_results=10):
     try:
         r = requests.get(ML_API, params=params, headers=_ml_auth_headers(), timeout=15)
         print(f"      [ML] '{query[:40]}': HTTP {r.status_code}" +
-              " (autenticado)" if ML_APP_ID else "")
+              (" (autenticado)" if ML_APP_ID else ""))
         if r.status_code == 200:
             return _parse_ml_json(r.json(), query)
     except Exception as e:
