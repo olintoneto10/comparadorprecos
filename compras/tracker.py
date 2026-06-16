@@ -48,6 +48,8 @@ USER_AGENTS = [
 
 SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY", "")
 BESTBUY_API_KEY = os.environ.get("BESTBUY_API_KEY", "")
+ML_APP_ID       = os.environ.get("ML_APP_ID", "")
+ML_SECRET_KEY   = os.environ.get("ML_SECRET_KEY", "")
 
 ORLANDO_ZIP  = "32819"
 ORLANDO_STATE = "FL"
@@ -211,14 +213,54 @@ def fetch_brl_usd():
     print("  [Cambio] usando fallback 5.80")
     return 5.80
 
-ML_API = "https://api.mercadolibre.com/sites/MLB/search"
+ML_API      = "https://api.mercadolibre.com/sites/MLB/search"
 ML_ITEM_API = "https://api.mercadolibre.com/items/{}"
+
+_ML_TOKEN        = None
+_ML_TOKEN_EXPIRY = 0.0
+
+def get_ml_token():
+    """Obtém (ou reutiliza) token OAuth2 client_credentials do Mercado Livre.
+    Bypassa o bloqueio de IP de datacenters que afeta chamadas sem autenticação."""
+    global _ML_TOKEN, _ML_TOKEN_EXPIRY
+    if not ML_APP_ID or not ML_SECRET_KEY:
+        return None
+    now = time.time()
+    if _ML_TOKEN and now < _ML_TOKEN_EXPIRY - 60:
+        return _ML_TOKEN
+    try:
+        r = requests.post(
+            "https://api.mercadolibre.com/oauth/token",
+            data={"grant_type": "client_credentials",
+                  "client_id": ML_APP_ID,
+                  "client_secret": ML_SECRET_KEY},
+            headers={"Accept": "application/json", "Content-Type": "application/x-www-form-urlencoded"},
+            timeout=15,
+        )
+        if r.status_code == 200:
+            d = r.json()
+            _ML_TOKEN = d.get("access_token")
+            _ML_TOKEN_EXPIRY = now + d.get("expires_in", 21600)
+            print(f"      [ML] token obtido (expira em {d.get('expires_in',0)}s)")
+            return _ML_TOKEN
+        print(f"      [ML] erro ao obter token: HTTP {r.status_code} — {r.text[:120]}")
+    except Exception as e:
+        print(f"      [ML] erro token: {e}")
+    return None
+
+def _ml_auth_headers():
+    token = get_ml_token()
+    h = {"Accept": "application/json", "Accept-Language": "pt-BR,pt;q=0.9",
+         "User-Agent": random.choice(USER_AGENTS)}
+    if token:
+        h["Authorization"] = f"Bearer {token}"
+    return h
 
 def _ml_item_price(item_id):
     """Busca preco exato de um item ML pelo ID."""
     try:
         r = requests.get(ML_ITEM_API.format(item_id),
-                         headers={"Accept": "application/json"}, timeout=10)
+                         headers=_ml_auth_headers(), timeout=10)
         if r.status_code == 200:
             d = r.json()
             price = d.get("price") or d.get("sale_price")
@@ -298,17 +340,18 @@ def fetch_mercadolivre(query, max_results=10):
     """Busca menor preco novo no Mercado Livre via API oficial."""
     params = {"q": query, "limit": max_results, "condition": "new", "sort": "price_asc"}
     api_url = ML_API + "?" + urllib.parse.urlencode(params)
-    ml_hdrs = {"Accept": "application/json", "Accept-Language": "pt-BR,pt;q=0.9",
-               "User-Agent": random.choice(USER_AGENTS)}
 
+    # Tentativa 1: API autenticada com token OAuth2 (bypassa bloqueio de IP de datacenter)
     try:
-        r = requests.get(ML_API, params=params, headers=ml_hdrs, timeout=15)
-        print(f"      [ML] '{query[:40]}': HTTP {r.status_code}")
+        r = requests.get(ML_API, params=params, headers=_ml_auth_headers(), timeout=15)
+        print(f"      [ML] '{query[:40]}': HTTP {r.status_code}" +
+              " (autenticado)" if ML_APP_ID else "")
         if r.status_code == 200:
             return _parse_ml_json(r.json(), query)
     except Exception as e:
         print(f"      [ML] erro direto: {e}")
 
+    # Tentativa 2: ScraperAPI como proxy (se cota disponivel)
     r2 = scraperapi_get(api_url, country="br")
     if r2:
         try:
@@ -317,6 +360,7 @@ def fetch_mercadolivre(query, max_results=10):
         except Exception as e:
             print(f"      [ML] ScraperAPI parse erro: {e}")
 
+    # Tentativa 3: HTML scrape via ScraperAPI
     html_url = "https://www.mercadolivre.com.br/busca?q=" + requests.utils.quote(query)
     r3 = scraperapi_get(html_url, country="br")
     if r3 and HAS_BS4:
@@ -1439,6 +1483,8 @@ def processar_item(pid, p, item, now):
 def main():
     print(f"\n  BESTBUY_API_KEY: {'configurado' if BESTBUY_API_KEY else 'NAO configurado'}")
     print(f"  SCRAPER_API_KEY: {'configurado' if SCRAPER_API_KEY else 'NAO configurado'}")
+    print(f"  ML_APP_ID:       {'configurado' if ML_APP_ID else 'NAO configurado'}")
+    print(f"  ML_SECRET_KEY:   {'configurado' if ML_SECRET_KEY else 'NAO configurado'}")
 
     data = {}
     if os.path.exists(DATA_FILE):
