@@ -1,6 +1,6 @@
 {
-  "atualizado_em": "2026-06-29T20:32:50.224588+00:00",
-  "total_estimado": 561.18,
+  "atualizado_em": "2026-07-06T22:56:08.431536+00:00",
+  "total_estimado": 650.44,
   "cupons": {
     "bambulab": [],
     "bestbuy": [],
@@ -305,6 +305,11 @@
           "data": "2026-06-29T20:32:50.224588+00:00",
           "preco": 23.99,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-07-06T22:56:08.431536+00:00",
+          "preco": 23.99,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -320,13 +325,13 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": null,
+          "preco": 17.16,
           "url_produto": "https://www.amazon.com/dp/B0GSSB8GDQ",
           "url_carrinho": null
         }
       },
-      "melhor_loja": null,
-      "preco_atual": null,
+      "melhor_loja": "amazon",
+      "preco_atual": 17.16,
       "preco_minimo": 17.16,
       "historico": [
         {
@@ -446,6 +451,11 @@
         },
         {
           "data": "2026-06-27T17:46:06.495588+00:00",
+          "preco": 17.16,
+          "loja": "amazon"
+        },
+        {
+          "data": "2026-07-06T22:56:08.431536+00:00",
           "preco": 17.16,
           "loja": "amazon"
         }
@@ -609,6 +619,11 @@
         },
         {
           "data": "2026-06-29T20:32:50.224588+00:00",
+          "preco": 28.99,
+          "loja": "amazon"
+        },
+        {
+          "data": "2026-07-06T22:56:08.431536+00:00",
           "preco": 28.99,
           "loja": "amazon"
         }
@@ -779,6 +794,11 @@
           "data": "2026-06-29T20:32:50.224588+00:00",
           "preco": 28.99,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-07-06T22:56:08.431536+00:00",
+          "preco": 28.99,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -794,7 +814,7 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 30.7,
+          "preco": 30.0,
           "url_produto": "https://www.amazon.com/dp/B0G4ZVJDM7",
           "url_carrinho": null
         },
@@ -805,7 +825,7 @@
         }
       },
       "melhor_loja": "amazon",
-      "preco_atual": 30.7,
+      "preco_atual": 30.0,
       "preco_minimo": 14.99,
       "historico": [
         {
@@ -932,6 +952,11 @@
           "data": "2026-06-29T20:32:50.224588+00:00",
           "preco": 30.7,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-07-06T22:56:08.431536+00:00",
+          "preco": 30.0,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -947,7 +972,7 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 28.45,
+          "preco": 26.1,
           "url_produto": "https://www.amazon.com/dp/B0G5175G82",
           "url_carrinho": null
         },
@@ -958,7 +983,7 @@
         }
       },
       "melhor_loja": "amazon",
-      "preco_atual": 28.45,
+      "preco_atual": 26.1,
       "preco_minimo": 14.99,
       "historico": [
         {
@@ -1084,6 +1109,11 @@
         {
           "data": "2026-06-29T20:32:50.224588+00:00",
           "preco": 28.45,
+          "loja": "amazon"
+        },
+        {
+          "data": "2026-07-06T22:56:08.431536+00:00",
+          "preco": 26.1,
           "loja": "amazon"
         }
       ],
@@ -1280,6 +1310,11 @@
           "data": "2026-06-29T20:32:50.224588+00:00",
           "preco": 29.99,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-07-06T22:56:08.431536+00:00",
+          "preco": 29.99,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -1295,7 +1330,7 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 22.99,
+          "preco": 33.99,
           "url_produto": "https://www.amazon.com/dp/B0C4GB1TB1",
           "url_carrinho": null
         },
@@ -1306,7 +1341,7 @@
         }
       },
       "melhor_loja": "amazon",
-      "preco_atual": 22.99,
+      "preco_atual": 33.99,
       "preco_minimo": 6.87,
       "historico": [
         {
@@ -1448,6 +1483,11 @@
           "data": "2026-06-29T20:32:50.224588+00:00",
           "preco": 22.99,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-07-06T22:56:08.431536+00:00",
+          "preco": 33.99,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -1458,7 +1498,7 @@
       "qty": 1,
       "lojas_precos": {
         "amazon": {
-          "preco": 249.95,
+          "preco": 299.99,
           "url_produto": "https://www.amazon.com/dp/B0FPPJBKLS",
           "url_carrinho": null
         },
@@ -1484,7 +1524,7 @@
         }
       },
       "melhor_loja": "amazon",
-      "preco_atual": 249.95,
+      "preco_atual": 299.99,
       "preco_minimo": 249.95,
       "historico": [
         {
@@ -1606,6 +1646,11 @@
           "data": "2026-06-29T20:32:50.224588+00:00",
           "preco": 249.95,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-07-06T22:56:08.431536+00:00",
+          "preco": 299.99,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -1614,6 +1659,6 @@
   "cambio": {
     "usd_brl": 5.8,
     "fonte": "AwesomeAPI",
-    "atualizado_em": "2026-06-29T20:32:50.224588+00:00"
+    "atualizado_em": "2026-07-06T22:56:08.431536+00:00"
   }
 }
