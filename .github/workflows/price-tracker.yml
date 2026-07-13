@@ -24,10 +24,11 @@ jobs:
       - name: Executar rastreador
         timeout-minutes: 45
         env:
-          BESTBUY_API_KEY: ${{ secrets.BESTBUY_API_KEY }}
-          SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
-          ML_APP_ID:       ${{ secrets.ML_APP_ID }}
-          ML_SECRET_KEY:   ${{ secrets.ML_SECRET_KEY }}
+          BESTBUY_API_KEY:   ${{ secrets.BESTBUY_API_KEY }}
+          SCRAPER_API_KEY:   ${{ secrets.SCRAPER_API_KEY }}
+          ML_APP_ID:         ${{ secrets.ML_APP_ID }}
+          ML_SECRET_KEY:     ${{ secrets.ML_SECRET_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python compras/tracker.py
 
       - name: Validar JSON gerado
