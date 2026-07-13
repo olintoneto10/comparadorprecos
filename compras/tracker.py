@@ -46,10 +46,12 @@ USER_AGENTS = [
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
 ]
 
-SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY", "")
-BESTBUY_API_KEY = os.environ.get("BESTBUY_API_KEY", "")
-ML_APP_ID       = os.environ.get("ML_APP_ID", "")
-ML_SECRET_KEY   = os.environ.get("ML_SECRET_KEY", "")
+SCRAPER_API_KEY   = os.environ.get("SCRAPER_API_KEY", "")
+BESTBUY_API_KEY   = os.environ.get("BESTBUY_API_KEY", "")
+ML_APP_ID         = os.environ.get("ML_APP_ID", "")
+ML_SECRET_KEY     = os.environ.get("ML_SECRET_KEY", "")
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+CLAUDE_MODEL      = os.environ.get("CLAUDE_MODEL", "claude-haiku-4-5-20251001")
 
 ORLANDO_ZIP  = "32819"
 ORLANDO_STATE = "FL"
@@ -623,6 +625,106 @@ def _preco_de_ld(html):
             pass
     return None
 
+# ---------------------------------------------------------------------------
+# Extrator de preco via Claude (Anthropic) — fallback inteligente.
+# Usado quando o HTML foi baixado com sucesso mas os parsers CSS/regex falham
+# (tipico do Bambu Lab/Shopify). NAO contorna bloqueio de IP: so funciona
+# quando ja existe HTML valido. Configure ANTHROPIC_API_KEY para ativar.
+# ---------------------------------------------------------------------------
+_CLAUDE_CACHE = {}
+
+def _num_de_texto(texto):
+    """Converte a resposta do Claude num float, tratando separadores BR/US."""
+    t = (texto or "").strip().lower()
+    if "null" in t or not t:
+        return None
+    t = re.sub(r"[^\d.,]", "", t)
+    if not t:
+        return None
+    if "," in t and "." in t:
+        if t.rfind(",") > t.rfind("."):        # 1.299,90 -> BR
+            t = t.replace(".", "").replace(",", ".")
+        else:                                   # 1,299.90 -> US
+            t = t.replace(",", "")
+    elif "," in t:
+        t = t.replace(",", ".") if re.search(r",\d{1,2}$", t) else t.replace(",", "")
+    try:
+        return float(t)
+    except ValueError:
+        return None
+
+def _reduzir_html_para_claude(html, max_chars=45000):
+    """Reduz o HTML preservando trechos com preco (scripts JSON + texto visivel)."""
+    if not html:
+        return ""
+    if not HAS_BS4:
+        return html[:max_chars]
+    try:
+        soup = BeautifulSoup(html, "lxml")
+        partes = []
+        for script in soup.find_all("script"):
+            txt = script.string or ""
+            low = txt.lower()
+            if txt and ("price" in low or "variants" in low or "offers" in low):
+                partes.append(txt[:8000])
+        for tag in soup(["script", "style", "noscript", "svg", "path", "head", "footer"]):
+            tag.decompose()
+        partes.append(soup.get_text(" ", strip=True))
+        return ("\n---\n".join(partes))[:max_chars]
+    except Exception:
+        return html[:max_chars]
+
+def fetch_price_claude(html, produto_nome, moeda="USD", preco_min=1, loja=""):
+    """Extrai o preco de venda de um HTML dificil usando Claude. Retorna float ou None."""
+    if not ANTHROPIC_API_KEY or not html:
+        return None
+    blob = _reduzir_html_para_claude(html)
+    if len(blob) < 50:
+        return None
+    cache_key = (loja, produto_nome, hash(blob))
+    if cache_key in _CLAUDE_CACHE:
+        return _CLAUDE_CACHE[cache_key]
+    prompt = (
+        f"Voce recebe o conteudo (texto + trechos de script) de uma pagina de produto de e-commerce.\n"
+        f'Produto procurado: "{produto_nome}"\n'
+        f"Moeda esperada: {moeda}. Preco minimo plausivel: {preco_min}.\n\n"
+        f"Extraia o PRECO DE VENDA ATUAL do produto principal (o valor que o cliente pagaria hoje, "
+        f"ja com desconto se houver, sem frete). Ignore acessorios, itens relacionados, "
+        f"'comprados juntos', parcelas, precos antigos riscados e assinaturas.\n"
+        f"Se a pagina for bloqueio/captcha/erro, ou nao houver preco claro do produto, responda NULL.\n\n"
+        f"Responda SOMENTE com o numero usando ponto como separador decimal (ex: 799.99) ou NULL. "
+        f"Sem simbolo de moeda, sem texto extra.\n\nCONTEUDO:\n{blob}"
+    )
+    try:
+        r = requests.post(
+            "https://api.anthropic.com/v1/messages",
+            headers={"x-api-key": ANTHROPIC_API_KEY,
+                     "anthropic-version": "2023-06-01",
+                     "content-type": "application/json"},
+            json={"model": CLAUDE_MODEL, "max_tokens": 20,
+                  "messages": [{"role": "user", "content": prompt}]},
+            timeout=45,
+        )
+        if r.status_code != 200:
+            print(f"      [Claude] HTTP {r.status_code}: {r.text[:120]}")
+            return None
+        texto = "".join(b.get("text", "") for b in r.json().get("content", [])).strip()
+        v = _num_de_texto(texto)
+        if v is None:
+            print(f"      [Claude] {loja} '{produto_nome[:28]}': sem preco (resp='{texto[:20]}')")
+            _CLAUDE_CACHE[cache_key] = None
+            return None
+        if v < preco_min:
+            print(f"      [Claude] {loja}: {v} abaixo do minimo {preco_min}, descartado")
+            _CLAUDE_CACHE[cache_key] = None
+            return None
+        print(f"      [Claude] {loja} '{produto_nome[:28]}': {moeda} {v}")
+        _CLAUDE_CACHE[cache_key] = v
+        return v
+    except Exception as e:
+        print(f"      [Claude] erro: {e}")
+    return None
+
 def _parse_price_html(html, seletores):
     if not HAS_BS4:
         return None
@@ -682,7 +784,7 @@ def _parse_bl_json(r, handle, variant_hint):
             return float(v["price"]), v["id"]
     return float(variants[0]["price"]), variants[0]["id"]
 
-def fetch_bambulab(handle, variant_hint=None):
+def fetch_bambulab(handle, variant_hint=None, nome=None):
     url = f"https://us.store.bambulab.com/products/{handle}.json"
 
     r = scraperapi_get(url)
@@ -747,6 +849,12 @@ def fetch_bambulab(handle, variant_hint=None):
         if p:
             print(f"      [BL] {handle}: ${p} via navegador (HTML)")
             return p, vid
+
+    # Fallback inteligente: Claude le o HTML que baixamos mas nao conseguimos parsear
+    desc = " ".join(filter(None, [nome or handle, variant_hint]))
+    p = fetch_price_claude(page_html, desc, moeda="USD", preco_min=1, loja="BL")
+    if p:
+        return p, None
 
     return None, None
 
@@ -1103,7 +1211,7 @@ def _parse_amazon_html(html, label):
     print(f"      [AMZ] {label}: sem preco. Titulo='{(title_el.text[:60] if title_el else 'N/A')}'")
     return None
 
-def fetch_amazon(asin):
+def fetch_amazon(asin, nome=None):
     url = f"https://www.amazon.com/dp/{asin}"
     amz_cookies = {
         "i18n-prefs": "USD",
@@ -1111,6 +1219,7 @@ def fetch_amazon(asin):
         "x-amzn-marketplace-country": "US",
         "delivery-zipcode": ORLANDO_ZIP,
     }
+    melhor_html = ""
     sc = make_scraper()
     try:
         h = hdrs("https://www.amazon.com/")
@@ -1119,6 +1228,8 @@ def fetch_amazon(asin):
         price = _parse_amazon_html(r.text, asin)
         if price:
             return price
+        if len(r.text) > len(melhor_html):
+            melhor_html = r.text
     except Exception as e:
         print(f"      [AMZ] {asin}: {e}")
     r2 = scraperapi_get(url)
@@ -1126,6 +1237,12 @@ def fetch_amazon(asin):
         price = _parse_amazon_html(r2.text, f"{asin} [ScraperAPI]")
         if price:
             return price
+        if len(r2.text) > len(melhor_html):
+            melhor_html = r2.text
+    # Fallback inteligente: Claude le o HTML que baixamos mas nao parseamos
+    p = fetch_price_claude(melhor_html, nome or asin, moeda="USD", preco_min=1, loja="AMZ")
+    if p:
+        return p
     return None
 
 def fetch_amazon_url(url):
@@ -1347,7 +1464,7 @@ def processar_item(pid, p, item, now):
         url_carrinho = None
 
         if loja == "bambulab":
-            price, vid = fetch_bambulab(cfg["handle"], cfg.get("variant_hint"))
+            price, vid = fetch_bambulab(cfg["handle"], cfg.get("variant_hint"), nome=p.get("nome"))
             url_produto = f"https://us.store.bambulab.com/products/{cfg['handle']}"
             if vid:
                 url_carrinho = f"https://us.store.bambulab.com/cart/{vid}:{p['qty']}"
@@ -1365,7 +1482,7 @@ def processar_item(pid, p, item, now):
 
         elif loja == "amazon":
             if "asin" in cfg:
-                price = fetch_amazon(cfg["asin"])
+                price = fetch_amazon(cfg["asin"], nome=p.get("nome"))
                 url_produto = f"https://www.amazon.com/dp/{cfg['asin']}"
             else:
                 price, url_produto = fetch_amazon_url(cfg.get("url",""))
@@ -1485,6 +1602,7 @@ def main():
     print(f"  SCRAPER_API_KEY: {'configurado' if SCRAPER_API_KEY else 'NAO configurado'}")
     print(f"  ML_APP_ID:       {'configurado' if ML_APP_ID else 'NAO configurado'}")
     print(f"  ML_SECRET_KEY:   {'configurado' if ML_SECRET_KEY else 'NAO configurado'}")
+    print(f"  ANTHROPIC_API_KEY: {'configurado (' + CLAUDE_MODEL + ')' if ANTHROPIC_API_KEY else 'NAO configurado'}")
 
     data = {}
     if os.path.exists(DATA_FILE):
