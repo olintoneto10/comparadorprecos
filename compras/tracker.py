@@ -53,8 +53,36 @@ ML_SECRET_KEY     = os.environ.get("ML_SECRET_KEY", "")
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 CLAUDE_MODEL      = os.environ.get("CLAUDE_MODEL", "claude-haiku-4-5-20251001")
 
+# IDs de afiliado (monetizacao). Vazios = links normais, sem alteracao.
+AMAZON_TAG_US = os.environ.get("AMAZON_TAG_US", "")   # ex: meusite-20
+AMAZON_TAG_BR = os.environ.get("AMAZON_TAG_BR", "")   # ex: meusite-21
+ML_MATT_WORD  = os.environ.get("ML_MATT_WORD", "")    # tag do Mercado Livre Afiliados
+ML_MATT_TOOL  = os.environ.get("ML_MATT_TOOL", "")    # id da ferramenta ML Afiliados
+
 ORLANDO_ZIP  = "32819"
 ORLANDO_STATE = "FL"
+
+def link_afiliado(url):
+    """Anexa parametros de afiliado a URLs de produto. Sem ID configurado, devolve a URL intacta."""
+    if not url:
+        return url
+    try:
+        sep = "&" if "?" in url else "?"
+        if "amazon.com.br" in url:
+            if AMAZON_TAG_BR and "tag=" not in url:
+                return f"{url}{sep}tag={AMAZON_TAG_BR}"
+        elif "amazon.com" in url:
+            if AMAZON_TAG_US and "tag=" not in url:
+                return f"{url}{sep}tag={AMAZON_TAG_US}"
+        elif "mercadolivre.com.br" in url or "mercadolibre.com" in url:
+            if ML_MATT_WORD and "matt_word" not in url:
+                extra = f"matt_word={ML_MATT_WORD}"
+                if ML_MATT_TOOL:
+                    extra += f"&matt_tool={ML_MATT_TOOL}"
+                return f"{url}{sep}{extra}"
+    except Exception:
+        pass
+    return url
 
 def make_scraper():
     if HAS_CS:
@@ -1517,7 +1545,7 @@ def processar_item(pid, p, item, now):
 
         item["lojas_precos"][loja] = {
             "preco": price,
-            "url_produto": url_produto,
+            "url_produto": link_afiliado(url_produto),
             "url_carrinho": url_carrinho,
         }
         si = store_info(loja)
@@ -1588,7 +1616,7 @@ def processar_item(pid, p, item, now):
         if preco_brl:
             item["brasil"] = {
                 "preco_brl":  round(preco_brl, 2),
-                "url":        url_brl,
+                "url":        link_afiliado(url_brl),
                 "loja_nome":  loja_nome_brl,
             }
             print(f"    Brasil ({loja_nome_brl}): R${preco_brl:.2f}")

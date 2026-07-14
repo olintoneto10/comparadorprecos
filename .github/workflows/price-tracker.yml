@@ -29,6 +29,10 @@ jobs:
           ML_APP_ID:         ${{ secrets.ML_APP_ID }}
           ML_SECRET_KEY:     ${{ secrets.ML_SECRET_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          AMAZON_TAG_US:     ${{ secrets.AMAZON_TAG_US }}
+          AMAZON_TAG_BR:     ${{ secrets.AMAZON_TAG_BR }}
+          ML_MATT_WORD:      ${{ secrets.ML_MATT_WORD }}
+          ML_MATT_TOOL:      ${{ secrets.ML_MATT_TOOL }}
         run: python compras/tracker.py
 
       - name: Validar JSON gerado
