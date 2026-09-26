@@ -1,6 +1,6 @@
 {
-  "atualizado_em": "2026-07-26T00:05:15.140323+00:00",
-  "total_estimado": 686.72,
+  "atualizado_em": "2026-09-26T09:12:50.415934+00:00",
+  "total_estimado": 1416.17,
   "cupons": {
     "bambulab": [],
     "bestbuy": [],
@@ -21,7 +21,7 @@
           "url_carrinho": null
         },
         "bestbuy": {
-          "preco": null,
+          "preco": 749.99,
           "url_produto": "https://www.bestbuy.com/site/bambu-lab-p2s-combo-fdm-3d-printer-with-ams-2-pro/6647058.p",
           "url_carrinho": null
         },
@@ -41,9 +41,9 @@
           "url_carrinho": null
         }
       },
-      "melhor_loja": null,
-      "preco_atual": null,
-      "preco_minimo": 5.49,
+      "melhor_loja": "bestbuy",
+      "preco_atual": 749.99,
+      "preco_minimo": 749.99,
       "historico": [
         {
           "data": "2026-06-06T12:00:00+00:00",
@@ -74,6 +74,11 @@
           "data": "2026-06-11T07:51:19.072045+00:00",
           "preco": 5.49,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-09-26T09:12:50.415934+00:00",
+          "preco": 749.99,
+          "loja": "bestbuy"
         }
       ],
       "brasil": null
@@ -105,6 +110,11 @@
         },
         {
           "data": "2026-07-26T00:05:15.140323+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-09-26T09:12:50.415934+00:00",
           "preco": 17.99,
           "loja": "bambulab"
         }
@@ -140,6 +150,11 @@
           "data": "2026-07-26T00:05:15.140323+00:00",
           "preco": 17.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-09-26T09:12:50.415934+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -150,7 +165,7 @@
       "qty": 1,
       "lojas_precos": {
         "bambulab": {
-          "preco": 37.99,
+          "preco": 24.99,
           "url_produto": "https://us.store.bambulab.com/products/bambu-dual-texture-pei-plate",
           "url_carrinho": null
         },
@@ -166,12 +181,17 @@
         }
       },
       "melhor_loja": "bambulab",
-      "preco_atual": 37.99,
-      "preco_minimo": 37.99,
+      "preco_atual": 24.99,
+      "preco_minimo": 24.99,
       "historico": [
         {
           "data": "2026-07-26T00:05:15.140323+00:00",
           "preco": 37.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-09-26T09:12:50.415934+00:00",
+          "preco": 24.99,
           "loja": "bambulab"
         }
       ],
@@ -188,7 +208,7 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 23.95,
+          "preco": 15.06,
           "url_produto": "https://www.amazon.com/dp/B0DK6TBF1D",
           "url_carrinho": null
         },
@@ -329,6 +349,11 @@
         },
         {
           "data": "2026-07-26T00:05:15.140323+00:00",
+          "preco": 14.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-09-26T09:12:50.415934+00:00",
           "preco": 14.99,
           "loja": "bambulab"
         }
@@ -482,6 +507,11 @@
         },
         {
           "data": "2026-07-26T00:05:15.140323+00:00",
+          "preco": 17.16,
+          "loja": "amazon"
+        },
+        {
+          "data": "2026-09-26T09:12:50.415934+00:00",
           "preco": 17.16,
           "loja": "amazon"
         }
@@ -655,6 +685,11 @@
         },
         {
           "data": "2026-07-26T00:05:15.140323+00:00",
+          "preco": 28.99,
+          "loja": "amazon"
+        },
+        {
+          "data": "2026-09-26T09:12:50.415934+00:00",
           "preco": 28.99,
           "loja": "amazon"
         }
@@ -835,6 +870,11 @@
           "data": "2026-07-26T00:05:15.140323+00:00",
           "preco": 28.99,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-09-26T09:12:50.415934+00:00",
+          "preco": 28.99,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -845,12 +885,12 @@
       "qty": 2,
       "lojas_precos": {
         "bambulab": {
-          "preco": 19.99,
+          "preco": 15.99,
           "url_produto": "https://us.store.bambulab.com/products/pla-matte",
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 27.97,
+          "preco": 27.36,
           "url_produto": "https://www.amazon.com/dp/B0G4ZVJDM7",
           "url_carrinho": null
         },
@@ -861,7 +901,7 @@
         }
       },
       "melhor_loja": "bambulab",
-      "preco_atual": 19.99,
+      "preco_atual": 15.99,
       "preco_minimo": 14.99,
       "historico": [
         {
@@ -998,6 +1038,11 @@
           "data": "2026-07-26T00:05:15.140323+00:00",
           "preco": 19.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-09-26T09:12:50.415934+00:00",
+          "preco": 15.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -1013,7 +1058,7 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 25.77,
+          "preco": 25.5,
           "url_produto": "https://www.amazon.com/dp/B0G5175G82",
           "url_carrinho": null
         },
@@ -1024,7 +1069,7 @@
         }
       },
       "melhor_loja": "amazon",
-      "preco_atual": 25.77,
+      "preco_atual": 25.5,
       "preco_minimo": 14.99,
       "historico": [
         {
@@ -1161,6 +1206,11 @@
           "data": "2026-07-26T00:05:15.140323+00:00",
           "preco": 25.77,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-09-26T09:12:50.415934+00:00",
+          "preco": 25.5,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -1194,6 +1244,11 @@
           "data": "2026-07-26T00:05:15.140323+00:00",
           "preco": 24.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-09-26T09:12:50.415934+00:00",
+          "preco": 24.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -1204,12 +1259,12 @@
       "qty": 1,
       "lojas_precos": {
         "bambulab": {
-          "preco": 19.99,
+          "preco": 15.99,
           "url_produto": "https://us.store.bambulab.com/products/pla-basic-filament",
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 16.99,
+          "preco": 25.16,
           "url_produto": "https://www.amazon.com/dp/B0C4GBJCSV",
           "url_carrinho": null
         },
@@ -1219,9 +1274,9 @@
           "url_carrinho": null
         }
       },
-      "melhor_loja": "amazon",
-      "preco_atual": 16.99,
-      "preco_minimo": 16.99,
+      "melhor_loja": "bambulab",
+      "preco_atual": 15.99,
+      "preco_minimo": 15.99,
       "historico": [
         {
           "data": "2026-06-06T12:00:00+00:00",
@@ -1372,6 +1427,11 @@
           "data": "2026-07-26T00:05:15.140323+00:00",
           "preco": 16.99,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-09-26T09:12:50.415934+00:00",
+          "preco": 15.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -1382,12 +1442,12 @@
       "qty": 1,
       "lojas_precos": {
         "bambulab": {
-          "preco": 19.99,
+          "preco": 15.99,
           "url_produto": "https://us.store.bambulab.com/products/pla-basic-filament",
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 13.99,
+          "preco": 17.09,
           "url_produto": "https://www.amazon.com/dp/B0C4GB1TB1",
           "url_carrinho": null
         },
@@ -1397,8 +1457,8 @@
           "url_carrinho": null
         }
       },
-      "melhor_loja": "amazon",
-      "preco_atual": 13.99,
+      "melhor_loja": "bambulab",
+      "preco_atual": 15.99,
       "preco_minimo": 6.87,
       "historico": [
         {
@@ -1550,6 +1610,11 @@
           "data": "2026-07-26T00:05:15.140323+00:00",
           "preco": 13.99,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-09-26T09:12:50.415934+00:00",
+          "preco": 15.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -1718,14 +1783,19 @@
           "data": "2026-07-26T00:05:15.140323+00:00",
           "preco": 299.99,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-09-26T09:12:50.415934+00:00",
+          "preco": 299.99,
+          "loja": "amazon"
         }
       ],
       "brasil": null
     }
   },
   "cambio": {
-    "usd_brl": 5.0785,
+    "usd_brl": 5.1866,
     "fonte": "AwesomeAPI",
-    "atualizado_em": "2026-07-26T00:05:15.140323+00:00"
+    "atualizado_em": "2026-09-26T09:12:50.415934+00:00"
   }
 }
