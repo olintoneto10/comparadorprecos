@@ -240,26 +240,6 @@ def close_browser():
             pass
         _BROWSER = None
 
-class _FakeResp:
-    """Embrulha texto JSON num objeto compativel com requests.Response."""
-    def __init__(self, text):
-        self.status_code = 200
-        self.text = text
-    def json(self):
-        return json.loads(self.text)
-
-def _json_de_pre(html):
-    """Extrai JSON renderizado pelo Chrome dentro de <pre>...</pre>."""
-    if not html:
-        return None
-    m = re.search(r"<pre[^>]*>(\{.*\})</pre>", html, re.DOTALL)
-    if m:
-        return m.group(1)
-    s = html.strip()
-    if s.startswith("{") and s.endswith("}"):
-        return s
-    return None
-
 AWESOMEAPI_TOKEN = os.environ.get("AWESOMEAPI_TOKEN", "")
 _FONTES_REAIS = {"AwesomeAPI", "Banco Central (PTAX)", "open.er-api.com", "Frankfurter (BCE)"}
 
@@ -531,7 +511,7 @@ PRODUCTS = [
                "ml_query":"Bambu Lab hotend 0.2mm P2S"}},
     {"id":"hotend-04-hs", "nome":"Hotend 0.4mm Hardened Steel (P2S)", "categoria":"acessorio", "qty":1,
      "lojas":{
-       "bambulab": {"handle":"bambu-hotend-h2-p2s", "variant_hint":"hardened"},
+       "bambulab": {"handle":"bambu-hotend-h2-p2s", "variant_hint":"0.4 hardened"},
      },
      "brasil":{"handle":"bambu-hotend-h2-p2s","variant_hint":"hardened","url_br":_BL_BR.format("bambu-hotend-h2-p2s"),
                "ml_query":"Bambu Lab hotend 0.4mm hardened steel P2S"}},
@@ -904,204 +884,119 @@ def _parse_bl_json(r, handle, variant_hint):
             return float(v["price"]), v["id"]
     return float(variants[0]["price"]), variants[0]["id"]
 
-def fetch_bambulab(handle, variant_hint=None, nome=None):
-    url = f"https://us.store.bambulab.com/products/{handle}.json"
+_BL_PAGINAS = {}   # handle -> HTML (uma requisicao por pagina, reaproveitada entre variantes)
 
-    r = scraperapi_get(url)
-    if r:
-        price, vid = _parse_bl_json(r, handle, variant_hint)
-        if price:
-            return price, vid
-
-    json_hdrs = {
-        "User-Agent": random.choice(USER_AGENTS),
-        "Accept": "application/json, text/javascript, */*; q=0.01",
-        "Accept-Language": "en-US,en;q=0.9",
-        "Referer": "https://us.store.bambulab.com/",
-    }
-    for attempt in range(3):
+def _bl_pagina(handle):
+    """Baixa a pagina do produto UMA vez por atualizacao. Tenta curl_cffi
+    (com uma nova tentativa se o site pedir calma), depois o navegador real."""
+    if handle in _BL_PAGINAS:
+        return _BL_PAGINAS[handle]
+    url = f"https://us.store.bambulab.com/products/{handle}"
+    html = None
+    for tentativa in range(2):
         try:
-            r2 = make_scraper().get(url, headers=json_hdrs, timeout=30)
-            print(f"      [BL] {handle}: HTTP {r2.status_code}, {len(r2.text)} bytes")
-            if r2.status_code == 404:
-                if len(r2.text) > 10000:
-                    print(f"      [BL] {handle}: bloqueio Cloudflare (configure SCRAPER_API_KEY)")
-                else:
-                    print(f"      [BL] {handle}: produto nao encontrado")
+            r = make_scraper().get(url, headers=hdrs("https://us.store.bambulab.com/"), timeout=30)
+            print(f"      [BL] {handle}: HTTP {r.status_code}, {len(r.text)} bytes")
+            if r.status_code == 200 and len(r.text) > 10000:
+                html = r.text
                 break
-            if r2.status_code != 200:
-                time.sleep(2 ** attempt)
+            if r.status_code == 429 and tentativa == 0:
+                time.sleep(8)        # muitas requisicoes: espera e tenta uma vez mais
                 continue
-            price, vid = _parse_bl_json(r2, handle, variant_hint)
-            if price:
-                return price, vid
             break
         except Exception as e:
-            print(f"      [BL] tentativa {attempt+1}: {e}")
-            if attempt < 2:
-                time.sleep(2 ** attempt)
+            print(f"      [BL] {handle}: {str(e)[:80]}")
+            break
+    if not html:
+        html = browser_get(url, f"BL {handle}")
+        if html and len(html) < 10000:
+            html = None
+    _BL_PAGINAS[handle] = html
+    time.sleep(1.5)                  # espaca as paginas do Bambu Lab
+    return html
 
-    try:
-        page_url = f"https://us.store.bambulab.com/products/{handle}"
-        sc = make_scraper()
-        r3 = sc.get(page_url, headers=hdrs("https://us.store.bambulab.com/"), timeout=30)
-        print(f"      [BL] HTML fallback {handle}: HTTP {r3.status_code}, {len(r3.text)} bytes")
-        if r3.status_code == 200:
-            p, vid = _parse_bl_shopify_html(r3.text, handle, variant_hint)
-            if p:
-                return p, vid
-    except Exception as e:
-        print(f"      [BL] HTML fallback erro: {e}")
+def _bl_variantes_ld(html):
+    """Variantes (nome, preco, disponivel) do JSON-LD da pagina do Bambu Lab.
+    A loja usa ProductGroup com hasVariant; tambem aceita Product com offers."""
+    variantes = []
+    if not html:
+        return variantes
+    for bloco in re.findall(r'<script[^>]*type="application/ld\+json"[^>]*>(.*?)</script>',
+                            html, re.DOTALL | re.I):
+        try:
+            dados = json.loads(bloco.strip())
+        except Exception:
+            continue
+        itens = dados if isinstance(dados, list) else [dados]
+        for it in list(itens):
+            if isinstance(it, dict) and "@graph" in it:
+                itens.extend(it["@graph"])
+        for it in itens:
+            if not isinstance(it, dict):
+                continue
+            tipo = str(it.get("@type", ""))
+            fontes = []
+            if "ProductGroup" in tipo:
+                for v in it.get("hasVariant") or []:
+                    if isinstance(v, dict):
+                        fontes.append((v.get("name") or it.get("name") or "", v.get("offers")))
+            elif "Product" in tipo:
+                ofs = it.get("offers")
+                ofs = ofs if isinstance(ofs, list) else [ofs]
+                for o in ofs:
+                    if isinstance(o, dict):
+                        fontes.append((o.get("name") or o.get("sku") or it.get("name") or "", o))
+            for nome, o in fontes:
+                if isinstance(o, list):
+                    o = o[0] if o else {}
+                if not isinstance(o, dict):
+                    continue
+                try:
+                    preco = float(str(o.get("price") or o.get("lowPrice") or "").replace(",", ""))
+                except ValueError:
+                    continue
+                if 0.5 < preco < 50000:
+                    disp = "OutOfStock" not in str(o.get("availability", ""))
+                    variantes.append((str(nome), preco, disp))
+    return variantes
 
-    # Fallback final: navegador real (contorna Cloudflare)
-    raw = browser_get(url, f"BL {handle}.json")
-    json_txt = _json_de_pre(raw)
-    if json_txt:
-        price, vid = _parse_bl_json(_FakeResp(json_txt), handle, variant_hint)
-        if price:
-            print(f"      [BL] {handle}: ${price} via navegador (JSON)")
-            return price, vid
+def _bl_escolher_variante(variantes, hint):
+    """Variante que bate com o hint (cor/modelo). Entre varias: prefere
+    'com carretel' (como vendem Amazon/Walmart), depois disponivel, depois a mais barata."""
+    cand = variantes
+    if hint:
+        partes = hint.lower().split()          # todas as palavras precisam aparecer
+        cand = [v for v in variantes if all(t in v[0].lower() for t in partes)]
+        if not cand:
+            return None
+    def ordem(v):
+        n = v[0].lower()
+        refil = "refill" in n or "without spool" in n
+        return (refil, not v[2], v[1])
+    return sorted(cand, key=ordem)[0]
 
-    page_html = browser_get(f"https://us.store.bambulab.com/products/{handle}",
-                            f"BL {handle} pagina")
-    if page_html and len(page_html) > 10000:
-        p, vid = _parse_bl_shopify_html(page_html, handle, variant_hint)
-        if p:
-            print(f"      [BL] {handle}: ${p} via navegador (HTML)")
-            return p, vid
+def fetch_bambulab(handle, variant_hint=None, nome=None):
+    html = _bl_pagina(handle)
+    if not html:
+        print(f"      [BL] {handle}: pagina indisponivel")
+        return None, None
 
-    # Fallback inteligente: Claude le o HTML que baixamos mas nao conseguimos parsear
+    variantes = _bl_variantes_ld(html)
+    if variantes:
+        v = _bl_escolher_variante(variantes, variant_hint)
+        if v:
+            print(f"      [BL] {handle}: '{v[0][:60]}' ${v[1]} ({len(variantes)} variantes)")
+            return v[1], None
+        exemplos = [x[0][:40] for x in variantes[:4]]
+        print(f"      [BL] {handle}: nenhuma variante com '{variant_hint}'. Ex.: {exemplos}")
+
+    # Ultima tentativa: Claude le a mesma pagina (sem nova requisicao ao site)
     desc = " ".join(filter(None, [nome or handle, variant_hint]))
-    p = fetch_price_claude(page_html, desc, moeda="USD", preco_min=1, loja="BL")
+    p = fetch_price_claude(html, desc, moeda="USD", preco_min=1, loja="BL")
     if p:
         return p, None
-
     return None, None
 
-
-def _parse_bl_shopify_html(html, handle, variant_hint):
-    """Extrai preco da pagina HTML Shopify do Bambu Lab."""
-    p = _preco_de_ld(html)
-    if p and 0.5 < p < 50000:
-        print(f"      [BL] {handle}: ${p} via JSON-LD")
-        return p, None
-
-    for pattern in [
-        r'(?:var|let|const)\s+\w*[Pp]roduct\w*\s*=\s*(\{[^<]{200,}\})\s*;',
-        r'"product"\s*:\s*(\{"id"[^<]{100,}\})\s*[,;}\n]',
-        r'window\.__productData\s*=\s*(\{[^<]+\})',
-    ]:
-        m = re.search(pattern, html, re.DOTALL)
-        if m:
-            try:
-                data = json.loads(m.group(1))
-                variants = data.get("variants", [])
-                price = _selecionar_variante(variants, variant_hint, handle)
-                if price:
-                    print(f"      [BL] {handle}: ${price} via Shopify product JSON embutido")
-                    return price, None
-            except Exception:
-                pass
-
-    if HAS_BS4:
-        soup = BeautifulSoup(html, "lxml")
-        for script in soup.find_all("script"):
-            txt = script.string or ""
-            if '"variants"' not in txt and 'variants' not in txt:
-                continue
-            m = re.search(r'"variants"\s*:\s*(\[[^\]]{50,}\])', txt)
-            if m:
-                try:
-                    variants = json.loads(m.group(1))
-                    price = _selecionar_variante(variants, variant_hint, handle)
-                    if price:
-                        print(f"      [BL] {handle}: ${price} via variantes no script")
-                        return price, None
-                except Exception:
-                    pass
-
-        for sel in [
-            "[data-product-price]",
-            ".product__price [class*='price']",
-            ".price__regular",
-            ".product-single__price",
-            ".price-item--regular",
-            "[class*='ProductPrice']",
-            "[class*='product-price']",
-            "[itemprop='price']",
-        ]:
-            el = soup.select_one(sel)
-            if el:
-                txt = el.get("content") or el.get("data-product-price") or el.get_text()
-                m2 = re.search(r"\$?([\d,]+\.?\d{0,2})", txt.strip())
-                if m2:
-                    try:
-                        v = float(m2.group(1).replace(",",""))
-                        if 0.5 < v < 50000:
-                            print(f"      [BL] {handle}: ${v} via CSS '{sel}'")
-                            return v, None
-                    except ValueError:
-                        pass
-
-    matches = re.findall(r'"price"\s*:\s*(\d+)', html)
-    for pc_str in matches:
-        pc = int(pc_str)
-        if 500 <= pc <= 1000000:
-            price = pc / 100
-            print(f"      [BL] {handle}: ${price} via regex centavos ({pc_str})")
-            return price, None
-
-    for m in re.finditer(r'"price"\s*:\s*"([\d.]+)"', html):
-        try:
-            v = float(m.group(1))
-            if 0.5 < v < 50000:
-                print(f"      [BL] {handle}: ${v} via regex dolares")
-                return v, None
-        except ValueError:
-            pass
-
-    print(f"      [BL] {handle}: HTML sem preco reconhecivel")
-    return None, None
-
-
-def _selecionar_variante(variants, variant_hint, handle):
-    """Seleciona preco da variante certa."""
-    if not variants:
-        return None
-    primeiro_preco = variants[0].get("price", 0) if isinstance(variants[0], dict) else 0
-    divisor = 100 if isinstance(primeiro_preco, int) and primeiro_preco > 1000 else 1
-
-    candidatos = []
-    if variant_hint:
-        hint = variant_hint.lower()
-        for v in variants:
-            if not isinstance(v, dict):
-                continue
-            fields = " ".join([
-                str(v.get("title","")).lower(),
-                str(v.get("option1","")).lower(),
-                str(v.get("option2","")).lower(),
-                str(v.get("option3","")).lower(),
-                str(v.get("name","")).lower(),
-            ])
-            if hint in fields:
-                candidatos.append(v)
-        if candidatos:
-            v = min(candidatos, key=lambda x: float(x.get("price",0)))
-            p = float(v.get("price", 0)) / divisor
-            if 0.5 < p < 50000:
-                return round(p, 2)
-        nomes = [v.get("title") or v.get("name") for v in variants[:4]]
-        print(f"      [BL] hint '{variant_hint}' nao casou. Opcoes: {nomes}")
-
-    disponiveis = [v for v in variants if isinstance(v, dict) and v.get("available", True)]
-    candidatos = disponiveis or variants
-    v = min(candidatos, key=lambda x: float(x.get("price", 0)) if isinstance(x, dict) else 0)
-    if isinstance(v, dict):
-        p = float(v.get("price", 0)) / divisor
-        if 0.5 < p < 50000:
-            return round(p, 2)
-    return None
 
 def fetch_bambulab_br(handle, variant_hint=None):
     """Busca preco na loja Bambu Lab Brasil (br.store.bambulab.com) em BRL."""
