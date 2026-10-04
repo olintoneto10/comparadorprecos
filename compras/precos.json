@@ -1,6 +1,6 @@
 {
-  "atualizado_em": "2026-10-04T12:02:37.966243+00:00",
-  "total_estimado": 2358.04,
+  "atualizado_em": "2026-10-04T12:11:02.239503+00:00",
+  "total_estimado": 2342.04,
   "cupons": {
     "bambulab": [],
     "bestbuy": [],
@@ -114,6 +114,11 @@
           "data": "2026-10-04T12:02:37.966243+00:00",
           "preco": 749.0,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:11:02.239503+00:00",
+          "preco": 749.0,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -180,6 +185,11 @@
         },
         {
           "data": "2026-10-04T12:02:37.966243+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:11:02.239503+00:00",
           "preco": 17.99,
           "loja": "bambulab"
         }
@@ -255,6 +265,11 @@
           "data": "2026-10-04T12:02:37.966243+00:00",
           "preco": 17.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:11:02.239503+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -321,6 +336,11 @@
         },
         {
           "data": "2026-10-04T12:02:37.966243+00:00",
+          "preco": 37.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:11:02.239503+00:00",
           "preco": 37.99,
           "loja": "bambulab"
         }
@@ -521,6 +541,11 @@
           "data": "2026-10-04T12:02:37.966243+00:00",
           "preco": 14.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:11:02.239503+00:00",
+          "preco": 14.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -709,6 +734,11 @@
           "data": "2026-10-04T12:02:37.966243+00:00",
           "preco": 17.16,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-10-04T12:11:02.239503+00:00",
+          "preco": 17.16,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -722,11 +752,21 @@
           "preco": 28.99,
           "url_produto": "https://www.amazon.com/dp/B0FQPPLP3S",
           "url_carrinho": null
+        },
+        "bambulab": {
+          "preco": 24.99,
+          "url_produto": "https://us.store.bambulab.com/products/pla-silk-dual-color",
+          "url_carrinho": null
+        },
+        "walmart": {
+          "preco": null,
+          "url_produto": "https://www.walmart.com/search?q=Bambu%20Lab%20PLA%20Silk%20Dual%20Color%20filament",
+          "url_carrinho": null
         }
       },
-      "melhor_loja": "amazon",
-      "preco_atual": 28.99,
-      "preco_minimo": 28.99,
+      "melhor_loja": "bambulab",
+      "preco_atual": 24.99,
+      "preco_minimo": 24.99,
       "historico": [
         {
           "data": "2026-06-06T20:51:07.314487+00:00",
@@ -912,9 +952,96 @@
           "data": "2026-10-04T12:02:37.966243+00:00",
           "preco": 28.99,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-10-04T12:11:02.239503+00:00",
+          "preco": 24.99,
+          "loja": "bambulab"
         }
       ],
-      "brasil": null
+      "brasil": null,
+      "cores_bambu": [
+        {
+          "cor": "Aurora Purple",
+          "preco": 24.99,
+          "disponivel": true,
+          "promocao": false,
+          "preco_normal": 24.99,
+          "descricao": "degrade"
+        },
+        {
+          "cor": "Blue Hawaii",
+          "preco": 24.99,
+          "disponivel": true,
+          "promocao": false,
+          "preco_normal": 24.99,
+          "descricao": "azul e verde"
+        },
+        {
+          "cor": "Dawn Radiance",
+          "preco": 24.99,
+          "disponivel": true,
+          "promocao": false,
+          "preco_normal": 24.99,
+          "descricao": "degrade"
+        },
+        {
+          "cor": "Gilded Rose",
+          "preco": 24.99,
+          "disponivel": true,
+          "promocao": false,
+          "preco_normal": 24.99,
+          "descricao": "rosa e dourado"
+        },
+        {
+          "cor": "Midnight Blaze",
+          "preco": 24.99,
+          "disponivel": true,
+          "promocao": false,
+          "preco_normal": 24.99,
+          "descricao": "azul e vermelho"
+        },
+        {
+          "cor": "Mystic Magenta",
+          "preco": 24.99,
+          "disponivel": true,
+          "promocao": false,
+          "preco_normal": 24.99,
+          "descricao": ""
+        },
+        {
+          "cor": "Neon City",
+          "preco": 24.99,
+          "disponivel": true,
+          "promocao": false,
+          "preco_normal": 24.99,
+          "descricao": "azul e magenta"
+        },
+        {
+          "cor": "Phantom Blue",
+          "preco": 24.99,
+          "disponivel": true,
+          "promocao": false,
+          "preco_normal": 24.99,
+          "descricao": "azul e ciano"
+        },
+        {
+          "cor": "South Beach",
+          "preco": 24.99,
+          "disponivel": true,
+          "promocao": false,
+          "preco_normal": 24.99,
+          "descricao": "degrade"
+        },
+        {
+          "cor": "Velvet Eclipse",
+          "preco": 24.99,
+          "disponivel": true,
+          "promocao": false,
+          "preco_normal": 24.99,
+          "descricao": "preto e vermelho"
+        }
+      ]
     },
     "pla-matte-charcoal": {
       "nome": "PLA Matte Charcoal",
@@ -1113,6 +1240,11 @@
         },
         {
           "data": "2026-10-04T12:02:37.966243+00:00",
+          "preco": 18.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:11:02.239503+00:00",
           "preco": 18.99,
           "loja": "bambulab"
         }
@@ -1318,6 +1450,11 @@
           "data": "2026-10-04T12:02:37.966243+00:00",
           "preco": 22.99,
           "loja": "walmart"
+        },
+        {
+          "data": "2026-10-04T12:11:02.239503+00:00",
+          "preco": 22.99,
+          "loja": "walmart"
         }
       ],
       "brasil": null
@@ -1389,6 +1526,11 @@
         },
         {
           "data": "2026-10-04T12:02:37.966243+00:00",
+          "preco": 24.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:11:02.239503+00:00",
           "preco": 24.99,
           "loja": "bambulab"
         }
@@ -1609,6 +1751,11 @@
           "data": "2026-10-04T12:02:37.966243+00:00",
           "preco": 18.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:11:02.239503+00:00",
+          "preco": 18.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -1827,6 +1974,11 @@
           "data": "2026-10-04T12:02:37.966243+00:00",
           "preco": 18.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:11:02.239503+00:00",
+          "preco": 18.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -2035,6 +2187,11 @@
           "data": "2026-10-04T12:02:37.966243+00:00",
           "preco": 249.9,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-10-04T12:11:02.239503+00:00",
+          "preco": 249.9,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -2065,6 +2222,11 @@
           "data": "2026-10-04T12:02:37.966243+00:00",
           "preco": 899.0,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:11:02.239503+00:00",
+          "preco": 899.0,
+          "loja": "bambulab"
         }
       ],
       "preco_atual": 899.0,
@@ -2091,6 +2253,11 @@
         },
         {
           "data": "2026-10-04T12:02:37.966243+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:11:02.239503+00:00",
           "preco": 17.99,
           "loja": "bambulab"
         }
@@ -2121,6 +2288,11 @@
           "data": "2026-10-04T12:02:37.966243+00:00",
           "preco": 17.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:11:02.239503+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
         }
       ],
       "preco_atual": 17.99,
@@ -2147,6 +2319,11 @@
         },
         {
           "data": "2026-10-04T12:02:37.966243+00:00",
+          "preco": 37.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:11:02.239503+00:00",
           "preco": 37.99,
           "loja": "bambulab"
         }
@@ -2177,7 +2354,12 @@
   "cambio": {
     "usd_brl": 5.2238,
     "fonte": "Banco Central (PTAX)",
-    "atualizado_em": "2026-10-04T12:02:37.966266+00:00"
+    "atualizado_em": "2026-10-04T12:11:02.239517+00:00"
   },
-  "alertas_enviados": {}
+  "alertas_enviados": {
+    "pla-silk-multicolor": {
+      "preco": 24.99,
+      "data": "2026-10-04T12:11:02.239503+00:00"
+    }
+  }
 }
