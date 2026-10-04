@@ -64,6 +64,7 @@ BESTBUY_API_KEY   = os.environ.get("BESTBUY_API_KEY", "")
 ML_APP_ID         = os.environ.get("ML_APP_ID", "")
 ML_SECRET_KEY     = os.environ.get("ML_SECRET_KEY", "")
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+SERPER_API_KEY    = os.environ.get("SERPER_API_KEY", "")   # Google Shopping Brasil (serper.dev)
 CLAUDE_MODEL      = os.environ.get("CLAUDE_MODEL", "claude-haiku-4-5-20251001")
 
 # IDs de afiliado (monetizacao). Vazios = links normais, sem alteracao.
@@ -504,26 +505,26 @@ PRODUCTS = [
        "target":   {"query":"Bambu Lab P2S 3D Printer", "exige":["p2s","combo"]},
        "costco":   {"query":"Bambu Lab P2S 3D Printer"},
      },
-     "brasil":{"handle":"p2s","variant_hint":"combo","url_br":_BL_BR.format("p2s"),
+     "brasil":{"exige_br":["p2s", "combo"],"handle":"p2s","variant_hint":"combo","url_br":_BL_BR.format("p2s"),
                "ml_query":"Bambu Lab P2S Combo AMS impressora 3D"}},
     {"id":"hotend-02-ss", "nome":"Hotend 0.2mm Stainless Steel (P2S)", "categoria":"acessorio", "qty":1,
      "lojas":{
        "bambulab": {"handle":"bambu-hotend-h2-p2s", "variant_hint":"p2s 0.2"},
      },
-     "brasil":{"handle":"bambu-hotend-h2-p2s","variant_hint":"0.2","url_br":_BL_BR.format("bambu-hotend-h2-p2s"),
+     "brasil":{"exige_br":["hotend", "p2s", "0.2"],"handle":"bambu-hotend-h2-p2s","variant_hint":"0.2","url_br":_BL_BR.format("bambu-hotend-h2-p2s"),
                "ml_query":"Bambu Lab hotend 0.2mm P2S"}},
     {"id":"hotend-04-hs", "nome":"Hotend 0.4mm Hardened Steel (P2S)", "categoria":"acessorio", "qty":1,
      "lojas":{
        "bambulab": {"handle":"bambu-hotend-h2-p2s", "variant_hint":"p2s 0.4 hardened"},
      },
-     "brasil":{"handle":"bambu-hotend-h2-p2s","variant_hint":"hardened","url_br":_BL_BR.format("bambu-hotend-h2-p2s"),
+     "brasil":{"exige_br":["hotend", "p2s", "0.4", "hardened|endurecido|temperado"],"handle":"bambu-hotend-h2-p2s","variant_hint":"hardened","url_br":_BL_BR.format("bambu-hotend-h2-p2s"),
                "ml_query":"Bambu Lab hotend 0.4mm hardened steel P2S"}},
     {"id":"pei-plate", "nome":"Bambu Dual-Texture PEI Plate (P2S)", "categoria":"acessorio", "qty":1,
      "lojas":{
        "bambulab": {"handle":"bambu-dual-texture-pei-plate", "variant_hint":"p2s"},
        "walmart":  {"query":"Bambu Lab PEI Plate Dual Texture"},
      },
-     "brasil":{"handle":"bambu-dual-texture-pei-plate","url_br":_BL_BR.format("bambu-dual-texture-pei-plate"),
+     "brasil":{"exige_br":["pei", "p2s"],"handle":"bambu-dual-texture-pei-plate","url_br":_BL_BR.format("bambu-dual-texture-pei-plate"),
                "ml_query":"Bambu Lab placa PEI dupla textura"}},
     {"id":"liquid-glue", "nome":"Bambu Liquid Glue", "categoria":"acessorio", "qty":1,
      "lojas":{
@@ -531,14 +532,14 @@ PRODUCTS = [
        "amazon":   {"asin":"B0DK6TBF1D"},
        "walmart":  {"query":"Bambu Lab Liquid Glue 3D printer"},
      },
-     "brasil":{"handle":"liquid-glue-for-build-plate","url_br":_BL_BR.format("liquid-glue-for-build-plate"),
+     "brasil":{"exige_br":["cola|glue"],"handle":"liquid-glue-for-build-plate","url_br":_BL_BR.format("liquid-glue-for-build-plate"),
                "ml_query":"Bambu Lab liquid glue cola placa impressora"}},
     {"id":"nozzle-wiper", "nome":"Nozzle Wiper (P2S)", "categoria":"acessorio", "qty":2, "preco_min":2,
      "lojas":{
        "bambulab": {"handle":"nozzle-wiping-pad-p2s-x2d"},   # serve P2S e X2D
        "amazon":   {"asin":"B0GSSB8GDQ"},
      },
-     "brasil":{"handle":"nozzle-wiper","url_br":_BL_BR.format("nozzle-wiper"),
+     "brasil":{"exige_br":["p2s", "wiper|wiping|limpador|limpeza"],"handle":"nozzle-wiper","url_br":_BL_BR.format("nozzle-wiper"),
                "ml_query":"Bambu Lab nozzle wiper limpador bico impressora"}},
     # --- X2D: impressora e os mesmos acessorios da P2S, na versao X2D ---
     {"id":"x2d-combo", "nome":"Bambu Lab X2D Combo", "categoria":"impressora", "qty":1,
@@ -546,42 +547,42 @@ PRODUCTS = [
        "bambulab": {"handle":"x2d", "variant_hint":"combo"},
        "walmart":  {"query":"Bambu Lab X2D Combo 3D Printer"},
      },
-     "brasil":{"handle":"x2d","variant_hint":"combo","url_br":_BL_BR.format("x2d"),
+     "brasil":{"exige_br":["x2d", "combo"],"handle":"x2d","variant_hint":"combo","url_br":_BL_BR.format("x2d"),
                "ml_query":"Bambu Lab X2D Combo impressora 3D"}},
     {"id":"hotend-02-ss-x2d", "nome":"Hotend 0.2mm Stainless Steel (X2D)", "categoria":"acessorio", "qty":1,
      "lojas":{
        "bambulab": {"handle":"bambu-hotend-h2-p2s", "variant_hint":"x2d 0.2"},
      },
-     "brasil":{"ml_query":"Bambu Lab hotend 0.2mm X2D"}},
+     "brasil":{"exige_br":["hotend", "x2d", "0.2"],"ml_query":"Bambu Lab hotend 0.2mm X2D"}},
     {"id":"hotend-04-hs-x2d", "nome":"Hotend 0.4mm Hardened Steel (X2D)", "categoria":"acessorio", "qty":1,
      "lojas":{
        "bambulab": {"handle":"bambu-hotend-h2-p2s", "variant_hint":"x2d 0.4 hardened"},
      },
-     "brasil":{"ml_query":"Bambu Lab hotend 0.4mm hardened steel X2D"}},
+     "brasil":{"exige_br":["hotend", "x2d", "0.4", "hardened|endurecido|temperado"],"ml_query":"Bambu Lab hotend 0.4mm hardened steel X2D"}},
     {"id":"pei-plate-x2d", "nome":"Bambu Dual-Texture PEI Plate (X2D)", "categoria":"acessorio", "qty":1,
      "lojas":{
        "bambulab": {"handle":"bambu-dual-texture-pei-plate", "variant_hint":"x2d"},
      },
-     "brasil":{"ml_query":"Bambu Lab placa PEI dupla textura X2D"}},
+     "brasil":{"exige_br":["pei", "x2d"],"ml_query":"Bambu Lab placa PEI dupla textura X2D"}},
     {"id":"nozzle-wiper-x2d", "nome":"Nozzle Wiper (X2D)", "categoria":"acessorio", "qty":2, "preco_min":2,
      "lojas":{
        "bambulab": {"handle":"nozzle-wiping-pad-p2s-x2d"},   # serve P2S e X2D
      },
-     "brasil":{"ml_query":"Bambu Lab nozzle wiper X2D"}},
+     "brasil":{"exige_br":["x2d", "wiper|wiping|limpador|limpeza"],"ml_query":"Bambu Lab nozzle wiper X2D"}},
     {"id":"pla-silk-multicolor", "nome":"PLA Silk Multi-Color (cores variadas)", "categoria":"filamento", "qty":4,
      "lojas":{
        "bambulab": {"handle":"pla-silk-dual-color", "todas_cores": True},
        "amazon":   {"asin":"B0FQPPLP3S"},
        "walmart":  {"query":"Bambu Lab PLA Silk Dual Color filament", "exige":["silk","dual"]},
      },
-     "brasil":{"ml_query":"Bambu Lab PLA Silk Dual Color filamento"}},
+     "brasil":{"exige_br":["pla", "silk|seda", "dual|multi|bicolor"],"ml_query":"Bambu Lab PLA Silk Dual Color filamento"}},
     {"id":"pla-matte-charcoal", "nome":"PLA Matte Charcoal", "categoria":"filamento", "qty":2,
      "lojas":{
        "bambulab": {"handle":"pla-matte", "variant_hint":"charcoal"},
        "amazon":   {"asin":"B0G4ZVJDM7"},
        "walmart":  {"query":"Bambu Lab PLA Matte Charcoal filament 1kg"},
      },
-     "brasil":{"handle":"pla-matte","variant_hint":"charcoal","url_br":_BL_BR.format("pla-matte"),
+     "brasil":{"exige_br":["pla", "matte|fosco", "charcoal|carvao"],"handle":"pla-matte","variant_hint":"charcoal","url_br":_BL_BR.format("pla-matte"),
                "ml_query":"Bambu Lab PLA Matte filamento 1kg"}},
     {"id":"pla-matte-terracotta", "nome":"PLA Matte Terracotta", "categoria":"filamento", "qty":2,
      "lojas":{
@@ -589,14 +590,14 @@ PRODUCTS = [
        "amazon":   {"asin":"B0G5175G82"},
        "walmart":  {"query":"Bambu Lab PLA Matte Terracotta filament 1kg"},
      },
-     "brasil":{"handle":"pla-matte","variant_hint":"terracotta","url_br":_BL_BR.format("pla-matte"),
+     "brasil":{"exige_br":["pla", "matte|fosco", "terracotta|terracota"],"handle":"pla-matte","variant_hint":"terracotta","url_br":_BL_BR.format("pla-matte"),
                "ml_query":"Bambu Lab PLA Matte Terracotta filamento 1kg"}},
     {"id":"pla-glow", "nome":"PLA Glow-in-the-Dark", "categoria":"filamento", "qty":1,
      "lojas":{
        "bambulab": {"handle":"pla-glow"},
        "walmart":  {"query":"Bambu Lab PLA Glow in the Dark filament", "exige":["pla","glow"]},
      },
-     "brasil":{"handle":"pla-glow","url_br":_BL_BR.format("pla-glow"),
+     "brasil":{"exige_br":["pla", "glow|fosforescente|brilha"],"handle":"pla-glow","url_br":_BL_BR.format("pla-glow"),
                "ml_query":"Bambu Lab PLA fosforescente glow filamento"}},
     {"id":"pla-basic-black", "nome":"PLA Basic Preto", "categoria":"filamento", "qty":1,
      "lojas":{
@@ -604,7 +605,7 @@ PRODUCTS = [
        "amazon":   {"asin":"B0C4GBJCSV"},
        "walmart":  {"query":"Bambu Lab PLA Basic Black filament 1kg"},
      },
-     "brasil":{"handle":"pla-basic-filament","variant_hint":"black","url_br":_BL_BR.format("pla-basic-filament"),
+     "brasil":{"exige_br":["pla", "basic|basico", "black|preto"],"handle":"pla-basic-filament","variant_hint":"black","url_br":_BL_BR.format("pla-basic-filament"),
                "ml_query":"Bambu Lab PLA Basic preto filamento 1kg"}},
     {"id":"pla-basic-white", "nome":"PLA Basic Branco", "categoria":"filamento", "qty":1,
      "lojas":{
@@ -612,7 +613,7 @@ PRODUCTS = [
        "amazon":   {"asin":"B0C4GB1TB1"},
        "walmart":  {"query":"Bambu Lab PLA Basic White filament 1kg"},
      },
-     "brasil":{"handle":"pla-basic-filament","variant_hint":"white","url_br":_BL_BR.format("pla-basic-filament"),
+     "brasil":{"exige_br":["pla", "basic|basico", "white|branco"],"handle":"pla-basic-filament","variant_hint":"white","url_br":_BL_BR.format("pla-basic-filament"),
                "ml_query":"Bambu Lab PLA Basic branco filamento 1kg"}},
     {"id":"ninja-crispi-pro", "nome":"Ninja Crispi Pro 6-in-1 Glass Air Fryer AS101DG Ash Grey", "categoria":"eletronico", "qty":1,
      "lojas":{
@@ -622,7 +623,7 @@ PRODUCTS = [
        "target":  {"query":"Ninja Crispi Pro AS101DG Air Fryer", "exige":["crispi","pro","6-in-1"]},
        "costco":  {"query":"Ninja Crispi Pro Glass Air Fryer"},
      },
-     "brasil":{"ml_query":"Ninja Crispi Pro fritadeira vidro"}},
+     "brasil":{"exige_br":["crispi", "pro"],"ml_query":"Ninja Crispi Pro fritadeira vidro"}},
 ]
 
 STORE_COUPON_SOURCES = {
@@ -1211,6 +1212,54 @@ def fetch_kabum(query):
         print(f"      [KB] erro: {e}")
     return None, None
 
+def _preco_brl(texto):
+    """'R$ 1.234,56' -> 1234.56 | 'R$ 89,90' -> 89.9 | 'R$ 1.234' -> 1234.0"""
+    t = re.sub(r"[^\d.,]", "", texto or "")
+    if not t:
+        return None
+    if "," in t:
+        t = t.replace(".", "").replace(",", ".")
+    elif re.fullmatch(r"\d{1,3}(\.\d{3})+", t):        # so ponto de milhar
+        t = t.replace(".", "")
+    try:
+        v = float(t)
+    except ValueError:
+        return None
+    return v if 1 < v < 500000 else None
+
+def fetch_serper_br(query, exige=None):
+    """Menor preco no Google Shopping Brasil (varias lojas de uma vez) entre os
+    anuncios que sao o produto certo. Retorna (preco_brl, url, loja) ou (None,...)."""
+    if not SERPER_API_KEY or not query:
+        return None, None, None
+    try:
+        r = requests.post("https://google.serper.dev/shopping",
+                          headers={"X-API-KEY": SERPER_API_KEY, "Content-Type": "application/json"},
+                          json={"q": query, "gl": "br", "hl": "pt-br", "num": 40}, timeout=30)
+        if r.status_code != 200:
+            print(f"      [Serper] HTTP {r.status_code}: {r.text[:100]}")
+            return None, None, None
+        anuncios = r.json().get("shopping") or []
+    except Exception as e:
+        print(f"      [Serper] erro: {str(e)[:80]}")
+        return None, None, None
+
+    validos, com_preco = [], 0
+    for a in anuncios:
+        titulo, preco = a.get("title") or "", _preco_brl(a.get("price"))
+        if not titulo or not preco:
+            continue
+        com_preco += 1
+        if _item_bate_com_busca(titulo, query, exige):
+            validos.append((preco, titulo, a.get("link") or "", a.get("source") or "Google Shopping"))
+    if not validos:
+        exemplos = [(a.get("title") or "")[:45] for a in anuncios[:3]]
+        print(f"      [Serper] nenhum dos {com_preco} anuncios e o produto certo. Ex.: {exemplos}")
+        return None, None, None
+    preco, titulo, url, loja = min(validos)
+    print(f"      [Serper] '{titulo[:55]}' R${preco:.2f} em {loja} ({len(validos)} de {com_preco} batem)")
+    return preco, url, loja
+
 def fetch_bestbuy(sku=None, url_produto=None, search_query=None):
     if BESTBUY_API_KEY:
         try:
@@ -1399,11 +1448,17 @@ _GENERICAS_BUSCA = {"filament", "printer", "spool", "lab"}
 # Marcas: se a busca tem a marca, o item tem que ser dela
 _MARCAS_BUSCA = {"bambu", "ninja"}
 # Acessorio de terceiros "para Bambu Lab" / "compativel com"
-_RE_TERCEIROS = re.compile(r"\bfor\s+bambu\b|\bcompatible\b|\bfits\s+bambu\b", re.I)
+_RE_TERCEIROS = re.compile(r"\bfor\s+bambu\b|\bcompatible\b|\bfits\s+bambu\b"
+                           r"|\bpara\s+bambu\b|\bcompativel\b", re.I)
 _SINONIMOS = {"gray": "grey", "colour": "color"}
 
+def _sem_acento(texto):
+    import unicodedata
+    return "".join(c for c in unicodedata.normalize("NFKD", texto or "")
+                   if not unicodedata.combining(c))
+
 def _tokens(texto):
-    return {_SINONIMOS.get(t, t) for t in re.findall(r"[a-z0-9]+", (texto or "").lower())
+    return {_SINONIMOS.get(t, t) for t in re.findall(r"[a-z0-9]+", _sem_acento(texto).lower())
             if len(t) >= 2 and t not in _STOPWORDS_BUSCA}
 
 def _item_bate_com_busca(nome, query, exige=None):
@@ -1414,17 +1469,18 @@ def _item_bate_com_busca(nome, query, exige=None):
     marcas = busca_t & _MARCAS_BUSCA
     if marcas and not marcas <= nome_t:
         return False
-    if _RE_TERCEIROS.search(nome or ""):
+    if _RE_TERCEIROS.search(_sem_acento(nome)):
         return False
     chave = set(exige) if exige else (busca_t - _GENERICAS_BUSCA - _MARCAS_BUSCA)
-    nome_norm = re.sub(r"[\s\-]+", "-", (nome or "").lower())
-    for e in chave:
+    nome_norm = re.sub(r"[\s\-]+", "-", _sem_acento(nome).lower())
+
+    def tem(e):
         if re.fullmatch(r"[a-z0-9]+", e):
-            if _SINONIMOS.get(e, e) not in nome_t:
-                return False
-        elif re.sub(r"[\s\-]+", "-", e.lower()) not in nome_norm:   # expressao, ex: "6-in-1"
-            return False
-    return True
+            return _SINONIMOS.get(e, e) in nome_t
+        return re.sub(r"[\s\-]+", "-", e.lower()) in nome_norm      # expressao, ex: "6-in-1", "0.4"
+
+    # "cola|glue" = qualquer uma das alternativas serve (titulos em PT ou EN)
+    return all(any(tem(alt) for alt in e.split("|")) for e in chave)
 
 def _wm_preco_item(item):
     """Preco de um item da busca do Walmart (o formato do JSON varia entre paginas)."""
@@ -1777,6 +1833,13 @@ def processar_item(pid, p, item, now):
         bl_hint   = brasil_cfg.get("variant_hint")
         asin_br   = brasil_cfg.get("asin_br")
 
+        # 0. Google Shopping Brasil (Serper): varias lojas de uma vez, com conferencia de produto
+        if not preco_brl and SERPER_API_KEY and ml_query:
+            print(f"    [BR] Google Shopping (Serper)...")
+            preco_brl, url_brl, loja_serper = fetch_serper_br(ml_query, brasil_cfg.get("exige_br"))
+            if preco_brl:
+                loja_nome_brl = loja_serper
+
         # 1. Bambu Lab Brasil (loja oficial) — para produtos Bambu
         if not preco_brl and bl_handle:
             print(f"    [BR] Bambu Lab Brasil...")
@@ -1813,7 +1876,7 @@ def processar_item(pid, p, item, now):
             }
             print(f"    Brasil ({loja_nome_brl}): R${preco_brl:.2f}")
         else:
-            item.setdefault("brasil", None)
+            item["brasil"] = None
 
     return quedas_item
 
@@ -1918,6 +1981,7 @@ def main():
     print(f"  ML_APP_ID:       {'configurado' if ML_APP_ID else 'NAO configurado'}")
     print(f"  ML_SECRET_KEY:   {'configurado' if ML_SECRET_KEY else 'NAO configurado'}")
     print(f"  ANTHROPIC_API_KEY: {'configurado (' + CLAUDE_MODEL + ')' if ANTHROPIC_API_KEY else 'NAO configurado'}")
+    print(f"  SERPER_API_KEY:  {'configurado' if SERPER_API_KEY else 'NAO configurado'}")
 
     data = {}
     if os.path.exists(DATA_FILE):

@@ -30,6 +30,7 @@ jobs:
           ML_APP_ID:         ${{ secrets.ML_APP_ID }}
           ML_SECRET_KEY:     ${{ secrets.ML_SECRET_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SERPER_API_KEY:    ${{ secrets.SERPER_API_KEY }}
           AWESOMEAPI_TOKEN:  ${{ secrets.AWESOMEAPI_TOKEN }}
           AMAZON_TAG_US:     ${{ secrets.AMAZON_TAG_US }}
           AMAZON_TAG_BR:     ${{ secrets.AMAZON_TAG_BR }}
