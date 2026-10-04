@@ -1,6 +1,6 @@
 {
   "atualizado_em": "2026-10-04T11:02:52.167761+00:00",
-  "total_estimado": 1346.41,
+  "total_estimado": 1364.79,
   "cupons": {
     "bambulab": [],
     "bestbuy": [],
@@ -26,7 +26,7 @@
           "url_carrinho": null
         },
         "walmart": {
-          "preco": 44.84,
+          "preco": null,
           "url_produto": "https://www.walmart.com/ip/Bambu-Lab-3D-Printer-Filament-Bambu-TPU-for-AMS-Gray-Filament-with-spool/20247474846?classType=REGULAR",
           "url_carrinho": null
         },
@@ -205,13 +205,13 @@
           "url_carrinho": null
         },
         "walmart": {
-          "preco": 37.6,
+          "preco": null,
           "url_produto": "https://www.walmart.com/ip/For-Bambu-Lab-x1-P1P-Build-Plate-PEI-Bed-Upgraded-Double-Side-PEI-Spring-Steel-Sheet-276x258mm-Smooth-PEI-Texture-PEI/17590367774?classType=REGULAR",
           "url_carrinho": null
         }
       },
-      "melhor_loja": "walmart",
-      "preco_atual": 37.6,
+      "melhor_loja": "bambulab",
+      "preco_atual": 37.99,
       "preco_minimo": 24.99,
       "historico": [
         {
@@ -231,8 +231,8 @@
         },
         {
           "data": "2026-10-04T11:02:52.167761+00:00",
-          "preco": 37.6,
-          "loja": "walmart"
+          "preco": 37.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -253,7 +253,7 @@
           "url_carrinho": null
         },
         "walmart": {
-          "preco": 18.5,
+          "preco": null,
           "url_produto": "https://www.walmart.com/ip/Bambu-Lab-Filament-Carft-3D-Printer-Bambu-PLA-Basic-Cocoa-Brown-A00-N1-1-75-1000-SPLFREE/18000958912?classType=REGULAR",
           "url_carrinho": null
         }
@@ -594,14 +594,14 @@
           "url_carrinho": null
         },
         "walmart": {
-          "preco": 23.99,
+          "preco": null,
           "url_produto": "https://www.walmart.com/ip/Cailab-PLA-Silk-Dual-Color-3D-Printer-Filament-2-Colors-Changing-2-2lbs-1KG-Spool-for-FDM-3D-Printer-Red-Gold/19112912873?classType=VARIANT",
           "url_carrinho": null
         }
       },
-      "melhor_loja": "walmart",
-      "preco_atual": 23.99,
-      "preco_minimo": 23.99,
+      "melhor_loja": "amazon",
+      "preco_atual": 28.99,
+      "preco_minimo": 28.99,
       "historico": [
         {
           "data": "2026-06-06T20:51:07.314487+00:00",
@@ -760,8 +760,8 @@
         },
         {
           "data": "2026-10-04T11:02:52.167761+00:00",
-          "preco": 23.99,
-          "loja": "walmart"
+          "preco": 28.99,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -782,14 +782,14 @@
           "url_carrinho": null
         },
         "walmart": {
-          "preco": 28.74,
+          "preco": null,
           "url_produto": "https://www.walmart.com/ip/Bambu-Lab-3D-Printer-Filament-PLA-Silk-Purple-Filament-with-spool/20277411813?classType=REGULAR",
           "url_carrinho": null
         }
       },
-      "melhor_loja": "walmart",
-      "preco_atual": 28.74,
-      "preco_minimo": 28.74,
+      "melhor_loja": "amazon",
+      "preco_atual": 28.99,
+      "preco_minimo": 28.99,
       "historico": [
         {
           "data": "2026-06-06T20:51:07.314487+00:00",
@@ -953,8 +953,8 @@
         },
         {
           "data": "2026-10-04T11:02:52.167761+00:00",
-          "preco": 28.74,
-          "loja": "walmart"
+          "preco": 28.99,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -975,7 +975,7 @@
           "url_carrinho": null
         },
         "walmart": {
-          "preco": 22.99,
+          "preco": null,
           "url_produto": "https://www.walmart.com/ip/Bambu-Lab-Filament-Carft-3D-Printer-PLA-Matte-Bone-White-A01-W3-1-75-1000-SPLFREE/19586923748?classType=REGULAR",
           "url_carrinho": null
         }
@@ -1331,14 +1331,14 @@
           "url_carrinho": null
         },
         "walmart": {
-          "preco": 22.99,
+          "preco": null,
           "url_produto": "https://www.walmart.com/ip/Bambu-Lab-Filament-Carft-3D-Printer-PLA-Matte-Dark-Green-A01-G7-1-75-1000-SPLFREE/17933768048?classType=REGULAR",
           "url_carrinho": null
         }
       },
-      "melhor_loja": "walmart",
-      "preco_atual": 22.99,
-      "preco_minimo": 22.99,
+      "melhor_loja": "bambulab",
+      "preco_atual": 24.99,
+      "preco_minimo": 24.99,
       "historico": [
         {
           "data": "2026-07-26T00:05:15.140323+00:00",
@@ -1357,8 +1357,8 @@
         },
         {
           "data": "2026-10-04T11:02:52.167761+00:00",
-          "preco": 22.99,
-          "loja": "walmart"
+          "preco": 24.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -1572,13 +1572,13 @@
           "url_carrinho": null
         },
         "walmart": {
-          "preco": 18.5,
+          "preco": null,
           "url_produto": "https://www.walmart.com/ip/Bambu-Lab-Filament-Carft-3D-Printer-Bambu-PLA-Basic-Cocoa-Brown-A00-N1-1-75-1000-SPLFREE/18000958912?classType=REGULAR",
           "url_carrinho": null
         }
       },
-      "melhor_loja": "walmart",
-      "preco_atual": 18.5,
+      "melhor_loja": "amazon",
+      "preco_atual": 23.99,
       "preco_minimo": 6.87,
       "historico": [
         {
@@ -1743,8 +1743,8 @@
         },
         {
           "data": "2026-10-04T11:02:52.167761+00:00",
-          "preco": 18.5,
-          "loja": "walmart"
+          "preco": 23.99,
+          "loja": "amazon"
         }
       ],
       "brasil": null
