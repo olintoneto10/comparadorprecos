@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      issues: write
 
     steps:
       - uses: actions/checkout@v4
@@ -47,3 +48,12 @@ jobs:
           git diff --staged --quiet || git commit -m "chore: precos atualizados $(date -u '+%Y-%m-%d')"
           git pull --rebase -X theirs origin master
           git push
+
+      - name: Abrir alerta de queda de preco
+        if: hashFiles('compras/alerta.md') != ''
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create alerta-preco --color E11D48 --description "Queda de preco detectada" 2>/dev/null || true
+          gh issue create --title "$(cat compras/alerta_titulo.txt)" --body-file compras/alerta.md --label alerta-preco

@@ -1,0 +1,23 @@
+{
+  "_como_usar": "queda_minima_pct: avisa quando o melhor preco cair pelo menos esse percentual desde a ultima atualizacao. precos_alvo_usd: avisa quando o produto chegar ou ficar abaixo do valor (em dolar). Use o id do produto; veja os ids em _ids_disponiveis.",
+  "queda_minima_pct": 10,
+  "precos_alvo_usd": {
+    "p2s-combo": 699
+  },
+  "_ids_disponiveis": [
+    "p2s-combo",
+    "hotend-02-ss",
+    "hotend-04-hs",
+    "pei-plate",
+    "liquid-glue",
+    "nozzle-wiper",
+    "pla-silk-red-gold",
+    "pla-silk-blue-purple",
+    "pla-matte-charcoal",
+    "pla-matte-terracotta",
+    "pla-glow",
+    "pla-basic-black",
+    "pla-basic-white",
+    "ninja-crispi-pro"
+  ]
+}

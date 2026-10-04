@@ -48,6 +48,9 @@ USE_CFFI = os.environ.get("USE_CFFI", "1") == "1"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_FILE  = os.path.join(SCRIPT_DIR, "precos.json")
 LISTA_FILE = os.path.join(SCRIPT_DIR, "lista.json")
+ALERTAS_CFG    = os.path.join(SCRIPT_DIR, "alertas.json")     # sua configuracao
+ALERTA_CORPO   = os.path.join(SCRIPT_DIR, "alerta.md")        # gerado; vira issue no GitHub
+ALERTA_TITULO  = os.path.join(SCRIPT_DIR, "alerta_titulo.txt")
 
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
@@ -1675,6 +1678,101 @@ def processar_item(pid, p, item, now):
 
     return quedas_item
 
+# ---------------------------------------------------------------------------
+# Alerta de queda de preco: escreve compras/alerta.md; o workflow transforma
+# em issue no GitHub, que avisa o dono por e-mail e no app do celular.
+# ---------------------------------------------------------------------------
+ORLANDO_TAX_ALERTA = 0.065   # imposto de venda de Orlando
+
+def _config_alertas():
+    cfg = {"queda_minima_pct": 10, "precos_alvo_usd": {}}
+    try:
+        with open(ALERTAS_CFG) as f:
+            cfg.update({k: v for k, v in json.load(f).items() if not k.startswith("_")})
+    except FileNotFoundError:
+        pass
+    except Exception as e:
+        print(f"  [Alerta] alertas.json invalido: {e}")
+    return cfg
+
+def _usd(v):
+    return f"{v:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+def gerar_alertas(data, anteriores, now, usd_brl):
+    """Compara o preco atual com o da atualizacao anterior e com o preco-alvo.
+    Nao repete aviso para o mesmo preco: so avisa de novo se cair ainda mais,
+    ou depois que o preco subir e voltar a cair."""
+    for caminho in (ALERTA_CORPO, ALERTA_TITULO):
+        if os.path.exists(caminho):
+            os.remove(caminho)
+    cfg = _config_alertas()
+    queda_min = float(cfg.get("queda_minima_pct") or 10)
+    alvos = cfg.get("precos_alvo_usd") or {}
+    enviados = data.setdefault("alertas_enviados", {})
+    fator_brl = usd_brl * (1 + ORLANDO_TAX_ALERTA) * 1.04
+
+    avisos = []
+    for pid, item in data.get("items", {}).items():
+        atual = item.get("preco_atual")
+        if not atual:
+            continue
+        ult = enviados.get(pid)
+        if ult and atual > ult["preco"] * 1.02:     # subiu de novo: libera novo aviso
+            del enviados[pid]
+            ult = None
+
+        motivos = []
+        prev = anteriores.get(pid)
+        if prev and atual < prev:
+            pct = (prev - atual) / prev * 100
+            if pct > 60:
+                print(f"  [Alerta] {item.get('nome','')[:40]}: queda de {pct:.0f}% parece erro de leitura, ignorada")
+                continue                              # nem o preco-alvo vale com leitura suspeita
+            if pct >= queda_min:
+                motivos.append(f"caiu {pct:.0f}% (era US$ {_usd(prev)})")
+        alvo = alvos.get(pid)
+        if alvo and atual <= float(alvo):
+            motivos.append(f"chegou ao seu preco-alvo de US$ {_usd(float(alvo))}")
+        if not motivos:
+            continue
+        if ult and atual >= ult["preco"] - 0.009:    # ja avisado neste preco
+            continue
+
+        enviados[pid] = {"preco": atual, "data": now}
+        loja = item.get("melhor_loja") or ""
+        url = (item.get("lojas_precos", {}).get(loja) or {}).get("url_produto") or ""
+        avisos.append({"nome": item.get("nome", pid), "preco": atual, "loja": store_info(loja)["nome"],
+                       "url": url, "motivos": motivos, "minimo": item.get("preco_minimo"),
+                       "brl": atual * fator_brl})
+
+    if not avisos:
+        print("  [Alerta] nenhuma queda para avisar")
+        return []
+
+    dono = os.environ.get("GITHUB_REPOSITORY_OWNER", "")
+    if len(avisos) == 1:
+        titulo = f"Queda de preco: {avisos[0]['nome'][:60]} por US$ {_usd(avisos[0]['preco'])}"
+    else:
+        titulo = f"Queda de preco em {len(avisos)} produtos"
+    linhas = [f"@{dono} " if dono else "", "Encontrei quedas de preco na atualizacao de hoje:\n"]
+    for a in avisos:
+        link = f"[{a['loja']}]({a['url']})" if a["url"] else a["loja"]
+        linhas.append(f"### {a['nome']}")
+        brl = f"{a['brl']:,.0f}".replace(",", ".")
+        linhas.append(f"- **US$ {_usd(a['preco'])}** em {link} (cerca de R$ {brl} com imposto e cartao)")
+        linhas.append(f"- {'; '.join(a['motivos'])}")
+        if a["minimo"]:
+            linhas.append(f"- menor preco ja visto: US$ {_usd(a['minimo'])}")
+        linhas.append("")
+    linhas.append("---\nAjuste o percentual e os precos-alvo em `compras/alertas.json`. "
+                  "Pode fechar esta issue depois de ver.")
+    with open(ALERTA_CORPO, "w") as f:
+        f.write("\n".join(linhas))
+    with open(ALERTA_TITULO, "w") as f:
+        f.write(titulo)
+    print(f"  [Alerta] {len(avisos)} aviso(s): {titulo}")
+    return avisos
+
 def main():
     print(f"\n  BESTBUY_API_KEY: {'configurado' if BESTBUY_API_KEY else 'NAO configurado'}")
     print(f"  SCRAPER_API_KEY: {'configurado' if SCRAPER_API_KEY else 'NAO configurado'}")
@@ -1700,6 +1798,7 @@ def main():
     }
     quedas = []
     ids_processados = set()
+    anteriores = {pid: it.get("preco_atual") for pid, it in data["items"].items()}
 
     print("\n=== Rastreando precos ===")
     for p in PRODUCTS:
@@ -1761,6 +1860,9 @@ def main():
     print(f"  Total de cupons: {sum(len(v) for v in cupons_data.values())}")
 
     close_browser()
+
+    print("\n=== Alertas de queda de preco ===")
+    gerar_alertas(data, anteriores, now, usd_brl)
 
     with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
