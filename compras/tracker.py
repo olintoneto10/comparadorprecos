@@ -1350,50 +1350,105 @@ def fetch_amazon_url(url):
         print(f"      [AMZ-URL]: {e}")
     return None, url
 
-def _parse_walmart_html(html, url):
+_STOPWORDS_BUSCA = {"the", "for", "and", "with", "de", "da", "do", "kg", "1kg", "3d"}
+
+def _tokens(texto):
+    return {t for t in re.findall(r"[a-z0-9]+", (texto or "").lower())
+            if len(t) >= 2 and t not in _STOPWORDS_BUSCA}
+
+def _wm_preco_item(item):
+    """Preco de um item da busca do Walmart (o formato do JSON varia entre paginas)."""
+    pi = item.get("priceInfo") or {}
+    cur = pi.get("currentPrice") or {}
+    for v in (cur.get("price"), item.get("price"), pi.get("price"),
+              cur.get("priceString"), pi.get("linePrice"), pi.get("itemPrice")):
+        if v in (None, "", 0):
+            continue
+        p = v if isinstance(v, (int, float)) else _num_de_texto(str(v))
+        if p and 0.5 < float(p) < 50000:
+            return float(p)
+    return None
+
+def _wm_itens(data):
+    """Todos os itens de todas as pilhas de resultados (nao so a primeira)."""
+    sr = (data.get("props", {}).get("pageProps", {})
+              .get("initialData", {}).get("searchResult", {}))
+    for stack in sr.get("itemStacks") or []:
+        for it in (stack or {}).get("items") or []:
+            if isinstance(it, dict):
+                yield it
+
+def _parse_walmart_html(html, url, query=""):
+    """Escolhe, entre os resultados com preco, o que mais combina com a busca."""
     if not HAS_BS4:
         return None, None
     soup = BeautifulSoup(html, "lxml")
     nd = soup.find("script", id="__NEXT_DATA__")
-    if nd:
-        try:
-            data = json.loads(nd.string)
-            items = (data.get("props",{}).get("pageProps",{})
-                         .get("initialData",{}).get("searchResult",{})
-                         .get("itemStacks",[{}])[0].get("items",[]))
-            if items:
-                item = items[0]
-                price = (item.get("priceInfo",{}).get("currentPrice",{})
-                             .get("price") or item.get("priceInfo",{}).get("price"))
-                slug = item.get("canonicalUrl","")
-                prod_url = ("https://www.walmart.com" + slug) if slug else url
-                if price:
-                    return float(price), prod_url
-                print(f"      [WM] __NEXT_DATA__ sem preco")
-        except Exception as e:
-            print(f"      [WM] parse erro: {e}")
-    else:
+    if not nd:
         print(f"      [WM] __NEXT_DATA__ nao encontrado — provavel bloqueio de IP")
-    p = _preco_de_ld(html)
-    if p: return p, url
-    return None, None
+        return None, None
+    try:
+        data = json.loads(nd.string)
+    except Exception as e:
+        print(f"      [WM] parse erro: {e}")
+        return None, None
+
+    alvo = _tokens(query)
+    candidatos = []
+    for it in _wm_itens(data):
+        nome = it.get("name") or it.get("title") or ""
+        preco = _wm_preco_item(it)
+        if not nome or not preco:
+            continue
+        score = len(alvo & _tokens(nome)) / len(alvo) if alvo else 0
+        slug = it.get("canonicalUrl") or ""
+        prod_url = ("https://www.walmart.com" + slug) if slug.startswith("/") else (slug or url)
+        candidatos.append((score, preco, nome, prod_url))
+
+    if not candidatos:
+        print(f"      [WM] nenhum item com preco no __NEXT_DATA__")
+        return None, None
+    # maior semelhanca com a busca; empate -> menor preco
+    candidatos.sort(key=lambda c: (-c[0], c[1]))
+    score, preco, nome, prod_url = candidatos[0]
+    if score < 0.6:
+        print(f"      [WM] melhor item '{nome[:50]}' parece outro produto "
+              f"({score:.0%} de semelhanca), descartado")
+        return None, None
+    print(f"      [WM] '{nome[:50]}' ${preco} ({score:.0%} de semelhanca, "
+          f"{len(candidatos)} itens com preco)")
+    return preco, prod_url
 
 def fetch_walmart(query):
     search_url = "https://www.walmart.com/search?q=" + requests.utils.quote(query)
-    r = scraperapi_get(search_url)
-    if r:
-        print(f"      [WM] '{query[:40]}': ScraperAPI OK")
-        price, prod_url = _parse_walmart_html(r.text, search_url)
-        if price:
-            print(f"      [WM] preco via ScraperAPI: ${price}")
-            return price, prod_url
+    melhor_html = ""
     sc = make_scraper()
     try:
-        r2 = sc.get(search_url, headers=hdrs(), timeout=30)
-        print(f"      [WM] '{query[:40]}': HTTP {r2.status_code}, {len(r2.text)} bytes")
-        return _parse_walmart_html(r2.text, search_url)
+        r = sc.get(search_url, headers=hdrs(), timeout=30)
+        print(f"      [WM] '{query[:40]}': HTTP {r.status_code}, {len(r.text)} bytes")
+        if r.status_code == 200:
+            price, prod_url = _parse_walmart_html(r.text, search_url, query)
+            if price:
+                return price, prod_url
+            melhor_html = r.text
     except Exception as e:
         print(f"      [WM] erro: {e}")
+    # ScraperAPI so se o acesso direto falhou (economiza a cota)
+    if len(melhor_html) < 100000:
+        r2 = scraperapi_get(search_url)
+        if r2:
+            print(f"      [WM] '{query[:40]}': ScraperAPI OK")
+            price, prod_url = _parse_walmart_html(r2.text, search_url, query)
+            if price:
+                return price, prod_url
+            if len(r2.text) > len(melhor_html):
+                melhor_html = r2.text
+    # Ultima tentativa: Claude le a pagina, so quando ela nao trouxe os dados
+    # estruturados (se trouxe e nenhum item bateu, nao vale arriscar um chute)
+    if len(melhor_html) > 100000 and '"itemStacks"' not in melhor_html:
+        p = fetch_price_claude(melhor_html, query, moeda="USD", preco_min=1, loja="WM")
+        if p:
+            return p, search_url
     return None, None
 
 def _parse_target_html(html, url):
