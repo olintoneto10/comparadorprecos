@@ -535,7 +535,7 @@ PRODUCTS = [
                "ml_query":"Bambu Lab liquid glue cola placa impressora"}},
     {"id":"nozzle-wiper", "nome":"Nozzle Wiper (P2S)", "categoria":"acessorio", "qty":2, "preco_min":2,
      "lojas":{
-       "bambulab": {"handle":"nozzle-wiper", "variant_hint":"p2s"},
+       "bambulab": {"handle":"nozzle-wiping-pad-p2s-x2d"},   # serve P2S e X2D
        "amazon":   {"asin":"B0GSSB8GDQ"},
      },
      "brasil":{"handle":"nozzle-wiper","url_br":_BL_BR.format("nozzle-wiper"),
@@ -565,7 +565,7 @@ PRODUCTS = [
      "brasil":{"ml_query":"Bambu Lab placa PEI dupla textura X2D"}},
     {"id":"nozzle-wiper-x2d", "nome":"Nozzle Wiper (X2D)", "categoria":"acessorio", "qty":2, "preco_min":2,
      "lojas":{
-       "bambulab": {"handle":"nozzle-wiper", "variant_hint":"x2d"},
+       "bambulab": {"handle":"nozzle-wiping-pad-p2s-x2d"},   # serve P2S e X2D
      },
      "brasil":{"ml_query":"Bambu Lab nozzle wiper X2D"}},
     {"id":"pla-silk-multicolor", "nome":"PLA Silk Multi-Color (cores variadas)", "categoria":"filamento", "qty":4,
