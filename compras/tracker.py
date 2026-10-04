@@ -540,35 +540,34 @@ PRODUCTS = [
      },
      "brasil":{"handle":"nozzle-wiper","url_br":_BL_BR.format("nozzle-wiper"),
                "ml_query":"Bambu Lab nozzle wiper limpador bico impressora"}},
-    # --- H2C: impressora e os mesmos acessorios da P2S, na versao H2C ---
-    {"id":"h2c-combo", "nome":"Bambu Lab H2C Combo", "categoria":"impressora", "qty":1,
+    # --- X2D: impressora e os mesmos acessorios da P2S, na versao X2D ---
+    {"id":"x2d-combo", "nome":"Bambu Lab X2D Combo", "categoria":"impressora", "qty":1,
      "lojas":{
-       "bambulab": {"handle":"h2c", "variant_hint":"combo"},
-       "walmart":  {"query":"Bambu Lab H2C Combo 3D Printer"},
+       "bambulab": {"handle":"x2d", "variant_hint":"combo"},
+       "walmart":  {"query":"Bambu Lab X2D Combo 3D Printer"},
      },
-     "brasil":{"handle":"h2c","variant_hint":"combo","url_br":_BL_BR.format("h2c"),
-               "ml_query":"Bambu Lab H2C Combo impressora 3D"}},
-    {"id":"hotend-02-ss-h2c", "nome":"Hotend 0.2mm Stainless Steel (H2C)", "categoria":"acessorio", "qty":1,
+     "brasil":{"handle":"x2d","variant_hint":"combo","url_br":_BL_BR.format("x2d"),
+               "ml_query":"Bambu Lab X2D Combo impressora 3D"}},
+    {"id":"hotend-02-ss-x2d", "nome":"Hotend 0.2mm Stainless Steel (X2D)", "categoria":"acessorio", "qty":1,
      "lojas":{
-       "bambulab": {"handle":"bambu-hotend-h2-p2s", "variant_hint":"h2c 0.2"},
+       "bambulab": {"handle":"bambu-hotend-h2-p2s", "variant_hint":"x2d 0.2"},
      },
-     "brasil":{"ml_query":"Bambu Lab hotend 0.2mm H2C"}},
-    {"id":"hotend-04-hs-h2c", "nome":"Hotend 0.4mm Hardened Steel (H2C)", "categoria":"acessorio", "qty":1,
+     "brasil":{"ml_query":"Bambu Lab hotend 0.2mm X2D"}},
+    {"id":"hotend-04-hs-x2d", "nome":"Hotend 0.4mm Hardened Steel (X2D)", "categoria":"acessorio", "qty":1,
      "lojas":{
-       "bambulab": {"handle":"bambu-hotend-h2-p2s", "variant_hint":"h2c 0.4 hardened"},
+       "bambulab": {"handle":"bambu-hotend-h2-p2s", "variant_hint":"x2d 0.4 hardened"},
      },
-     "brasil":{"ml_query":"Bambu Lab hotend 0.4mm hardened steel H2C"}},
-    {"id":"pei-plate-h2c", "nome":"Bambu Dual-Texture PEI Plate (H2C)", "categoria":"acessorio", "qty":1,
+     "brasil":{"ml_query":"Bambu Lab hotend 0.4mm hardened steel X2D"}},
+    {"id":"pei-plate-x2d", "nome":"Bambu Dual-Texture PEI Plate (X2D)", "categoria":"acessorio", "qty":1,
      "lojas":{
-       "bambulab": {"handle":"bambu-dual-texture-pei-plate", "variant_hint":"h2c"},
+       "bambulab": {"handle":"bambu-dual-texture-pei-plate", "variant_hint":"x2d"},
      },
-     "brasil":{"ml_query":"Bambu Lab placa PEI dupla textura H2C"}},
-    {"id":"nozzle-wiper-h2c", "nome":"Nozzle Wiper (H2C)", "categoria":"acessorio", "qty":2, "preco_min":2,
+     "brasil":{"ml_query":"Bambu Lab placa PEI dupla textura X2D"}},
+    {"id":"nozzle-wiper-x2d", "nome":"Nozzle Wiper (X2D)", "categoria":"acessorio", "qty":2, "preco_min":2,
      "lojas":{
-       "bambulab": {"handle":"nozzle-wiper", "variant_hint":"h2c"},
-       "amazon":   {"asin":"B0GSSB8GDQ"},   # anuncio serve H2D/H2C/P2S
+       "bambulab": {"handle":"nozzle-wiper", "variant_hint":"x2d"},
      },
-     "brasil":{"ml_query":"Bambu Lab nozzle wiper H2C"}},
+     "brasil":{"ml_query":"Bambu Lab nozzle wiper X2D"}},
     {"id":"pla-silk-red-gold", "nome":"PLA Silk Dual Color (Red-Gold)", "categoria":"filamento", "qty":2,
      "lojas":{
        "bambulab": {"handle":"pla-silk-dual-color", "listar": True},   # cor a definir

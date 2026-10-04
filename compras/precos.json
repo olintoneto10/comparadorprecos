@@ -1,6 +1,6 @@
 {
   "atualizado_em": "2026-10-04T11:39:16.362699+00:00",
-  "total_estimado": 3654.37,
+  "total_estimado": 1385.07,
   "cupons": {
     "bambulab": [],
     "bestbuy": [],
@@ -2125,125 +2125,6 @@
           "loja": "amazon"
         }
       ],
-      "brasil": null
-    },
-    "h2c-combo": {
-      "nome": "Bambu Lab H2C Combo",
-      "categoria": "impressora",
-      "qty": 1,
-      "lojas_precos": {
-        "bambulab": {
-          "preco": 2199.0,
-          "url_produto": "https://us.store.bambulab.com/products/h2c",
-          "url_carrinho": null
-        },
-        "walmart": {
-          "preco": null,
-          "url_produto": "https://www.walmart.com/search?q=Bambu%20Lab%20H2C%20Combo%203D%20Printer",
-          "url_carrinho": null
-        }
-      },
-      "historico": [
-        {
-          "data": "2026-10-04T11:39:16.362699+00:00",
-          "preco": 2199.0,
-          "loja": "bambulab"
-        }
-      ],
-      "preco_atual": 2199.0,
-      "preco_minimo": 2199.0,
-      "melhor_loja": "bambulab",
-      "brasil": null
-    },
-    "hotend-02-ss-h2c": {
-      "nome": "Hotend 0.2mm Stainless Steel (H2C)",
-      "categoria": "acessorio",
-      "qty": 1,
-      "lojas_precos": {
-        "bambulab": {
-          "preco": 17.99,
-          "url_produto": "https://us.store.bambulab.com/products/bambu-hotend-h2-p2s",
-          "url_carrinho": null
-        }
-      },
-      "historico": [
-        {
-          "data": "2026-10-04T11:39:16.362699+00:00",
-          "preco": 17.99,
-          "loja": "bambulab"
-        }
-      ],
-      "preco_atual": 17.99,
-      "preco_minimo": 17.99,
-      "melhor_loja": "bambulab",
-      "brasil": null
-    },
-    "hotend-04-hs-h2c": {
-      "nome": "Hotend 0.4mm Hardened Steel (H2C)",
-      "categoria": "acessorio",
-      "qty": 1,
-      "lojas_precos": {
-        "bambulab": {
-          "preco": 17.99,
-          "url_produto": "https://us.store.bambulab.com/products/bambu-hotend-h2-p2s",
-          "url_carrinho": null
-        }
-      },
-      "historico": [
-        {
-          "data": "2026-10-04T11:39:16.362699+00:00",
-          "preco": 17.99,
-          "loja": "bambulab"
-        }
-      ],
-      "preco_atual": 17.99,
-      "preco_minimo": 17.99,
-      "melhor_loja": "bambulab",
-      "brasil": null
-    },
-    "pei-plate-h2c": {
-      "nome": "Bambu Dual-Texture PEI Plate (H2C)",
-      "categoria": "acessorio",
-      "qty": 1,
-      "lojas_precos": {
-        "bambulab": {
-          "preco": null,
-          "url_produto": "https://us.store.bambulab.com/products/bambu-dual-texture-pei-plate",
-          "url_carrinho": null
-        }
-      },
-      "historico": [],
-      "preco_atual": null,
-      "preco_minimo": null,
-      "melhor_loja": null,
-      "brasil": null
-    },
-    "nozzle-wiper-h2c": {
-      "nome": "Nozzle Wiper (H2C)",
-      "categoria": "acessorio",
-      "qty": 2,
-      "lojas_precos": {
-        "bambulab": {
-          "preco": null,
-          "url_produto": "https://us.store.bambulab.com/products/nozzle-wiper",
-          "url_carrinho": null
-        },
-        "amazon": {
-          "preco": 17.16,
-          "url_produto": "https://www.amazon.com/dp/B0GSSB8GDQ",
-          "url_carrinho": null
-        }
-      },
-      "historico": [
-        {
-          "data": "2026-10-04T11:39:16.362699+00:00",
-          "preco": 17.16,
-          "loja": "amazon"
-        }
-      ],
-      "preco_atual": 17.16,
-      "preco_minimo": 17.16,
-      "melhor_loja": "amazon",
       "brasil": null
     }
   },
