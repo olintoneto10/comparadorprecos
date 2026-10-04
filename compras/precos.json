@@ -1579,7 +1579,7 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 49.99,
+          "preco": null,
           "url_produto": "https://www.amazon.com/dp/B0C4GBJCSV",
           "url_carrinho": null
         },
@@ -1792,7 +1792,7 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 49.99,
+          "preco": null,
           "url_produto": "https://www.amazon.com/dp/B0C4GB1TB1",
           "url_carrinho": null
         },

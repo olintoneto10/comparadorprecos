@@ -1255,17 +1255,16 @@ def fetch_bestbuy(sku=None, url_produto=None, search_query=None):
                 return p
     return None
 
+# Preco atual do produto. ".a-text-price" e o preco riscado ("de"), nunca usar.
 _AMZ_SELECTORS = [
-    "#corePriceDisplay_desktop_feature_div .a-price .a-offscreen",
-    "#corePrice_desktop .a-price .a-offscreen",
-    "#apex_offerDisplay_desktop .a-price .a-offscreen",
+    "#corePriceDisplay_desktop_feature_div .a-price:not(.a-text-price) .a-offscreen",
+    "#corePrice_desktop .a-price:not(.a-text-price) .a-offscreen",
+    "#apex_offerDisplay_desktop .a-price:not(.a-text-price) .a-offscreen",
     ".priceToPay .a-offscreen",
     "#price_inside_buybox",
     "#priceblock_ourprice",
     "#priceblock_dealprice",
-    ".a-price.a-text-price .a-offscreen",
-    "#buyNewSection .a-price .a-offscreen",
-    "[data-asin] .a-price .a-offscreen",
+    "#buyNewSection .a-price:not(.a-text-price) .a-offscreen",
 ]
 
 def _parse_amazon_html(html, label):
