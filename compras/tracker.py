@@ -72,7 +72,7 @@ AMAZON_TAG_BR = os.environ.get("AMAZON_TAG_BR", "")   # ex: meusite-21
 ML_MATT_WORD  = os.environ.get("ML_MATT_WORD", "")    # tag do Mercado Livre Afiliados
 ML_MATT_TOOL  = os.environ.get("ML_MATT_TOOL", "")    # id da ferramenta ML Afiliados
 
-ORLANDO_ZIP  = "32819"
+ORLANDO_ZIP  = "34746"   # CEP da casa em Kissimmee, onde as compras serao entregues
 ORLANDO_STATE = "FL"
 
 def link_afiliado(url):
@@ -1821,7 +1821,7 @@ def processar_item(pid, p, item, now):
 # Alerta de queda de preco: escreve compras/alerta.md; o workflow transforma
 # em issue no GitHub, que avisa o dono por e-mail e no app do celular.
 # ---------------------------------------------------------------------------
-ORLANDO_TAX_ALERTA = 0.065   # imposto de venda de Orlando
+ORLANDO_TAX_ALERTA = 0.075   # imposto de venda de Kissimmee/Osceola (6% FL + 1,5% condado)
 
 def _config_alertas():
     cfg = {"queda_minima_pct": 10, "precos_alvo_usd": {}}

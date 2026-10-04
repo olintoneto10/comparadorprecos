@@ -45,6 +45,13 @@
     .how-calc-body.open{display:block}
     .how-step{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px}
     .how-num{background:#7c3aed;color:#fff;width:18px;height:18px;min-width:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:900;margin-top:1px;flex-shrink:0}
+    .entrega{background:#fff;margin:0 12px 8px;border-radius:14px;border:1px solid #d1fae5;box-shadow:0 1px 6px rgba(16,185,129,.08);overflow:hidden}
+    .entrega-top{width:100%;background:none;border:none;font-family:inherit;text-align:left;cursor:pointer;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;-webkit-tap-highlight-color:transparent}
+    .entrega-tit{font-size:.78rem;font-weight:800;color:#065f46}
+    .entrega-sub{font-size:.68rem;font-weight:700;color:#047857;margin-top:2px}
+    .entrega-body{display:none;padding:0 14px 12px;font-size:.72rem;color:#1e1b4b;line-height:1.55;font-weight:600}
+    .entrega-body.open{display:block}
+    .entrega-body li{margin:0 0 5px 16px}
     .cambio-bar{background:#ede9fe;margin:0 12px 8px;border-radius:10px;padding:7px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
     .cambio-info{font-size:.72rem;font-weight:700;color:#4c1d95;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
     .cambio-rate{font-size:.85rem;font-weight:900;color:#7c3aed}
@@ -208,7 +215,7 @@
 <div class="modal-bg" id="modal-update">
   <div class="modal">
     <h2>&#x1F504; Atualizar Pre&#xE7;os</h2>
-    <div class="modal-sub">A busca de pre&#xE7;os roda automaticamente a cada 2 dias. Para for&#xE7;ar agora:</div>
+    <div class="modal-sub">A busca de pre&#xE7;os roda quando voc&#xEA; pede. Para atualizar agora:</div>
     <a href="https://github.com/olintoneto10/comparadorprecos/actions/workflows/price-tracker.yml" target="_blank" class="modal-link" onclick="fecharModalUpdate()">&#x1F680; Atualizar agora no GitHub &#x2192;</a>
     <div class="modal-obs">Abre o GitHub, clique em <strong>Run workflow</strong> e aguarde ~7 minutos. Os pre&#xE7;os atualizam sozinhos.</div>
     <div class="modal-divider">ou use token para atualizar direto daqui</div>
@@ -259,7 +266,7 @@
     <div class="footer-sub" id="footer-sub">calculando...</div>
   </div>
   <div style="text-align:right">
-    <div style="font-size:.7rem;font-weight:700;opacity:.7">6 lojas &middot; a cada 2 dias</div>
+    <div style="font-size:.7rem;font-weight:700;opacity:.7">6 lojas &middot; atualiza&#xE7;&#xE3;o manual</div>
     <div style="font-size:.62rem;font-weight:700;opacity:.55" id="footer-cambio-mini"></div>
     <div style="font-size:.6rem;font-weight:700;opacity:.5;margin-top:1px" id="footer-updated"></div>
   </div>
@@ -272,7 +279,7 @@ const CUSTOM_KEY     = 'compras_custom_v2';
 const MANUAL_KEY     = 'compras_precos_manual_v1';
 const BRL_MANUAL_KEY = 'compras_brl_manual_v1';
 
-const ORLANDO_TAX = 0.065;
+const ORLANDO_TAX = 0.075;   // Kissimmee/Osceola: 6% FL + 1,5% condado (CEP 34746)
 const SPREAD_RATE = 0.04;
 const IOF_SPREAD  = 1 + SPREAD_RATE;
 
@@ -411,6 +418,35 @@ function summaryHtml(t) {
   </div>`;
 }
 
+// Entrega: so cidade e CEP (o repositorio e publico; o endereco completo nao fica aqui)
+const ENTREGA = { cidade: 'Kissimmee, FL', cep: '34746', chegada: '2026-10-30', saida: '2026-11-13' };
+
+function entregaHtml() {
+  const d = s => new Date(s + 'T12:00:00');
+  const fmtD = dt => dt.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'});
+  const ini = d(ENTREGA.chegada); ini.setDate(ini.getDate() + 1);
+  const fim = d(ENTREGA.saida);   fim.setDate(fim.getDate() - 2);
+  return `
+  <div class="entrega">
+    <button class="entrega-top" onclick="document.getElementById('entrega-body').classList.toggle('open')">
+      <div>
+        <div class="entrega-tit">&#x1F4E6; Entrega na casa: ${ENTREGA.cidade} &middot; CEP ${ENTREGA.cep}</div>
+        <div class="entrega-sub">Receba entre ${fmtD(ini)} e ${fmtD(fim)} &middot; ou use locker / retirada na loja</div>
+      </div>
+      <span>&#x25BC;</span>
+    </button>
+    <div class="entrega-body" id="entrega-body">
+      <ul>
+        <li><b>Na casa:</b> confirme com o anfitri&#xE3;o que pode receber pacotes. N&#xE3;o marque entrega antes de ${fmtD(d(ENTREGA.chegada))}: pode haver outro h&#xF3;spede na casa.</li>
+        <li><b>Amazon:</b> no checkout, escolha um <i>Amazon Locker</i> ou <i>Hub</i> perto do CEP ${ENTREGA.cep}. O pacote fica guardado por poucos dias, ent&#xE3;o programe a retirada.</li>
+        <li><b>Walmart, Target e Best Buy:</b> compre online e retire na loja (<i>pickup</i>), sem frete.</li>
+        <li><b>Bambu Lab:</b> entrega por transportadora no endere&#xE7;o; o locker da Amazon n&#xE3;o serve. Impressoras s&#xE3;o caixas grandes: prefira a casa.</li>
+        <li><b>Imposto:</b> os pre&#xE7;os em reais j&#xE1; incluem os 7,5% de Kissimmee (6% da Fl&#xF3;rida + 1,5% do condado).</li>
+      </ul>
+    </div>
+  </div>`;
+}
+
 function howCalcHtml() {
   return `
   <div class="how-calc">
@@ -420,12 +456,12 @@ function howCalcHtml() {
     </button>
     <div class="how-calc-body" id="how-calc-body">
       <div class="how-step"><span class="how-num">1</span><span>Pegamos o menor pre&#xE7;o do produto em d&#xF3;lar entre todas as lojas americanas rastreadas.</span></div>
-      <div class="how-step"><span class="how-num">2</span><span>Somamos o imposto de venda de <strong>Orlando (6,5%)</strong>.</span></div>
+      <div class="how-step"><span class="how-num">2</span><span>Somamos o imposto de venda de <strong>Kissimmee (7,5%)</strong>, onde fica a casa e onde as compras ser&#xE3;o entregues.</span></div>
       <div class="how-step"><span class="how-num">3</span><span>Convertemos para reais usando a <strong>cota&#xE7;&#xE3;o do d&#xF3;lar do dia (Ptax)</strong> mais o <strong>spread de 4% do cart&#xE3;o BB Visa Altus</strong>.</span></div>
       <div class="how-step"><span class="how-num">4</span><span>Comparamos com o pre&#xE7;o no Brasil.</span></div>
       <div class="how-step"><span class="how-num">5</span><span>O app recomenda onde comprar e soma sempre a op&#xE7;&#xE3;o mais barata no total da lista.</span></div>
       <div style="background:#f5f3ff;border-radius:8px;padding:8px 10px;margin-top:8px;font-size:.72rem;color:#7c3aed;font-weight:700">
-        &#x1F4CC; F&#xF3;rmula EUA em R$: <br>Pre&#xE7;o USD &times; 1,065 (imposto) &times; Ptax &times; 1,04 (spread BB Altus)
+        &#x1F4CC; F&#xF3;rmula EUA em R$: <br>Pre&#xE7;o USD &times; 1,075 (imposto) &times; Ptax &times; 1,04 (spread BB Altus)
       </div>
     </div>
   </div>`;
@@ -520,7 +556,7 @@ function comparacaoHtml(item) {
   const winnerEUA = custoBR_brl != null ? (custoEUA_brl <= custoBR_brl ? 'winner' : 'loser') : 'neutral';
   const rowEUA = custoEUA_brl != null ? `
     <div class="cmp-row"><div class="label">&#x1F1FA;&#x1F1F8; Custo total nos EUA (em R$)</div><div class="val ${winnerEUA}">${fmtBrl(custoEUA_brl)}</div></div>
-    <div class="cmp-row" style="opacity:.65;font-size:.66rem;flex-wrap:wrap"><div class="label" style="display:flex;gap:8px;flex-wrap:wrap"><span>&#x1F4B5; Pre&#xE7;o: <b>$${precoEUA.toFixed(2)}</b></span><span>&#x1F3DB;&#xFE0F; Orlando 6,5%: <b>$${custoEUA_usd.toFixed(2)}</b></span><span>&#x1F4B3; Spread BB Altus 4%: <b>R$${taxaCartao.toFixed(2)}/USD</b></span></div></div>` :
+    <div class="cmp-row" style="opacity:.65;font-size:.66rem;flex-wrap:wrap"><div class="label" style="display:flex;gap:8px;flex-wrap:wrap"><span>&#x1F4B5; Pre&#xE7;o: <b>$${precoEUA.toFixed(2)}</b></span><span>&#x1F3DB;&#xFE0F; Kissimmee 7,5%: <b>$${custoEUA_usd.toFixed(2)}</b></span><span>&#x1F4B3; Spread BB Altus 4%: <b>R$${taxaCartao.toFixed(2)}/USD</b></span></div></div>` :
     `<div class="cmp-row"><div class="label" style="color:#9ca3af">&#x1F1FA;&#x1F1F8; Pre&#xE7;o EUA n&#xE3;o dispon&#xED;vel</div></div>`;
   const winnerBR = custoEUA_brl != null ? (custoBR_brl <= custoEUA_brl ? 'winner' : 'loser') : 'neutral';
   const rowBR = custoBR_brl != null ? `<div class="cmp-row"><div class="label">&#x1F1E7;&#x1F1F7; Custo no Brasil &mdash; ${lojaNomeBr}</div><div class="val ${winnerBR}">${fmtBrl(custoBR_brl)}</div></div>` : '';
@@ -651,7 +687,7 @@ function render() {
       ' · ' + d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
   }
   document.getElementById('app').innerHTML =
-    summaryHtml(t) + howCalcHtml() + cambioBannerHtml() + cuponsHtml(dados.cupons) + renderChips() + renderItems();
+    summaryHtml(t) + entregaHtml() + howCalcHtml() + cambioBannerHtml() + cuponsHtml(dados.cupons) + renderChips() + renderItems();
 }
 
 function filtrar(cat) { catAtual = cat; render(); }
