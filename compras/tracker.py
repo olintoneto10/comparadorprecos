@@ -568,22 +568,13 @@ PRODUCTS = [
        "bambulab": {"handle":"nozzle-wiper", "variant_hint":"x2d"},
      },
      "brasil":{"ml_query":"Bambu Lab nozzle wiper X2D"}},
-    {"id":"pla-silk-red-gold", "nome":"PLA Silk Dual Color (Red-Gold)", "categoria":"filamento", "qty":2,
+    {"id":"pla-silk-multicolor", "nome":"PLA Silk Multi-Color (cores variadas)", "categoria":"filamento", "qty":4,
      "lojas":{
-       "bambulab": {"handle":"pla-silk-dual-color", "listar": True},   # cor a definir
+       "bambulab": {"handle":"pla-silk-dual-color", "todas_cores": True},
        "amazon":   {"asin":"B0FQPPLP3S"},
-       "walmart":  {"query":"Bambu Lab PLA Silk Dual Color Red Gold filament"},
+       "walmart":  {"query":"Bambu Lab PLA Silk Dual Color filament", "exige":["silk","dual"]},
      },
-     "brasil":{"handle":"pla-silk-dual-color","variant_hint":"red","url_br":_BL_BR.format("pla-silk-dual-color"),
-               "ml_query":"Bambu Lab PLA Silk Dual Color vermelho dourado filamento"}},
-    {"id":"pla-silk-blue-purple", "nome":"PLA Silk Dual Color (Blue-Purple)", "categoria":"filamento", "qty":2,
-     "lojas":{
-       "bambulab": {"handle":"pla-silk-dual-color", "listar": True},   # cor a definir
-       "amazon":   {"asin":"B0FQPPLP3S"},
-       "walmart":  {"query":"Bambu Lab PLA Silk Dual Color Blue Purple filament"},
-     },
-     "brasil":{"handle":"pla-silk-dual-color","variant_hint":"blue","url_br":_BL_BR.format("pla-silk-dual-color"),
-               "ml_query":"Bambu Lab PLA Silk Dual Color azul roxo filamento"}},
+     "brasil":{"ml_query":"Bambu Lab PLA Silk Dual Color filamento"}},
     {"id":"pla-matte-charcoal", "nome":"PLA Matte Charcoal", "categoria":"filamento", "qty":2,
      "lojas":{
        "bambulab": {"handle":"pla-matte", "variant_hint":"charcoal"},
@@ -1028,14 +1019,63 @@ def _bl_listar_variantes(handle, variantes, motivo):
         print(f"         - {n}  ${preco}")
 
 _BL_LISTADOS = set()   # cada pagina so e listada uma vez no log
+_BL_CORES = {}         # handle -> lista de cores (modo todas_cores), lida pelo processar_item
 
-def fetch_bambulab(handle, variant_hint=None, nome=None, listar=False):
+# Cores do Silk Multi-Color confirmadas em lojas/forum (o resto fica sem descricao)
+DESCRICAO_CORES = {
+    "Velvet Eclipse": "preto e vermelho", "Midnight Blaze": "azul e vermelho",
+    "Neon City": "azul e magenta", "Gilded Rose": "rosa e dourado",
+    "Blue Hawaii": "azul e verde", "Phantom Blue": "azul e ciano",
+    "Dawn Radiance": "degrade", "South Beach": "degrade", "Aurora Purple": "degrade",
+}
+
+def _nome_cor(nome_variante):
+    """'PLA Silk Multi-Color - Gilded Rose (13901) / Filament with spool / 1 kg' -> 'Gilded Rose'"""
+    m = re.search(r" - ([^/(]+?)\s*(?:\(|/|$)", nome_variante)
+    return (m.group(1) if m else nome_variante).strip()
+
+def _bl_todas_cores(variantes):
+    """Uma entrada por cor (com carretel), marcando promocao: preco abaixo do
+    preco mais comum da linha. Ordena: promocao, disponivel, mais barata."""
+    from collections import Counter
+    por_cor = {}
+    for nome, preco, disp in variantes:
+        if _eh_refil(nome):
+            continue
+        cor = _nome_cor(nome)
+        atual = por_cor.get(cor)
+        if not atual or (disp, -preco) > (atual["disponivel"], -atual["preco"]):
+            por_cor[cor] = {"cor": cor, "preco": preco, "disponivel": disp}
+    if not por_cor:
+        return []
+    normal = Counter(round(c["preco"], 2) for c in por_cor.values()).most_common(1)[0][0]
+    cores = []
+    for c in por_cor.values():
+        c["promocao"] = c["preco"] < normal - 0.009
+        c["preco_normal"] = normal
+        c["descricao"] = DESCRICAO_CORES.get(c["cor"], "")
+        cores.append(c)
+    return sorted(cores, key=lambda c: (not c["promocao"], not c["disponivel"], c["preco"], c["cor"]))
+
+def fetch_bambulab(handle, variant_hint=None, nome=None, listar=False, todas_cores=False):
     html = _bl_pagina(handle)
     if not html:
         print(f"      [BL] {handle}: pagina indisponivel")
         return None, None
 
     variantes = _bl_variantes_ld(html)
+    if variantes and todas_cores:
+        cores = _bl_todas_cores(variantes)
+        _BL_CORES[handle] = cores
+        disponiveis = [c for c in cores if c["disponivel"]] or cores
+        if not disponiveis:
+            return None, None
+        melhor = min(disponiveis, key=lambda c: c["preco"])
+        promo = [c["cor"] for c in cores if c["promocao"]]
+        print(f"      [BL] {handle}: {len(cores)} cores, preco normal ${cores[0]['preco_normal']}; "
+              f"mais barata {melhor['cor']} ${melhor['preco']}; "
+              f"em promocao: {', '.join(promo) if promo else 'nenhuma'}")
+        return melhor["preco"], None
     if variantes:
         if listar:
             if handle not in _BL_LISTADOS:
@@ -1641,7 +1681,10 @@ def processar_item(pid, p, item, now):
 
         if loja == "bambulab":
             price, vid = fetch_bambulab(cfg["handle"], cfg.get("variant_hint"), nome=p.get("nome"),
-                                         listar=cfg.get("listar", False))
+                                         listar=cfg.get("listar", False),
+                                         todas_cores=cfg.get("todas_cores", False))
+            if cfg.get("todas_cores"):
+                item["cores_bambu"] = _BL_CORES.get(cfg["handle"], [])
             url_produto = f"https://us.store.bambulab.com/products/{cfg['handle']}"
             if vid:
                 url_carrinho = f"https://us.store.bambulab.com/cart/{vid}:{p['qty']}"

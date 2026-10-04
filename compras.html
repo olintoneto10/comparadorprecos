@@ -74,6 +74,13 @@
     .price-current{font-size:1.35rem;font-weight:900;color:#7c3aed}
     .price-null{font-size:.82rem;font-weight:700;color:#9ca3af;font-style:italic}
     .price-subtotal{font-size:.72rem;font-weight:700;color:#7c6f9f;margin-bottom:8px}
+    .cores{border-top:1px solid #f3f0ff;padding-top:8px;margin-bottom:8px}
+    .cores-tit{font-size:.7rem;font-weight:800;color:#7c6f9f;margin-bottom:6px}
+    .cores-lista{display:flex;flex-wrap:wrap;gap:5px}
+    .cor-chip{font-size:.66rem;font-weight:700;padding:3px 8px;border-radius:12px;background:#f5f3ff;color:#4c1d95;border:1px solid #ede9fe;white-space:nowrap}
+    .cor-chip.promo{background:#fef3c7;color:#b45309;border-color:#fcd34d}
+    .cor-chip.esgotada{opacity:.45;text-decoration:line-through}
+    .cor-chip small{font-weight:600;opacity:.75}
     .stores{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;border-top:1px solid #f3f0ff;padding-top:8px}
     .store-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
     .store-name{font-size:.72rem;font-weight:700;color:#7c6f9f;min-width:90px;flex-shrink:0}
@@ -556,6 +563,21 @@ function comparacaoHtml(item) {
   </div>`;
 }
 
+function coresHtml(item) {
+  const cores = item.cores_bambu;
+  if (!cores || !cores.length) return '';
+  const promo = cores.filter(c => c.promocao).length;
+  const chips = cores.map(c => {
+    const cls = c.promocao ? 'promo' : (!c.disponivel ? 'esgotada' : '');
+    const desc = c.descricao ? ` <small>(${c.descricao})</small>` : '';
+    const tag = c.promocao ? '&#x1F525; ' : '';
+    const titulo = !c.disponivel ? ' title="Esgotada"' : (c.promocao ? ` title="Normal ${fmt(c.preco_normal)}"` : '');
+    return `<span class="cor-chip ${cls}"${titulo}>${tag}${c.cor}${desc} &middot; ${fmt(c.preco)}</span>`;
+  }).join('');
+  const tit = promo ? `&#x1F525; ${promo} cor${promo > 1 ? 'es' : ''} em promo&#xE7;&#xE3;o na Bambu Lab` : 'Cores na Bambu Lab (nenhuma em promo&#xE7;&#xE3;o)';
+  return `<div class="cores"><div class="cores-tit">${tit}</div><div class="cores-lista">${chips}</div></div>`;
+}
+
 function itemCard(item) {
   const temPreco = item.preco_atual != null;
   const pid      = item._id || item.nome || '';
@@ -580,6 +602,7 @@ function itemCard(item) {
     </div>
     ${subtotal ? `<div class="price-subtotal">Subtotal: ${fmt(subtotal)}${(item.qty||1) > 1 ? ` (${item.qty}&times;${fmt(item.preco_atual)})` : ''}</div>` : ''}
     ${storesHtml(item)}
+    ${coresHtml(item)}
     ${comparacaoHtml(item)}
     <a href="${cartUrl || '#'}" target="_blank" class="btn-main ${!cartUrl ? 'disabled' : ''}">
       &#x1F6D2; ${cartUrl ? 'Melhor Pre&#xE7;o &mdash; Ver na loja' : 'Aguardando rastreamento de pre&#xE7;o'}
