@@ -508,19 +508,19 @@ PRODUCTS = [
                "ml_query":"Bambu Lab P2S Combo AMS impressora 3D"}},
     {"id":"hotend-02-ss", "nome":"Hotend 0.2mm Stainless Steel (P2S)", "categoria":"acessorio", "qty":1,
      "lojas":{
-       "bambulab": {"handle":"bambu-hotend-h2-p2s", "variant_hint":"0.2"},
+       "bambulab": {"handle":"bambu-hotend-h2-p2s", "variant_hint":"p2s 0.2"},
      },
      "brasil":{"handle":"bambu-hotend-h2-p2s","variant_hint":"0.2","url_br":_BL_BR.format("bambu-hotend-h2-p2s"),
                "ml_query":"Bambu Lab hotend 0.2mm P2S"}},
     {"id":"hotend-04-hs", "nome":"Hotend 0.4mm Hardened Steel (P2S)", "categoria":"acessorio", "qty":1,
      "lojas":{
-       "bambulab": {"handle":"bambu-hotend-h2-p2s", "variant_hint":"0.4 hardened"},
+       "bambulab": {"handle":"bambu-hotend-h2-p2s", "variant_hint":"p2s 0.4 hardened"},
      },
      "brasil":{"handle":"bambu-hotend-h2-p2s","variant_hint":"hardened","url_br":_BL_BR.format("bambu-hotend-h2-p2s"),
                "ml_query":"Bambu Lab hotend 0.4mm hardened steel P2S"}},
-    {"id":"pei-plate", "nome":"Bambu Dual-Texture PEI Plate", "categoria":"acessorio", "qty":1,
+    {"id":"pei-plate", "nome":"Bambu Dual-Texture PEI Plate (P2S)", "categoria":"acessorio", "qty":1,
      "lojas":{
-       "bambulab": {"handle":"bambu-dual-texture-pei-plate"},
+       "bambulab": {"handle":"bambu-dual-texture-pei-plate", "variant_hint":"p2s"},
        "walmart":  {"query":"Bambu Lab PEI Plate Dual Texture"},
      },
      "brasil":{"handle":"bambu-dual-texture-pei-plate","url_br":_BL_BR.format("bambu-dual-texture-pei-plate"),
@@ -533,16 +533,45 @@ PRODUCTS = [
      },
      "brasil":{"handle":"liquid-glue-for-build-plate","url_br":_BL_BR.format("liquid-glue-for-build-plate"),
                "ml_query":"Bambu Lab liquid glue cola placa impressora"}},
-    {"id":"nozzle-wiper", "nome":"Nozzle Wiper", "categoria":"acessorio", "qty":2, "preco_min":2,
+    {"id":"nozzle-wiper", "nome":"Nozzle Wiper (P2S)", "categoria":"acessorio", "qty":2, "preco_min":2,
      "lojas":{
-       "bambulab": {"handle":"nozzle-wiper"},
+       "bambulab": {"handle":"nozzle-wiper", "variant_hint":"p2s"},
        "amazon":   {"asin":"B0GSSB8GDQ"},
      },
      "brasil":{"handle":"nozzle-wiper","url_br":_BL_BR.format("nozzle-wiper"),
                "ml_query":"Bambu Lab nozzle wiper limpador bico impressora"}},
+    # --- H2C: impressora e os mesmos acessorios da P2S, na versao H2C ---
+    {"id":"h2c-combo", "nome":"Bambu Lab H2C Combo", "categoria":"impressora", "qty":1,
+     "lojas":{
+       "bambulab": {"handle":"h2c", "variant_hint":"combo"},
+       "walmart":  {"query":"Bambu Lab H2C Combo 3D Printer"},
+     },
+     "brasil":{"handle":"h2c","variant_hint":"combo","url_br":_BL_BR.format("h2c"),
+               "ml_query":"Bambu Lab H2C Combo impressora 3D"}},
+    {"id":"hotend-02-ss-h2c", "nome":"Hotend 0.2mm Stainless Steel (H2C)", "categoria":"acessorio", "qty":1,
+     "lojas":{
+       "bambulab": {"handle":"bambu-hotend-h2-p2s", "variant_hint":"h2c 0.2"},
+     },
+     "brasil":{"ml_query":"Bambu Lab hotend 0.2mm H2C"}},
+    {"id":"hotend-04-hs-h2c", "nome":"Hotend 0.4mm Hardened Steel (H2C)", "categoria":"acessorio", "qty":1,
+     "lojas":{
+       "bambulab": {"handle":"bambu-hotend-h2-p2s", "variant_hint":"h2c 0.4 hardened"},
+     },
+     "brasil":{"ml_query":"Bambu Lab hotend 0.4mm hardened steel H2C"}},
+    {"id":"pei-plate-h2c", "nome":"Bambu Dual-Texture PEI Plate (H2C)", "categoria":"acessorio", "qty":1,
+     "lojas":{
+       "bambulab": {"handle":"bambu-dual-texture-pei-plate", "variant_hint":"h2c"},
+     },
+     "brasil":{"ml_query":"Bambu Lab placa PEI dupla textura H2C"}},
+    {"id":"nozzle-wiper-h2c", "nome":"Nozzle Wiper (H2C)", "categoria":"acessorio", "qty":2, "preco_min":2,
+     "lojas":{
+       "bambulab": {"handle":"nozzle-wiper", "variant_hint":"h2c"},
+       "amazon":   {"asin":"B0GSSB8GDQ"},   # anuncio serve H2D/H2C/P2S
+     },
+     "brasil":{"ml_query":"Bambu Lab nozzle wiper H2C"}},
     {"id":"pla-silk-red-gold", "nome":"PLA Silk Dual Color (Red-Gold)", "categoria":"filamento", "qty":2,
      "lojas":{
-       "bambulab": {"handle":"pla-silk-dual-color", "variant_hint":"red"},
+       "bambulab": {"handle":"pla-silk-dual-color", "listar": True},   # cor a definir
        "amazon":   {"asin":"B0FQPPLP3S"},
        "walmart":  {"query":"Bambu Lab PLA Silk Dual Color Red Gold filament"},
      },
@@ -550,7 +579,7 @@ PRODUCTS = [
                "ml_query":"Bambu Lab PLA Silk Dual Color vermelho dourado filamento"}},
     {"id":"pla-silk-blue-purple", "nome":"PLA Silk Dual Color (Blue-Purple)", "categoria":"filamento", "qty":2,
      "lojas":{
-       "bambulab": {"handle":"pla-silk-dual-color", "variant_hint":"blue"},
+       "bambulab": {"handle":"pla-silk-dual-color", "listar": True},   # cor a definir
        "amazon":   {"asin":"B0FQPPLP3S"},
        "walmart":  {"query":"Bambu Lab PLA Silk Dual Color Blue Purple filament"},
      },
@@ -963,22 +992,45 @@ def _bl_variantes_ld(html):
                     variantes.append((str(nome), preco, disp))
     return variantes
 
-def _bl_escolher_variante(variantes, hint):
-    """Variante que bate com o hint (cor/modelo). Entre varias: prefere
-    'com carretel' (como vendem Amazon/Walmart), depois disponivel, depois a mais barata."""
-    cand = variantes
-    if hint:
-        partes = hint.lower().split()          # todas as palavras precisam aparecer
-        cand = [v for v in variantes if all(t in v[0].lower() for t in partes)]
-        if not cand:
-            return None
-    def ordem(v):
-        n = v[0].lower()
-        refil = "refill" in n or "without spool" in n
-        return (refil, not v[2], v[1])
-    return sorted(cand, key=ordem)[0]
+def _eh_refil(nome):
+    n = nome.lower()
+    return "refill" in n or "without spool" in n
 
-def fetch_bambulab(handle, variant_hint=None, nome=None):
+def _parte_variavel(nome, variantes):
+    """Parte do nome que muda entre as variantes. Ex.: em
+    'Bambu Hotend - H2/P2S/X2D - Standard Flow / X2D / 0.2mm' o comeco comum
+    (que cita P2S em todas) nao conta; so 'X2D / 0.2mm' e comparado."""
+    nomes = {v[0] for v in variantes}
+    if len(nomes) < 2:
+        return nome.lower()
+    comum = os.path.commonprefix(sorted(nomes))
+    corte = max(comum.rfind(" - "), comum.rfind(" / "))
+    inicio = corte + 3 if corte >= 0 else 0
+    return nome[inicio:].lower()
+
+def _bl_escolher_variante(variantes, hint):
+    """Variante que bate com o hint (todas as palavras: impressora, bico, cor).
+    Refil (sem carretel) fica de fora, para comparar igual com Amazon/Walmart.
+    Entre as que sobram: disponivel primeiro, depois a mais barata."""
+    cand = [v for v in variantes if not _eh_refil(v[0])]
+    if hint:
+        partes = hint.lower().split()
+        cand = [v for v in cand if all(t in _parte_variavel(v[0], variantes) for t in partes)]
+    if not cand:
+        return None
+    return sorted(cand, key=lambda v: (not v[2], v[1]))[0]
+
+def _bl_listar_variantes(handle, variantes, motivo):
+    """Mostra no log todas as variantes (sem refil), para escolher o filtro certo."""
+    nomes = sorted({v[0] for v in variantes if not _eh_refil(v[0])})
+    print(f"      [BL] {handle}: {motivo}. Variantes disponiveis ({len(nomes)}):")
+    for n in nomes:
+        preco = min(v[1] for v in variantes if v[0] == n)
+        print(f"         - {n}  ${preco}")
+
+_BL_LISTADOS = set()   # cada pagina so e listada uma vez no log
+
+def fetch_bambulab(handle, variant_hint=None, nome=None, listar=False):
     html = _bl_pagina(handle)
     if not html:
         print(f"      [BL] {handle}: pagina indisponivel")
@@ -986,14 +1038,25 @@ def fetch_bambulab(handle, variant_hint=None, nome=None):
 
     variantes = _bl_variantes_ld(html)
     if variantes:
+        if listar:
+            if handle not in _BL_LISTADOS:
+                _BL_LISTADOS.add(handle)
+                _bl_listar_variantes(handle, variantes, "modo listar (variante a definir)")
+            return None, None
         v = _bl_escolher_variante(variantes, variant_hint)
         if v:
-            print(f"      [BL] {handle}: '{v[0][:60]}' ${v[1]} ({len(variantes)} variantes)")
+            print(f"      [BL] {handle}: '{v[0][:70]}' ${v[1]} ({len(variantes)} variantes)")
             return v[1], None
-        exemplos = [x[0][:40] for x in variantes[:4]]
-        print(f"      [BL] {handle}: nenhuma variante com '{variant_hint}'. Ex.: {exemplos}")
+        # A pagina tem dados estruturados e nenhuma variante e o produto pedido:
+        # nao vale pedir ao Claude para adivinhar (ele escolheria uma variante errada).
+        if handle not in _BL_LISTADOS:
+            _BL_LISTADOS.add(handle)
+            _bl_listar_variantes(handle, variantes, f"nenhuma variante com '{variant_hint}'")
+        else:
+            print(f"      [BL] {handle}: nenhuma variante com '{variant_hint}' (lista acima)")
+        return None, None
 
-    # Ultima tentativa: Claude le a mesma pagina (sem nova requisicao ao site)
+    # Pagina sem dados estruturados: Claude le a mesma pagina (sem nova requisicao)
     desc = " ".join(filter(None, [nome or handle, variant_hint]))
     p = fetch_price_claude(html, desc, moeda="USD", preco_min=1, loja="BL")
     if p:
@@ -1545,7 +1608,8 @@ def processar_item(pid, p, item, now):
         url_carrinho = None
 
         if loja == "bambulab":
-            price, vid = fetch_bambulab(cfg["handle"], cfg.get("variant_hint"), nome=p.get("nome"))
+            price, vid = fetch_bambulab(cfg["handle"], cfg.get("variant_hint"), nome=p.get("nome"),
+                                         listar=cfg.get("listar", False))
             url_produto = f"https://us.store.bambulab.com/products/{cfg['handle']}"
             if vid:
                 url_carrinho = f"https://us.store.bambulab.com/cart/{vid}:{p['qty']}"

@@ -18,6 +18,11 @@
     "pla-glow",
     "pla-basic-black",
     "pla-basic-white",
-    "ninja-crispi-pro"
+    "ninja-crispi-pro",
+    "h2c-combo",
+    "hotend-02-ss-h2c",
+    "hotend-04-hs-h2c",
+    "pei-plate-h2c",
+    "nozzle-wiper-h2c"
   ]
 }
