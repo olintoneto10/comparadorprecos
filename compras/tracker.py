@@ -501,7 +501,7 @@ PRODUCTS = [
        "bambulab": {"handle":"p2s", "variant_hint":"combo"},
        "bestbuy":  {"sku":"6647058", "url":"https://www.bestbuy.com/site/bambu-lab-p2s-combo-fdm-3d-printer-with-ams-2-pro/6647058.p"},
        "walmart":  {"query":"Bambu Lab P2S Combo 3D Printer AMS"},
-       "target":   {"query":"Bambu Lab P2S 3D Printer"},
+       "target":   {"query":"Bambu Lab P2S 3D Printer", "exige":["p2s","combo"]},
        "costco":   {"query":"Bambu Lab P2S 3D Printer"},
      },
      "brasil":{"handle":"p2s","variant_hint":"combo","url_br":_BL_BR.format("p2s"),
@@ -628,7 +628,7 @@ PRODUCTS = [
        "amazon":  {"asin":"B0FPPJBKLS"},
        "bestbuy": {"sku":"6604834", "url":"https://www.bestbuy.com/site/ninja-crispi-pro-6-in-1-glass-air-fryer-system/6604834.p"},
        "walmart": {"query":"Ninja Crispi Pro AS101DG Glass Air Fryer Ash Grey", "exige":["crispi","pro","6-in-1"]},
-       "target":  {"query":"Ninja Crispi Pro AS101DG Air Fryer"},
+       "target":  {"query":"Ninja Crispi Pro AS101DG Air Fryer", "exige":["crispi","pro","6-in-1"]},
        "costco":  {"query":"Ninja Crispi Pro Glass Air Fryer"},
      },
      "brasil":{"ml_query":"Ninja Crispi Pro fritadeira vidro"}},
@@ -1462,45 +1462,79 @@ def fetch_walmart(query, exige=None):
         return _parse_walmart_html(r2.text, search_url, query, exige)
     return None, None
 
-def _parse_target_html(html, url):
-    if not HAS_BS4:
-        return None, None
-    soup = BeautifulSoup(html, "lxml")
-    for script in soup.find_all("script"):
-        txt = script.string or ""
-        m = re.search(r'"currentPrice"\s*:\s*([\d.]+)', txt)
-        if m:
-            try: return float(m.group(1)), url
-            except: pass
-    p = _preco_de_ld(html)
-    if p: return p, url
-    for sel in ["[data-test='product-price']","[class*='styles__CurrentPrice']","[itemprop='price']"]:
-        el = soup.select_one(sel)
-        if el:
-            txt = el.get("content") or el.get_text()
-            m = re.search(r"\$?([\d,]+\.?\d{0,2})", txt)
-            if m:
-                try: return float(m.group(1).replace(",","")), url
-                except: pass
-    return None, None
+# Target: a pagina de busca carrega os precos por JavaScript a partir da API
+# interna RedSky. A chave publica dessa API aparece no HTML da propria pagina.
+_TG_CHAVE_PADRAO = "9f36aeafbe60771e321a7cc95a78140772ab3e96"
+_TG_LOJA_PADRAO = "3991"
 
-def fetch_target(query):
+def _tg_chave(html):
+    for padrao in (r'"apiKey"\s*:\s*"([0-9a-f]{40})"', r'[?&]key=([0-9a-f]{40})', r'"key"\s*:\s*"([0-9a-f]{40})"'):
+        m = re.search(padrao, html or "")
+        if m:
+            return m.group(1)
+    return _TG_CHAVE_PADRAO
+
+def _tg_preco(prod):
+    pr = prod.get("price") or {}
+    for v in (pr.get("current_retail"), pr.get("current_retail_min"), pr.get("reg_retail")):
+        if isinstance(v, (int, float)) and 0.5 < v < 50000:
+            return float(v)
+    txt = pr.get("formatted_current_price") or ""
+    m = re.search(r"\$\s*([\d,]+\.\d{2})", txt)          # "$19.99" ou "$19.99 - $24.99"
+    return float(m.group(1).replace(",", "")) if m else None
+
+def _tg_titulo(prod):
+    import html as _html
+    item = prod.get("item") or {}
+    t = (item.get("product_description") or {}).get("title") or ""
+    return _html.unescape(t)
+
+def fetch_target(query, exige=None):
     search_url = "https://www.target.com/s?searchTerm=" + requests.utils.quote(query)
-    r = scraperapi_get(search_url)
-    if r:
-        print(f"      [TG] '{query[:40]}': ScraperAPI OK")
-        price, prod_url = _parse_target_html(r.text, search_url)
-        if price:
-            print(f"      [TG] preco via ScraperAPI: ${price}")
-            return price, prod_url
     sc = make_scraper()
+    pagina = ""
     try:
-        r2 = sc.get(search_url, headers=hdrs("https://www.target.com/"), timeout=30)
-        print(f"      [TG] '{query[:40]}': HTTP {r2.status_code}")
-        return _parse_target_html(r2.text, search_url)
+        r = sc.get(search_url, headers=hdrs("https://www.target.com/"), timeout=30)
+        print(f"      [TG] '{query[:40]}': pagina HTTP {r.status_code}, {len(r.text)} bytes")
+        if r.status_code == 200:
+            pagina = r.text
     except Exception as e:
-        print(f"      [TG] erro: {e}")
-    return None, None
+        print(f"      [TG] pagina erro: {str(e)[:80]}")
+
+    api = ("https://redsky.target.com/redsky_aggregations/v1/web/plp_search_v2?"
+           + urllib.parse.urlencode({
+               "key": _tg_chave(pagina), "channel": "WEB", "count": 24, "offset": 0,
+               "keyword": query, "page": "/s/" + query,
+               "pricing_store_id": _TG_LOJA_PADRAO, "default_purchasability_filter": "true",
+               "visitor_id": "%032X" % random.getrandbits(128),
+           }))
+    try:
+        r2 = sc.get(api, headers={"Accept": "application/json", "Referer": search_url,
+                                  "Origin": "https://www.target.com"}, timeout=30)
+        print(f"      [TG] API RedSky: HTTP {r2.status_code}")
+        if r2.status_code != 200:
+            return None, None
+        produtos = (((r2.json().get("data") or {}).get("search") or {}).get("products")) or []
+    except Exception as e:
+        print(f"      [TG] API erro: {str(e)[:80]}")
+        return None, None
+
+    validos, com_preco = [], 0
+    for prod in produtos:
+        titulo, preco = _tg_titulo(prod), _tg_preco(prod)
+        if not titulo or not preco:
+            continue
+        com_preco += 1
+        if _item_bate_com_busca(titulo, query, exige):
+            url = ((prod.get("item") or {}).get("enrichment") or {}).get("buy_url") or search_url
+            validos.append((preco, titulo, url))
+    if not validos:
+        exemplos = [_tg_titulo(p)[:50] for p in produtos[:3]]
+        print(f"      [TG] nenhum dos {com_preco} itens com preco e o produto certo. Ex.: {exemplos}")
+        return None, None
+    preco, titulo, url = min(validos)
+    print(f"      [TG] '{titulo[:60]}' ${preco} ({len(validos)} de {com_preco} itens batem)")
+    return preco, url
 
 def _parse_costco_html(html, url):
     if not HAS_BS4:
@@ -1641,7 +1675,7 @@ def processar_item(pid, p, item, now):
 
         elif loja == "target":
             if "query" in cfg:
-                price, found_url = fetch_target(cfg["query"])
+                price, found_url = fetch_target(cfg["query"], cfg.get("exige"))
                 url_produto = found_url or "https://www.target.com/s?searchTerm=" + requests.utils.quote(cfg["query"])
             else:
                 price = fetch_generica(cfg.get("url",""))
