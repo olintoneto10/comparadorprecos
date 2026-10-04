@@ -1,6 +1,6 @@
 {
-  "atualizado_em": "2026-09-26T09:35:47.450693+00:00",
-  "total_estimado": 1429.55,
+  "atualizado_em": "2026-10-04T10:51:20.748877+00:00",
+  "total_estimado": 1376.14,
   "cupons": {
     "bambulab": [],
     "bestbuy": [],
@@ -79,6 +79,11 @@
           "data": "2026-09-26T09:35:47.450693+00:00",
           "preco": 749.99,
           "loja": "bestbuy"
+        },
+        {
+          "data": "2026-10-04T10:51:20.748877+00:00",
+          "preco": 749.99,
+          "loja": "bestbuy"
         }
       ],
       "brasil": null
@@ -115,6 +120,11 @@
         },
         {
           "data": "2026-09-26T09:35:47.450693+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T10:51:20.748877+00:00",
           "preco": 17.99,
           "loja": "bambulab"
         }
@@ -155,6 +165,11 @@
           "data": "2026-09-26T09:35:47.450693+00:00",
           "preco": 17.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T10:51:20.748877+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -193,6 +208,11 @@
           "data": "2026-09-26T09:35:47.450693+00:00",
           "preco": 37.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T10:51:20.748877+00:00",
+          "preco": 24.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -208,7 +228,7 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 15.06,
+          "preco": 15.01,
           "url_produto": "https://www.amazon.com/dp/B0DK6TBF1D",
           "url_carrinho": null
         },
@@ -356,6 +376,11 @@
           "data": "2026-09-26T09:35:47.450693+00:00",
           "preco": 14.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T10:51:20.748877+00:00",
+          "preco": 14.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -366,7 +391,7 @@
       "qty": 2,
       "lojas_precos": {
         "bambulab": {
-          "preco": 3.99,
+          "preco": null,
           "url_produto": "https://us.store.bambulab.com/products/nozzle-wiper",
           "url_carrinho": null
         },
@@ -512,6 +537,11 @@
         },
         {
           "data": "2026-09-26T09:35:47.450693+00:00",
+          "preco": 17.16,
+          "loja": "amazon"
+        },
+        {
+          "data": "2026-10-04T10:51:20.748877+00:00",
           "preco": 17.16,
           "loja": "amazon"
         }
@@ -690,6 +720,11 @@
         },
         {
           "data": "2026-09-26T09:35:47.450693+00:00",
+          "preco": 28.99,
+          "loja": "amazon"
+        },
+        {
+          "data": "2026-10-04T10:51:20.748877+00:00",
           "preco": 28.99,
           "loja": "amazon"
         }
@@ -875,6 +910,11 @@
           "data": "2026-09-26T09:35:47.450693+00:00",
           "preco": 28.99,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-10-04T10:51:20.748877+00:00",
+          "preco": 28.99,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -890,7 +930,7 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 27.36,
+          "preco": 27.85,
           "url_produto": "https://www.amazon.com/dp/B0G4ZVJDM7",
           "url_carrinho": null
         },
@@ -1043,6 +1083,11 @@
           "data": "2026-09-26T09:35:47.450693+00:00",
           "preco": 15.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T10:51:20.748877+00:00",
+          "preco": 15.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -1058,7 +1103,7 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 25.69,
+          "preco": 30.53,
           "url_produto": "https://www.amazon.com/dp/B0G5175G82",
           "url_carrinho": null
         },
@@ -1069,7 +1114,7 @@
         }
       },
       "melhor_loja": "amazon",
-      "preco_atual": 25.69,
+      "preco_atual": 30.53,
       "preco_minimo": 14.99,
       "historico": [
         {
@@ -1211,6 +1256,11 @@
           "data": "2026-09-26T09:35:47.450693+00:00",
           "preco": 25.69,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-10-04T10:51:20.748877+00:00",
+          "preco": 30.53,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -1249,6 +1299,11 @@
           "data": "2026-09-26T09:35:47.450693+00:00",
           "preco": 24.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T10:51:20.748877+00:00",
+          "preco": 24.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -1264,7 +1319,7 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 25.19,
+          "preco": 25.06,
           "url_produto": "https://www.amazon.com/dp/B0C4GBJCSV",
           "url_carrinho": null
         },
@@ -1432,6 +1487,11 @@
           "data": "2026-09-26T09:35:47.450693+00:00",
           "preco": 15.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T10:51:20.748877+00:00",
+          "preco": 15.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -1447,7 +1507,7 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 17.09,
+          "preco": 18.99,
           "url_produto": "https://www.amazon.com/dp/B0C4GB1TB1",
           "url_carrinho": null
         },
@@ -1615,6 +1675,11 @@
           "data": "2026-09-26T09:35:47.450693+00:00",
           "preco": 15.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T10:51:20.748877+00:00",
+          "preco": 15.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -1625,7 +1690,7 @@
       "qty": 1,
       "lojas_precos": {
         "amazon": {
-          "preco": 299.99,
+          "preco": 249.9,
           "url_produto": "https://www.amazon.com/dp/B0FPPJBKLS",
           "url_carrinho": null
         },
@@ -1651,8 +1716,8 @@
         }
       },
       "melhor_loja": "amazon",
-      "preco_atual": 299.99,
-      "preco_minimo": 249.95,
+      "preco_atual": 249.9,
+      "preco_minimo": 249.9,
       "historico": [
         {
           "data": "2026-06-06T23:49:26.489940+00:00",
@@ -1788,14 +1853,19 @@
           "data": "2026-09-26T09:35:47.450693+00:00",
           "preco": 299.99,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-10-04T10:51:20.748877+00:00",
+          "preco": 249.9,
+          "loja": "amazon"
         }
       ],
       "brasil": null
     }
   },
   "cambio": {
-    "usd_brl": 5.1866,
+    "usd_brl": 5.2172,
     "fonte": "AwesomeAPI",
-    "atualizado_em": "2026-09-26T09:35:47.450693+00:00"
+    "atualizado_em": "2026-10-04T10:51:20.748877+00:00"
   }
 }
