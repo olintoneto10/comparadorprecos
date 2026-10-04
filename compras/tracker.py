@@ -458,7 +458,7 @@ PRODUCTS = [
      },
      "brasil":{"handle":"liquid-glue-for-build-plate","url_br":_BL_BR.format("liquid-glue-for-build-plate"),
                "ml_query":"Bambu Lab liquid glue cola placa impressora"}},
-    {"id":"nozzle-wiper", "nome":"Nozzle Wiper", "categoria":"acessorio", "qty":2,
+    {"id":"nozzle-wiper", "nome":"Nozzle Wiper", "categoria":"acessorio", "qty":2, "preco_min":2,
      "lojas":{
        "bambulab": {"handle":"nozzle-wiper"},
        "amazon":   {"asin":"B0GSSB8GDQ"},
@@ -1556,7 +1556,7 @@ def processar_item(pid, p, item, now):
     # Limites plausíveis por categoria (evita preços claramente errados)
     _PRECO_MIN = {"impressora": 300, "acessorio": 5, "filamento": 5,
                   "fritadeira": 80, "eletronico": 20}
-    min_plausivel = _PRECO_MIN.get(p.get("categoria", ""), 1)
+    min_plausivel = p.get("preco_min") or _PRECO_MIN.get(p.get("categoria", ""), 1)
 
     validos = {l: d["preco"] for l, d in item["lojas_precos"].items()
                if d.get("preco") and d["preco"] >= min_plausivel}
