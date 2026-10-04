@@ -1,6 +1,6 @@
 {
-  "atualizado_em": "2026-10-04T12:11:02.239503+00:00",
-  "total_estimado": 2342.04,
+  "atualizado_em": "2026-10-04T12:31:48.797567+00:00",
+  "total_estimado": 2327.68,
   "cupons": {
     "bambulab": [],
     "bestbuy": [],
@@ -119,6 +119,11 @@
           "data": "2026-10-04T12:11:02.239503+00:00",
           "preco": 749.0,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:31:48.797567+00:00",
+          "preco": 749.0,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -190,6 +195,11 @@
         },
         {
           "data": "2026-10-04T12:11:02.239503+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:31:48.797567+00:00",
           "preco": 17.99,
           "loja": "bambulab"
         }
@@ -270,6 +280,11 @@
           "data": "2026-10-04T12:11:02.239503+00:00",
           "preco": 17.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:31:48.797567+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -341,6 +356,11 @@
         },
         {
           "data": "2026-10-04T12:11:02.239503+00:00",
+          "preco": 37.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:31:48.797567+00:00",
           "preco": 37.99,
           "loja": "bambulab"
         }
@@ -546,6 +566,11 @@
           "data": "2026-10-04T12:11:02.239503+00:00",
           "preco": 14.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:31:48.797567+00:00",
+          "preco": 14.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -556,8 +581,8 @@
       "qty": 2,
       "lojas_precos": {
         "bambulab": {
-          "preco": null,
-          "url_produto": "https://us.store.bambulab.com/products/nozzle-wiper",
+          "preco": 4.99,
+          "url_produto": "https://us.store.bambulab.com/products/nozzle-wiping-pad-p2s-x2d",
           "url_carrinho": null
         },
         "amazon": {
@@ -566,9 +591,9 @@
           "url_carrinho": null
         }
       },
-      "melhor_loja": "amazon",
-      "preco_atual": 17.16,
-      "preco_minimo": 17.16,
+      "melhor_loja": "bambulab",
+      "preco_atual": 4.99,
+      "preco_minimo": 4.99,
       "historico": [
         {
           "data": "2026-06-06T20:51:07.314487+00:00",
@@ -739,6 +764,11 @@
           "data": "2026-10-04T12:11:02.239503+00:00",
           "preco": 17.16,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-10-04T12:31:48.797567+00:00",
+          "preco": 4.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -955,6 +985,11 @@
         },
         {
           "data": "2026-10-04T12:11:02.239503+00:00",
+          "preco": 24.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:31:48.797567+00:00",
           "preco": 24.99,
           "loja": "bambulab"
         }
@@ -1247,6 +1282,11 @@
           "data": "2026-10-04T12:11:02.239503+00:00",
           "preco": 18.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:31:48.797567+00:00",
+          "preco": 18.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -1262,7 +1302,7 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 30.59,
+          "preco": 30.63,
           "url_produto": "https://www.amazon.com/dp/B0G5175G82",
           "url_carrinho": null
         },
@@ -1455,6 +1495,11 @@
           "data": "2026-10-04T12:11:02.239503+00:00",
           "preco": 22.99,
           "loja": "walmart"
+        },
+        {
+          "data": "2026-10-04T12:31:48.797567+00:00",
+          "preco": 22.99,
+          "loja": "walmart"
         }
       ],
       "brasil": null
@@ -1531,6 +1576,11 @@
         },
         {
           "data": "2026-10-04T12:11:02.239503+00:00",
+          "preco": 24.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:31:48.797567+00:00",
           "preco": 24.99,
           "loja": "bambulab"
         }
@@ -1756,6 +1806,11 @@
           "data": "2026-10-04T12:11:02.239503+00:00",
           "preco": 18.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:31:48.797567+00:00",
+          "preco": 18.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -1979,6 +2034,11 @@
           "data": "2026-10-04T12:11:02.239503+00:00",
           "preco": 18.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:31:48.797567+00:00",
+          "preco": 18.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -2192,6 +2252,11 @@
           "data": "2026-10-04T12:11:02.239503+00:00",
           "preco": 249.9,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-10-04T12:31:48.797567+00:00",
+          "preco": 249.9,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -2227,6 +2292,11 @@
           "data": "2026-10-04T12:11:02.239503+00:00",
           "preco": 899.0,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:31:48.797567+00:00",
+          "preco": 899.0,
+          "loja": "bambulab"
         }
       ],
       "preco_atual": 899.0,
@@ -2258,6 +2328,11 @@
         },
         {
           "data": "2026-10-04T12:11:02.239503+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:31:48.797567+00:00",
           "preco": 17.99,
           "loja": "bambulab"
         }
@@ -2293,6 +2368,11 @@
           "data": "2026-10-04T12:11:02.239503+00:00",
           "preco": 17.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:31:48.797567+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
         }
       ],
       "preco_atual": 17.99,
@@ -2326,6 +2406,11 @@
           "data": "2026-10-04T12:11:02.239503+00:00",
           "preco": 37.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T12:31:48.797567+00:00",
+          "preco": 37.99,
+          "loja": "bambulab"
         }
       ],
       "preco_atual": 37.99,
@@ -2339,22 +2424,28 @@
       "qty": 2,
       "lojas_precos": {
         "bambulab": {
-          "preco": null,
-          "url_produto": "https://us.store.bambulab.com/products/nozzle-wiper",
+          "preco": 4.99,
+          "url_produto": "https://us.store.bambulab.com/products/nozzle-wiping-pad-p2s-x2d",
           "url_carrinho": null
         }
       },
-      "historico": [],
-      "preco_atual": null,
-      "preco_minimo": null,
-      "melhor_loja": null,
+      "historico": [
+        {
+          "data": "2026-10-04T12:31:48.797567+00:00",
+          "preco": 4.99,
+          "loja": "bambulab"
+        }
+      ],
+      "preco_atual": 4.99,
+      "preco_minimo": 4.99,
+      "melhor_loja": "bambulab",
       "brasil": null
     }
   },
   "cambio": {
     "usd_brl": 5.2238,
     "fonte": "Banco Central (PTAX)",
-    "atualizado_em": "2026-10-04T12:11:02.239517+00:00"
+    "atualizado_em": "2026-10-04T12:31:48.797586+00:00"
   },
   "alertas_enviados": {
     "pla-silk-multicolor": {
