@@ -1,6 +1,6 @@
 {
-  "atualizado_em": "2026-10-04T11:39:16.362699+00:00",
-  "total_estimado": 1385.07,
+  "atualizado_em": "2026-10-04T11:57:56.986421+00:00",
+  "total_estimado": 2358.04,
   "cupons": {
     "bambulab": [],
     "bestbuy": [],
@@ -104,6 +104,11 @@
           "data": "2026-10-04T11:39:16.362699+00:00",
           "preco": 749.0,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T11:57:56.986421+00:00",
+          "preco": 749.0,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -160,6 +165,11 @@
         },
         {
           "data": "2026-10-04T11:39:16.362699+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T11:57:56.986421+00:00",
           "preco": 17.99,
           "loja": "bambulab"
         }
@@ -225,6 +235,11 @@
           "data": "2026-10-04T11:39:16.362699+00:00",
           "preco": 17.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T11:57:56.986421+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -281,6 +296,11 @@
         },
         {
           "data": "2026-10-04T11:39:16.362699+00:00",
+          "preco": 37.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T11:57:56.986421+00:00",
           "preco": 37.99,
           "loja": "bambulab"
         }
@@ -471,6 +491,11 @@
           "data": "2026-10-04T11:39:16.362699+00:00",
           "preco": 14.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T11:57:56.986421+00:00",
+          "preco": 14.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -647,6 +672,11 @@
         },
         {
           "data": "2026-10-04T11:39:16.362699+00:00",
+          "preco": 17.16,
+          "loja": "amazon"
+        },
+        {
+          "data": "2026-10-04T11:57:56.986421+00:00",
           "preco": 17.16,
           "loja": "amazon"
         }
@@ -850,6 +880,11 @@
         },
         {
           "data": "2026-10-04T11:39:16.362699+00:00",
+          "preco": 28.99,
+          "loja": "amazon"
+        },
+        {
+          "data": "2026-10-04T11:57:56.986421+00:00",
           "preco": 28.99,
           "loja": "amazon"
         }
@@ -1060,6 +1095,11 @@
           "data": "2026-10-04T11:39:16.362699+00:00",
           "preco": 28.99,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-10-04T11:57:56.986421+00:00",
+          "preco": 28.99,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -1253,6 +1293,11 @@
           "data": "2026-10-04T11:39:16.362699+00:00",
           "preco": 18.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T11:57:56.986421+00:00",
+          "preco": 18.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -1268,7 +1313,7 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 30.57,
+          "preco": 30.61,
           "url_produto": "https://www.amazon.com/dp/B0G5175G82",
           "url_carrinho": null
         },
@@ -1446,6 +1491,11 @@
           "data": "2026-10-04T11:39:16.362699+00:00",
           "preco": 22.99,
           "loja": "walmart"
+        },
+        {
+          "data": "2026-10-04T11:57:56.986421+00:00",
+          "preco": 22.99,
+          "loja": "walmart"
         }
       ],
       "brasil": null
@@ -1509,6 +1559,11 @@
           "data": "2026-10-04T11:39:16.362699+00:00",
           "preco": 24.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T11:57:56.986421+00:00",
+          "preco": 24.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -1524,7 +1579,7 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 25.06,
+          "preco": 49.99,
           "url_produto": "https://www.amazon.com/dp/B0C4GBJCSV",
           "url_carrinho": null
         },
@@ -1715,6 +1770,11 @@
         },
         {
           "data": "2026-10-04T11:39:16.362699+00:00",
+          "preco": 18.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T11:57:56.986421+00:00",
           "preco": 18.99,
           "loja": "bambulab"
         }
@@ -1925,6 +1985,11 @@
           "data": "2026-10-04T11:39:16.362699+00:00",
           "preco": 18.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T11:57:56.986421+00:00",
+          "preco": 18.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -2123,15 +2188,134 @@
           "data": "2026-10-04T11:39:16.362699+00:00",
           "preco": 249.9,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-10-04T11:57:56.986421+00:00",
+          "preco": 249.9,
+          "loja": "amazon"
         }
       ],
+      "brasil": null
+    },
+    "x2d-combo": {
+      "nome": "Bambu Lab X2D Combo",
+      "categoria": "impressora",
+      "qty": 1,
+      "lojas_precos": {
+        "bambulab": {
+          "preco": 899.0,
+          "url_produto": "https://us.store.bambulab.com/products/x2d",
+          "url_carrinho": null
+        },
+        "walmart": {
+          "preco": null,
+          "url_produto": "https://www.walmart.com/search?q=Bambu%20Lab%20X2D%20Combo%203D%20Printer",
+          "url_carrinho": null
+        }
+      },
+      "historico": [
+        {
+          "data": "2026-10-04T11:57:56.986421+00:00",
+          "preco": 899.0,
+          "loja": "bambulab"
+        }
+      ],
+      "preco_atual": 899.0,
+      "preco_minimo": 899.0,
+      "melhor_loja": "bambulab",
+      "brasil": null
+    },
+    "hotend-02-ss-x2d": {
+      "nome": "Hotend 0.2mm Stainless Steel (X2D)",
+      "categoria": "acessorio",
+      "qty": 1,
+      "lojas_precos": {
+        "bambulab": {
+          "preco": 17.99,
+          "url_produto": "https://us.store.bambulab.com/products/bambu-hotend-h2-p2s",
+          "url_carrinho": null
+        }
+      },
+      "historico": [
+        {
+          "data": "2026-10-04T11:57:56.986421+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
+        }
+      ],
+      "preco_atual": 17.99,
+      "preco_minimo": 17.99,
+      "melhor_loja": "bambulab",
+      "brasil": null
+    },
+    "hotend-04-hs-x2d": {
+      "nome": "Hotend 0.4mm Hardened Steel (X2D)",
+      "categoria": "acessorio",
+      "qty": 1,
+      "lojas_precos": {
+        "bambulab": {
+          "preco": 17.99,
+          "url_produto": "https://us.store.bambulab.com/products/bambu-hotend-h2-p2s",
+          "url_carrinho": null
+        }
+      },
+      "historico": [
+        {
+          "data": "2026-10-04T11:57:56.986421+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
+        }
+      ],
+      "preco_atual": 17.99,
+      "preco_minimo": 17.99,
+      "melhor_loja": "bambulab",
+      "brasil": null
+    },
+    "pei-plate-x2d": {
+      "nome": "Bambu Dual-Texture PEI Plate (X2D)",
+      "categoria": "acessorio",
+      "qty": 1,
+      "lojas_precos": {
+        "bambulab": {
+          "preco": 37.99,
+          "url_produto": "https://us.store.bambulab.com/products/bambu-dual-texture-pei-plate",
+          "url_carrinho": null
+        }
+      },
+      "historico": [
+        {
+          "data": "2026-10-04T11:57:56.986421+00:00",
+          "preco": 37.99,
+          "loja": "bambulab"
+        }
+      ],
+      "preco_atual": 37.99,
+      "preco_minimo": 37.99,
+      "melhor_loja": "bambulab",
+      "brasil": null
+    },
+    "nozzle-wiper-x2d": {
+      "nome": "Nozzle Wiper (X2D)",
+      "categoria": "acessorio",
+      "qty": 2,
+      "lojas_precos": {
+        "bambulab": {
+          "preco": null,
+          "url_produto": "https://us.store.bambulab.com/products/nozzle-wiper",
+          "url_carrinho": null
+        }
+      },
+      "historico": [],
+      "preco_atual": null,
+      "preco_minimo": null,
+      "melhor_loja": null,
       "brasil": null
     }
   },
   "cambio": {
     "usd_brl": 5.2238,
     "fonte": "Banco Central (PTAX)",
-    "atualizado_em": "2026-10-04T11:39:16.362717+00:00"
+    "atualizado_em": "2026-10-04T11:57:56.986457+00:00"
   },
   "alertas_enviados": {}
 }
