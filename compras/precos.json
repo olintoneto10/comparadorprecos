@@ -1,6 +1,6 @@
 {
-  "atualizado_em": "2026-10-04T11:29:26.109121+00:00",
-  "total_estimado": 1329.09,
+  "atualizado_em": "2026-10-04T11:39:16.362699+00:00",
+  "total_estimado": 3654.37,
   "cupons": {
     "bambulab": [],
     "bestbuy": [],
@@ -99,6 +99,11 @@
           "data": "2026-10-04T11:29:26.109121+00:00",
           "preco": 749.0,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T11:39:16.362699+00:00",
+          "preco": 749.0,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -109,7 +114,7 @@
       "qty": 1,
       "lojas_precos": {
         "bambulab": {
-          "preco": null,
+          "preco": 17.99,
           "url_produto": "https://us.store.bambulab.com/products/bambu-hotend-h2-p2s",
           "url_carrinho": null
         },
@@ -119,8 +124,8 @@
           "url_carrinho": null
         }
       },
-      "melhor_loja": null,
-      "preco_atual": null,
+      "melhor_loja": "bambulab",
+      "preco_atual": 17.99,
       "preco_minimo": 17.99,
       "historico": [
         {
@@ -150,6 +155,11 @@
         },
         {
           "data": "2026-10-04T11:10:58.632988+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T11:39:16.362699+00:00",
           "preco": 17.99,
           "loja": "bambulab"
         }
@@ -210,17 +220,22 @@
           "data": "2026-10-04T11:29:26.109121+00:00",
           "preco": 17.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T11:39:16.362699+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
     },
     "pei-plate": {
-      "nome": "Bambu Dual-Texture PEI Plate",
+      "nome": "Bambu Dual-Texture PEI Plate (P2S)",
       "categoria": "acessorio",
       "qty": 1,
       "lojas_precos": {
         "bambulab": {
-          "preco": null,
+          "preco": 37.99,
           "url_produto": "https://us.store.bambulab.com/products/bambu-dual-texture-pei-plate",
           "url_carrinho": null
         },
@@ -235,8 +250,8 @@
           "url_carrinho": null
         }
       },
-      "melhor_loja": null,
-      "preco_atual": null,
+      "melhor_loja": "bambulab",
+      "preco_atual": 37.99,
       "preco_minimo": 24.99,
       "historico": [
         {
@@ -263,6 +278,11 @@
           "data": "2026-10-04T11:10:58.632988+00:00",
           "preco": 24.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T11:39:16.362699+00:00",
+          "preco": 37.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -278,7 +298,7 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 15.26,
+          "preco": 16.0,
           "url_produto": "https://www.amazon.com/dp/B0DK6TBF1D",
           "url_carrinho": null
         },
@@ -446,12 +466,17 @@
           "data": "2026-10-04T11:29:26.109121+00:00",
           "preco": 14.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T11:39:16.362699+00:00",
+          "preco": 14.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
     },
     "nozzle-wiper": {
-      "nome": "Nozzle Wiper",
+      "nome": "Nozzle Wiper (P2S)",
       "categoria": "acessorio",
       "qty": 2,
       "lojas_precos": {
@@ -617,6 +642,11 @@
         },
         {
           "data": "2026-10-04T11:29:26.109121+00:00",
+          "preco": 17.16,
+          "loja": "amazon"
+        },
+        {
+          "data": "2026-10-04T11:39:16.362699+00:00",
           "preco": 17.16,
           "loja": "amazon"
         }
@@ -815,6 +845,11 @@
         },
         {
           "data": "2026-10-04T11:29:26.109121+00:00",
+          "preco": 28.99,
+          "loja": "amazon"
+        },
+        {
+          "data": "2026-10-04T11:39:16.362699+00:00",
           "preco": 28.99,
           "loja": "amazon"
         }
@@ -1020,6 +1055,11 @@
           "data": "2026-10-04T11:29:26.109121+00:00",
           "preco": 28.99,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-10-04T11:39:16.362699+00:00",
+          "preco": 28.99,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -1208,6 +1248,11 @@
           "data": "2026-10-04T11:29:26.109121+00:00",
           "preco": 18.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T11:39:16.362699+00:00",
+          "preco": 18.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -1223,7 +1268,7 @@
           "url_carrinho": null
         },
         "amazon": {
-          "preco": 30.55,
+          "preco": 30.57,
           "url_produto": "https://www.amazon.com/dp/B0G5175G82",
           "url_carrinho": null
         },
@@ -1396,6 +1441,11 @@
           "data": "2026-10-04T11:29:26.109121+00:00",
           "preco": 22.99,
           "loja": "walmart"
+        },
+        {
+          "data": "2026-10-04T11:39:16.362699+00:00",
+          "preco": 22.99,
+          "loja": "walmart"
         }
       ],
       "brasil": null
@@ -1452,6 +1502,11 @@
         },
         {
           "data": "2026-10-04T11:29:26.109121+00:00",
+          "preco": 24.99,
+          "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T11:39:16.362699+00:00",
           "preco": 24.99,
           "loja": "bambulab"
         }
@@ -1657,6 +1712,11 @@
           "data": "2026-10-04T11:29:26.109121+00:00",
           "preco": 18.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T11:39:16.362699+00:00",
+          "preco": 18.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -1860,6 +1920,11 @@
           "data": "2026-10-04T11:29:26.109121+00:00",
           "preco": 18.99,
           "loja": "bambulab"
+        },
+        {
+          "data": "2026-10-04T11:39:16.362699+00:00",
+          "preco": 18.99,
+          "loja": "bambulab"
         }
       ],
       "brasil": null
@@ -2053,15 +2118,139 @@
           "data": "2026-10-04T11:29:26.109121+00:00",
           "preco": 249.9,
           "loja": "amazon"
+        },
+        {
+          "data": "2026-10-04T11:39:16.362699+00:00",
+          "preco": 249.9,
+          "loja": "amazon"
         }
       ],
+      "brasil": null
+    },
+    "h2c-combo": {
+      "nome": "Bambu Lab H2C Combo",
+      "categoria": "impressora",
+      "qty": 1,
+      "lojas_precos": {
+        "bambulab": {
+          "preco": 2199.0,
+          "url_produto": "https://us.store.bambulab.com/products/h2c",
+          "url_carrinho": null
+        },
+        "walmart": {
+          "preco": null,
+          "url_produto": "https://www.walmart.com/search?q=Bambu%20Lab%20H2C%20Combo%203D%20Printer",
+          "url_carrinho": null
+        }
+      },
+      "historico": [
+        {
+          "data": "2026-10-04T11:39:16.362699+00:00",
+          "preco": 2199.0,
+          "loja": "bambulab"
+        }
+      ],
+      "preco_atual": 2199.0,
+      "preco_minimo": 2199.0,
+      "melhor_loja": "bambulab",
+      "brasil": null
+    },
+    "hotend-02-ss-h2c": {
+      "nome": "Hotend 0.2mm Stainless Steel (H2C)",
+      "categoria": "acessorio",
+      "qty": 1,
+      "lojas_precos": {
+        "bambulab": {
+          "preco": 17.99,
+          "url_produto": "https://us.store.bambulab.com/products/bambu-hotend-h2-p2s",
+          "url_carrinho": null
+        }
+      },
+      "historico": [
+        {
+          "data": "2026-10-04T11:39:16.362699+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
+        }
+      ],
+      "preco_atual": 17.99,
+      "preco_minimo": 17.99,
+      "melhor_loja": "bambulab",
+      "brasil": null
+    },
+    "hotend-04-hs-h2c": {
+      "nome": "Hotend 0.4mm Hardened Steel (H2C)",
+      "categoria": "acessorio",
+      "qty": 1,
+      "lojas_precos": {
+        "bambulab": {
+          "preco": 17.99,
+          "url_produto": "https://us.store.bambulab.com/products/bambu-hotend-h2-p2s",
+          "url_carrinho": null
+        }
+      },
+      "historico": [
+        {
+          "data": "2026-10-04T11:39:16.362699+00:00",
+          "preco": 17.99,
+          "loja": "bambulab"
+        }
+      ],
+      "preco_atual": 17.99,
+      "preco_minimo": 17.99,
+      "melhor_loja": "bambulab",
+      "brasil": null
+    },
+    "pei-plate-h2c": {
+      "nome": "Bambu Dual-Texture PEI Plate (H2C)",
+      "categoria": "acessorio",
+      "qty": 1,
+      "lojas_precos": {
+        "bambulab": {
+          "preco": null,
+          "url_produto": "https://us.store.bambulab.com/products/bambu-dual-texture-pei-plate",
+          "url_carrinho": null
+        }
+      },
+      "historico": [],
+      "preco_atual": null,
+      "preco_minimo": null,
+      "melhor_loja": null,
+      "brasil": null
+    },
+    "nozzle-wiper-h2c": {
+      "nome": "Nozzle Wiper (H2C)",
+      "categoria": "acessorio",
+      "qty": 2,
+      "lojas_precos": {
+        "bambulab": {
+          "preco": null,
+          "url_produto": "https://us.store.bambulab.com/products/nozzle-wiper",
+          "url_carrinho": null
+        },
+        "amazon": {
+          "preco": 17.16,
+          "url_produto": "https://www.amazon.com/dp/B0GSSB8GDQ",
+          "url_carrinho": null
+        }
+      },
+      "historico": [
+        {
+          "data": "2026-10-04T11:39:16.362699+00:00",
+          "preco": 17.16,
+          "loja": "amazon"
+        }
+      ],
+      "preco_atual": 17.16,
+      "preco_minimo": 17.16,
+      "melhor_loja": "amazon",
       "brasil": null
     }
   },
   "cambio": {
     "usd_brl": 5.2238,
     "fonte": "Banco Central (PTAX)",
-    "atualizado_em": "2026-10-04T11:29:26.109139+00:00"
+    "atualizado_em": "2026-10-04T11:39:16.362717+00:00"
   },
   "alertas_enviados": {}
 }
