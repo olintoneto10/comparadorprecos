@@ -7,7 +7,7 @@ Solucoes para bloqueio de IP:
 - Bambu Lab: ScraperAPI (proxy residencial) + fallback requests direto.
 - Best Buy: API oficial gratuita (developer.bestbuy.com) via BESTBUY_API_KEY.
 - Walmart/Target/Costco/Best Buy HTML: ScraperAPI proxy residencial via SCRAPER_API_KEY.
-- Amazon: cloudscraper + ScraperAPI como fallback.
+- Amazon/Walmart/Target/Costco: curl_cffi (imita o Chrome) + ScraperAPI como fallback.
 
 Como configurar (GitHub > Settings > Secrets and variables > Actions):
   BESTBUY_API_KEY  — chave gratuita de developer.bestbuy.com
@@ -34,6 +34,16 @@ try:
 except ImportError:
     HAS_CS = False
     print("  [aviso] cloudscraper nao instalado")
+
+try:
+    from curl_cffi import requests as cffi_requests
+    HAS_CFFI = True
+except ImportError:
+    HAS_CFFI = False
+    print("  [aviso] curl_cffi nao instalado")
+
+# USE_CFFI=0 volta ao cloudscraper antigo
+USE_CFFI = os.environ.get("USE_CFFI", "1") == "1"
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_FILE  = os.path.join(SCRIPT_DIR, "precos.json")
@@ -84,7 +94,46 @@ def link_afiliado(url):
         pass
     return url
 
+class _CffiSession:
+    """Sessao curl_cffi que imita a impressao digital TLS/HTTP2 de um Chrome real.
+    Remove o User-Agent passado pelo chamador: um UA diferente do navegador
+    imitado denuncia o bot."""
+    def __init__(self):
+        self._s = cffi_requests.Session(impersonate="chrome")
+        self._fallback = None
+
+    def _plano_b(self, url, headers, **kw):
+        """Se o curl_cffi falhar ou for bloqueado, tenta o cloudscraper (que ja funcionava)."""
+        if not HAS_CS:
+            return None
+        if self._fallback is None:
+            self._fallback = cloudscraper.create_scraper(
+                browser={"browser": "chrome", "platform": "windows", "mobile": False})
+        try:
+            return self._fallback.get(url, headers=headers, **kw)
+        except Exception:
+            return None
+
+    def get(self, url, headers=None, **kw):
+        h = {k: v for k, v in (headers or {}).items() if k.lower() != "user-agent"}
+        try:
+            r = self._s.get(url, headers=h, **kw)
+        except Exception as e:
+            print(f"      [cffi] erro, tentando cloudscraper: {str(e)[:80]}")
+            r2 = self._plano_b(url, headers, **kw)
+            if r2 is not None:
+                return r2
+            raise
+        if r.status_code in (403, 429, 503):
+            r2 = self._plano_b(url, headers, **kw)
+            if r2 is not None and r2.status_code == 200:
+                print(f"      [cffi] HTTP {r.status_code}; cloudscraper conseguiu")
+                return r2
+        return r
+
 def make_scraper():
+    if HAS_CFFI and USE_CFFI:
+        return _CffiSession()
     if HAS_CS:
         return cloudscraper.create_scraper(
             browser={"browser": "chrome", "platform": "windows", "mobile": False}
@@ -829,7 +878,7 @@ def fetch_bambulab(handle, variant_hint=None, nome=None):
     }
     for attempt in range(3):
         try:
-            r2 = requests.get(url, headers=json_hdrs, timeout=30)
+            r2 = make_scraper().get(url, headers=json_hdrs, timeout=30)
             print(f"      [BL] {handle}: HTTP {r2.status_code}, {len(r2.text)} bytes")
             if r2.status_code == 404:
                 if len(r2.text) > 10000:
@@ -844,7 +893,7 @@ def fetch_bambulab(handle, variant_hint=None, nome=None):
             if price:
                 return price, vid
             break
-        except requests.exceptions.RequestException as e:
+        except Exception as e:
             print(f"      [BL] tentativa {attempt+1}: {e}")
             if attempt < 2:
                 time.sleep(2 ** attempt)
@@ -1167,8 +1216,7 @@ def fetch_bestbuy(sku=None, url_produto=None, search_query=None):
         api = (f"https://www.bestbuy.com/api/tcfb/model.json"
                f"?paths=%5B%5B%22shop%22%2C%22button%22%2C%22skus%22%2C{sku}%2C%22prices%22%5D%5D&method=get")
         try:
-            r = requests.get(api, headers={
-                "User-Agent": random.choice(USER_AGENTS),
+            r = make_scraper().get(api, headers={
                 "Accept": "application/json",
                 "Referer": "https://www.bestbuy.com/",
             }, timeout=40)
@@ -1182,10 +1230,11 @@ def fetch_bestbuy(sku=None, url_produto=None, search_query=None):
                     if val:
                         print(f"      [BB] preco via API interna: ${val}")
                         return float(val)
-        except requests.exceptions.Timeout:
-            print(f"      [BB] timeout — IP bloqueado")
         except Exception as e:
-            print(f"      [BB] API interna erro: {e}")
+            if "timed out" in str(e).lower() or "timeout" in str(e).lower():
+                print(f"      [BB] timeout — IP bloqueado")
+            else:
+                print(f"      [BB] API interna erro: {e}")
 
     # Fallback final: navegador real (contorna Cloudflare/bloqueio de IP)
     if target_url:
