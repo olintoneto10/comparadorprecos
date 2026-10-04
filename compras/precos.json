@@ -1,6 +1,6 @@
 {
   "atualizado_em": "2026-10-04T11:10:58.632988+00:00",
-  "total_estimado": 1310.16,
+  "total_estimado": 1361.06,
   "cupons": {
     "bambulab": [],
     "bestbuy": [],
@@ -1830,7 +1830,7 @@
           "url_carrinho": null
         },
         "walmart": {
-          "preco": 199.0,
+          "preco": null,
           "url_produto": "https://www.walmart.com/ip/Ninja-Crispi-Pro-4-in-1-Countertop-Glass-Air-Fryer-4-qt-2-5-qt-Glass-Containers-Designed-Non-Toxic-Pink-AS100PK1/18261924322?classType=VARIANT&athbdg=L1103",
           "url_carrinho": null
         },
@@ -1845,9 +1845,9 @@
           "url_carrinho": null
         }
       },
-      "melhor_loja": "walmart",
-      "preco_atual": 199.0,
-      "preco_minimo": 199.0,
+      "melhor_loja": "amazon",
+      "preco_atual": 249.9,
+      "preco_minimo": 249.9,
       "historico": [
         {
           "data": "2026-06-06T23:49:26.489940+00:00",
@@ -1996,8 +1996,8 @@
         },
         {
           "data": "2026-10-04T11:10:58.632988+00:00",
-          "preco": 199.0,
-          "loja": "walmart"
+          "preco": 249.9,
+          "loja": "amazon"
         }
       ],
       "brasil": null
@@ -2005,7 +2005,7 @@
   },
   "cambio": {
     "usd_brl": 5.8,
-    "fonte": "AwesomeAPI",
+    "fonte": "valor fixo (todas as fontes falharam)",
     "atualizado_em": "2026-10-04T11:10:58.632988+00:00"
   }
 }

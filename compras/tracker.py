@@ -260,37 +260,80 @@ def _json_de_pre(html):
         return s
     return None
 
-def fetch_brl_usd():
-    """Busca taxa de cambio USD->BRL. Tenta direto, depois via ScraperAPI."""
-    url = "https://economia.awesomeapi.com.br/json/last/USD-BRL"
+AWESOMEAPI_TOKEN = os.environ.get("AWESOMEAPI_TOKEN", "")
+_FONTES_REAIS = {"AwesomeAPI", "Banco Central (PTAX)", "open.er-api.com", "Frankfurter (BCE)"}
 
-    def _extrair(r):
-        if r and r.status_code == 200:
-            try:
-                rate = float(r.json().get("USDBRL", {}).get("bid", 0))
-                if rate > 1:
-                    return rate
-            except Exception:
-                pass
-        return None
-
+def _cambio_plausivel(v):
     try:
-        r = requests.get(url, timeout=10)
-        rate = _extrair(r)
+        v = float(v)
+    except (TypeError, ValueError):
+        return None
+    return v if 3 < v < 10 else None
+
+def _cambio_awesome():
+    url = "https://economia.awesomeapi.com.br/json/last/USD-BRL"
+    hdr = {"x-api-key": AWESOMEAPI_TOKEN} if AWESOMEAPI_TOKEN else {}
+    r = requests.get(url, headers=hdr, timeout=10)
+    if r.status_code != 200:
+        raise RuntimeError(f"HTTP {r.status_code} {r.text[:80]}")
+    return r.json().get("USDBRL", {}).get("bid")
+
+def _cambio_ptax():
+    """Cotacao oficial do Banco Central (ultimo dia util dos ultimos 7 dias)."""
+    from datetime import timedelta
+    hoje = datetime.now(timezone.utc).date()
+    ini = (hoje - timedelta(days=7)).strftime("%m-%d-%Y")
+    fim = hoje.strftime("%m-%d-%Y")
+    url = ("https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/"
+           "CotacaoDolarPeriodo(dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)"
+           f"?@dataInicial='{ini}'&@dataFinalCotacao='{fim}'&$format=json")
+    r = requests.get(url, timeout=15)
+    if r.status_code != 200:
+        raise RuntimeError(f"HTTP {r.status_code}")
+    valores = r.json().get("value") or []
+    if not valores:
+        raise RuntimeError("sem cotacao no periodo")
+    return valores[-1].get("cotacaoVenda")
+
+def _cambio_er_api():
+    r = requests.get("https://open.er-api.com/v6/latest/USD", timeout=10)
+    if r.status_code != 200:
+        raise RuntimeError(f"HTTP {r.status_code}")
+    return r.json().get("rates", {}).get("BRL")
+
+def _cambio_frankfurter():
+    r = requests.get("https://api.frankfurter.app/latest?from=USD&to=BRL", timeout=10)
+    if r.status_code != 200:
+        raise RuntimeError(f"HTTP {r.status_code}")
+    return r.json().get("rates", {}).get("BRL")
+
+def fetch_brl_usd(anterior=None):
+    """Cotacao USD->BRL tentando varias fontes gratuitas.
+    Retorna (taxa, fonte, data_da_cotacao). Se todas falharem, reaproveita a
+    ultima cotacao real salva (com a data dela) antes de cair no valor fixo."""
+    agora = datetime.now(timezone.utc).isoformat()
+    for nome, fn in [("AwesomeAPI", _cambio_awesome),
+                     ("Banco Central (PTAX)", _cambio_ptax),
+                     ("open.er-api.com", _cambio_er_api),
+                     ("Frankfurter (BCE)", _cambio_frankfurter)]:
+        try:
+            rate = _cambio_plausivel(fn())
+            if rate:
+                print(f"  [Cambio] USD/BRL = {rate:.4f} ({nome})")
+                return rate, nome, agora
+            print(f"  [Cambio] {nome}: valor invalido")
+        except Exception as e:
+            print(f"  [Cambio] {nome} falhou: {str(e)[:100]}")
+
+    if anterior and anterior.get("fonte") in _FONTES_REAIS:
+        rate = _cambio_plausivel(anterior.get("usd_brl"))
         if rate:
-            print(f"  [Cambio] USD/BRL = {rate:.4f}")
-            return rate
-    except Exception as e:
-        print(f"  [Cambio] erro direto: {e}")
+            print(f"  [Cambio] todas as fontes falharam; mantendo ultima cotacao real "
+                  f"{rate:.4f} de {anterior.get('atualizado_em','?')[:10]}")
+            return rate, anterior["fonte"], anterior.get("atualizado_em", agora)
 
-    r2 = scraperapi_get(url, timeout=30)
-    rate = _extrair(r2)
-    if rate:
-        print(f"  [Cambio] USD/BRL = {rate:.4f} (via ScraperAPI)")
-        return rate
-
-    print("  [Cambio] usando fallback 5.80")
-    return 5.80
+    print("  [Cambio] todas as fontes falharam; usando valor fixo 5.80")
+    return 5.80, "valor fixo (todas as fontes falharam)", agora
 
 ML_API      = "https://api.mercadolibre.com/sites/MLB/search"
 ML_ITEM_API = "https://api.mercadolibre.com/items/{}"
@@ -573,7 +616,7 @@ PRODUCTS = [
      "lojas":{
        "amazon":  {"asin":"B0FPPJBKLS"},
        "bestbuy": {"sku":"6604834", "url":"https://www.bestbuy.com/site/ninja-crispi-pro-6-in-1-glass-air-fryer-system/6604834.p"},
-       "walmart": {"query":"Ninja Crispi Pro AS101DG Glass Air Fryer Ash Grey", "exige":["crispi","pro"]},
+       "walmart": {"query":"Ninja Crispi Pro AS101DG Glass Air Fryer Ash Grey", "exige":["crispi","pro","6-in-1"]},
        "target":  {"query":"Ninja Crispi Pro AS101DG Air Fryer"},
        "costco":  {"query":"Ninja Crispi Pro Glass Air Fryer"},
      },
@@ -1375,7 +1418,14 @@ def _item_bate_com_busca(nome, query, exige=None):
     if _RE_TERCEIROS.search(nome or ""):
         return False
     chave = set(exige) if exige else (busca_t - _GENERICAS_BUSCA - _MARCAS_BUSCA)
-    return chave <= nome_t
+    nome_norm = re.sub(r"[\s\-]+", "-", (nome or "").lower())
+    for e in chave:
+        if re.fullmatch(r"[a-z0-9]+", e):
+            if _SINONIMOS.get(e, e) not in nome_t:
+                return False
+        elif re.sub(r"[\s\-]+", "-", e.lower()) not in nome_norm:   # expressao, ex: "6-in-1"
+            return False
+    return True
 
 def _wm_preco_item(item):
     """Preco de um item da busca do Walmart (o formato do JSON varia entre paginas)."""
@@ -1747,11 +1797,11 @@ def main():
     data.setdefault("items", {})
 
     print("\n=== Buscando cambio ===")
-    usd_brl = fetch_brl_usd()
+    usd_brl, fonte_cambio, data_cambio = fetch_brl_usd(data.get("cambio"))
     data["cambio"] = {
         "usd_brl":      round(usd_brl, 4),
-        "fonte":        "AwesomeAPI",
-        "atualizado_em": now,
+        "fonte":        fonte_cambio,
+        "atualizado_em": data_cambio,
     }
     quedas = []
     ids_processados = set()
