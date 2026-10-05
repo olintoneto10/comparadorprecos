@@ -496,6 +496,21 @@ def store_info(loja):
 
 _BL_BR = "https://br.store.bambulab.com/products/{}"
 
+# Kit de memoria: marca preferida, 32GB em 2 pentes de 16GB, DDR4-3200, SO-DIMM (notebook).
+# Cada item da lista e obrigatorio; "a|b" = qualquer uma das alternativas.
+RAM_EXIGE = [
+    "crucial|kingston|corsair|g.skill|gskill|g-skill",
+    "32gb|32-gb",
+    "2x16gb|2x16|2-x-16|2x-16|16gbx2|16gb-x-2|kit",
+    "ddr4",
+    "3200|3200mhz|3200mt|ddr4-3200|pc4-25600",
+    "sodimm|so-dimm|laptop|notebook",
+]
+# Fora: ECC/servidor (aceita "Non-ECC"), DDR5, pente de desktop e kits de 1,35 V
+RAM_PROIBE = [r"(?<!non-)(?<!non )\becc\b", r"\bregistered\b|\brdimm\b|\bserver\b|\bservidor\b",
+              r"\bddr5\b", r"\budimm\b", r"\b1[.,]35\s?v\b",
+              r"\b64\s?gb\b", r"\b2\s?x\s?32\s?gb\b", r"\b4\s?x\s?8\s?gb\b"]   # outros tamanhos de kit
+
 PRODUCTS = [
     {"id":"p2s-combo", "nome":"Bambu Lab P2S Combo (AMS 2 Pro)", "categoria":"impressora", "qty":1,
      "lojas":{
@@ -541,6 +556,16 @@ PRODUCTS = [
      },
      "brasil":{"exige_br":["p2s", "wiper|wiping|limpador|limpeza"],"handle":"nozzle-wiper","url_br":_BL_BR.format("nozzle-wiper"),
                "ml_query":"Bambu Lab nozzle wiper limpador bico impressora"}},
+    # --- Memoria para notebook: kit 2x16GB DDR4-3200 SO-DIMM, so das marcas preferidas ---
+    {"id":"ram-32gb-ddr4-sodimm", "nome":"Kit RAM 32GB (2x16GB) DDR4-3200 SO-DIMM", "categoria":"eletronico", "qty":1,
+     "lojas":{
+       "amazon":  {"query":"32GB 2x16GB DDR4 3200 SODIMM laptop memory kit",
+                   "exige":RAM_EXIGE, "proibe":RAM_PROIBE},
+       "walmart": {"query":"32GB 2x16GB DDR4 3200 SODIMM laptop memory",
+                   "exige":RAM_EXIGE, "proibe":RAM_PROIBE},
+     },
+     "brasil":{"exige_br":RAM_EXIGE, "proibe":RAM_PROIBE,
+               "ml_query":"Kit memoria 32GB 2x16GB DDR4 3200 SODIMM notebook"}},
     # --- X2D: impressora e os mesmos acessorios da P2S, na versao X2D ---
     {"id":"x2d-combo", "nome":"Bambu Lab X2D Combo", "categoria":"impressora", "qty":1,
      "lojas":{
@@ -1227,7 +1252,7 @@ def _preco_brl(texto):
         return None
     return v if 1 < v < 500000 else None
 
-def fetch_serper_br(query, exige=None):
+def fetch_serper_br(query, exige=None, proibe=None):
     """Menor preco no Google Shopping Brasil (varias lojas de uma vez) entre os
     anuncios que sao o produto certo. Retorna (preco_brl, url, loja) ou (None,...)."""
     if not SERPER_API_KEY or not query:
@@ -1250,7 +1275,7 @@ def fetch_serper_br(query, exige=None):
         if not titulo or not preco:
             continue
         com_preco += 1
-        if _item_bate_com_busca(titulo, query, exige):
+        if _item_bate_com_busca(titulo, query, exige, proibe):
             validos.append((preco, titulo, a.get("link") or "", a.get("source") or "Google Shopping"))
     if not validos:
         exemplos = [(a.get("title") or "")[:45] for a in anuncios[:3]]
@@ -1413,6 +1438,44 @@ def fetch_amazon(asin, nome=None):
         return p
     return None
 
+def fetch_amazon_busca(query, exige=None, proibe=None):
+    """Busca na Amazon e fica com o resultado mais barato que for o produto
+    certo (mesma regra do Walmart). Retorna (preco, url)."""
+    if not HAS_BS4:
+        return None, None
+    url = "https://www.amazon.com/s?k=" + requests.utils.quote(query)
+    try:
+        r = make_scraper().get(url, headers=hdrs("https://www.amazon.com/"),
+                               cookies={"i18n-prefs": "USD", "delivery-zipcode": ORLANDO_ZIP}, timeout=30)
+        print(f"      [AMZ-busca] '{query[:40]}': HTTP {r.status_code}, {len(r.text)} bytes")
+        if r.status_code != 200:
+            return None, None
+    except Exception as e:
+        print(f"      [AMZ-busca] erro: {str(e)[:80]}")
+        return None, None
+    soup = BeautifulSoup(r.text, "lxml")
+    validos, com_preco = [], 0
+    for res in soup.select("[data-component-type='s-search-result']"):
+        asin = res.get("data-asin") or ""
+        tit_el = res.select_one("h2")
+        preco_el = res.select_one(".a-price:not(.a-text-price) .a-offscreen")
+        if not (asin and tit_el and preco_el):
+            continue
+        try:
+            preco = float(preco_el.get_text().replace("$", "").replace(",", "").strip())
+        except ValueError:
+            continue
+        com_preco += 1
+        titulo = tit_el.get_text(" ", strip=True)
+        if _item_bate_com_busca(titulo, query, exige, proibe):
+            validos.append((preco, titulo, f"https://www.amazon.com/dp/{asin}"))
+    if not validos:
+        print(f"      [AMZ-busca] nenhum dos {com_preco} resultados com preco e o produto certo")
+        return None, None
+    preco, titulo, link = min(validos)
+    print(f"      [AMZ-busca] '{titulo[:60]}' ${preco} ({len(validos)} de {com_preco} batem)")
+    return preco, link
+
 def fetch_amazon_url(url):
     if not HAS_BS4:
         return None, url
@@ -1461,7 +1524,7 @@ def _tokens(texto):
     return {_SINONIMOS.get(t, t) for t in re.findall(r"[a-z0-9]+", _sem_acento(texto).lower())
             if len(t) >= 2 and t not in _STOPWORDS_BUSCA}
 
-def _item_bate_com_busca(nome, query, exige=None):
+def _item_bate_com_busca(nome, query, exige=None, proibe=None):
     """Regra rigida: marca igual, nao e de terceiros e TODAS as palavras
     que definem o produto (tipo, modelo, cor) aparecem no nome."""
     nome_t = _tokens(nome)
@@ -1471,6 +1534,9 @@ def _item_bate_com_busca(nome, query, exige=None):
         return False
     if _RE_TERCEIROS.search(_sem_acento(nome)):
         return False
+    for padrao in proibe or []:                      # ex.: memoria ECC, DDR5
+        if re.search(padrao, _sem_acento(nome), re.I):
+            return False
     chave = set(exige) if exige else (busca_t - _GENERICAS_BUSCA - _MARCAS_BUSCA)
     nome_norm = re.sub(r"[\s\-]+", "-", _sem_acento(nome).lower())
 
@@ -1504,7 +1570,7 @@ def _wm_itens(data):
             if isinstance(it, dict):
                 yield it
 
-def _parse_walmart_html(html, url, query="", exige=None):
+def _parse_walmart_html(html, url, query="", exige=None, proibe=None):
     """Entre os resultados com preco, fica so com os que batem com o produto
     (regra rigida) e devolve o mais barato. Na duvida, sem preco."""
     if not HAS_BS4:
@@ -1527,7 +1593,7 @@ def _parse_walmart_html(html, url, query="", exige=None):
         if not nome or not preco:
             continue
         com_preco += 1
-        if not _item_bate_com_busca(nome, query, exige):
+        if not _item_bate_com_busca(nome, query, exige, proibe):
             continue
         slug = it.get("canonicalUrl") or ""
         prod_url = ("https://www.walmart.com" + slug) if slug.startswith("/") else (slug or url)
@@ -1540,21 +1606,21 @@ def _parse_walmart_html(html, url, query="", exige=None):
     print(f"      [WM] '{nome[:60]}' ${preco} ({len(validos)} de {com_preco} itens batem)")
     return preco, prod_url
 
-def fetch_walmart(query, exige=None):
+def fetch_walmart(query, exige=None, proibe=None):
     search_url = "https://www.walmart.com/search?q=" + requests.utils.quote(query)
     sc = make_scraper()
     try:
         r = sc.get(search_url, headers=hdrs(), timeout=30)
         print(f"      [WM] '{query[:40]}': HTTP {r.status_code}, {len(r.text)} bytes")
         if r.status_code == 200 and len(r.text) > 100000:
-            return _parse_walmart_html(r.text, search_url, query, exige)
+            return _parse_walmart_html(r.text, search_url, query, exige, proibe)
     except Exception as e:
         print(f"      [WM] erro: {e}")
     # ScraperAPI so se o acesso direto falhou (economiza a cota)
     r2 = scraperapi_get(search_url)
     if r2:
         print(f"      [WM] '{query[:40]}': ScraperAPI OK")
-        return _parse_walmart_html(r2.text, search_url, query, exige)
+        return _parse_walmart_html(r2.text, search_url, query, exige, proibe)
     return None, None
 
 # Target: a pagina de busca carrega os precos por JavaScript a partir da API
@@ -1760,12 +1826,15 @@ def processar_item(pid, p, item, now):
             if "asin" in cfg:
                 price = fetch_amazon(cfg["asin"], nome=p.get("nome"))
                 url_produto = f"https://www.amazon.com/dp/{cfg['asin']}"
+            elif "query" in cfg:
+                price, url_produto = fetch_amazon_busca(cfg["query"], cfg.get("exige"), cfg.get("proibe"))
+                url_produto = url_produto or "https://www.amazon.com/s?k=" + requests.utils.quote(cfg["query"])
             else:
                 price, url_produto = fetch_amazon_url(cfg.get("url",""))
 
         elif loja == "walmart":
             if "query" in cfg:
-                price, found_url = fetch_walmart(cfg["query"], cfg.get("exige"))
+                price, found_url = fetch_walmart(cfg["query"], cfg.get("exige"), cfg.get("proibe"))
                 url_produto = found_url or "https://www.walmart.com/search?q=" + requests.utils.quote(cfg["query"])
             else:
                 price = fetch_generica(cfg.get("url",""))
@@ -1836,7 +1905,7 @@ def processar_item(pid, p, item, now):
         # 0. Google Shopping Brasil (Serper): varias lojas de uma vez, com conferencia de produto
         if not preco_brl and SERPER_API_KEY and ml_query:
             print(f"    [BR] Google Shopping (Serper)...")
-            preco_brl, url_brl, loja_serper = fetch_serper_br(ml_query, brasil_cfg.get("exige_br"))
+            preco_brl, url_brl, loja_serper = fetch_serper_br(ml_query, brasil_cfg.get("exige_br"), brasil_cfg.get("proibe"))
             if preco_brl:
                 loja_nome_brl = loja_serper
 
